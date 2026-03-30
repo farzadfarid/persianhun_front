@@ -1,0 +1,7 @@
+{
+  "name": "PersianHubApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
