@@ -1,0 +1,128 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hero-search {
+  display: flex;
+  align-items: center;
+  gap: var(--ph-space-3);
+  background: var(--ph-surface-1);
+  border-radius: var(--ph-radius-pill);
+  padding: var(--ph-space-3) var(--ph-space-4);
+  margin-bottom: var(--ph-space-6);
+  cursor: pointer;
+  border: 1px solid var(--ph-surface-3);
+  transition: border-color 0.15s;
+
+  &:active { border-color: var(--ph-accent); }
+}
+
+.hero-search-icon {
+  font-size: 18px;
+  color: var(--ph-text-muted);
+}
+
+.hero-search-text {
+  color: var(--ph-text-muted);
+  font-size: var(--ph-font-md);
+}
+
+.ph-section {
+  margin-bottom: var(--ph-space-6);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--ph-space-3);
+}
+
+.section-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--ph-font-sm);
+  color: var(--ph-accent);
+  text-decoration: none;
+  font-weight: var(--ph-weight-medium);
+}
+
+.featured-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ph-space-3);
+}
+
+// Skeleton
+.skeleton-card {
+  display: flex;
+  align-items: center;
+  gap: var(--ph-space-3);
+  background: var(--ph-surface-1);
+  border-radius: var(--ph-radius-md);
+  padding: var(--ph-space-3);
+  border: 1px solid var(--ph-surface-2);
+}
+
+.skeleton-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--ph-radius-md);
+  background: var(--ph-surface-2);
+  flex-shrink: 0;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+.skeleton-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ph-space-2);
+}
+
+.skeleton-line {
+  height: 12px;
+  background: var(--ph-surface-2);
+  border-radius: var(--ph-radius-sm);
+  animation: pulse 1.4s ease-in-out infinite;
+
+  &.long { width: 65%; }
+  &.short { width: 40%; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+// Quick actions
+.quick-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--ph-space-3);
+}
+
+.quick-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ph-surface-1);
+  border-radius: var(--ph-radius-md);
+  padding: var(--ph-space-4);
+  border: 1px solid var(--ph-surface-2);
+  text-decoration: none;
+  transition: border-color 0.15s;
+
+  &:active { border-color: var(--ph-accent); }
+}
+
+.qa-label {
+  font-size: var(--ph-font-sm);
+  font-weight: var(--ph-weight-medium);
+  color: var(--ph-text-primary);
+}

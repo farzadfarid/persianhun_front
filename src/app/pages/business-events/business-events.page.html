@@ -1,0 +1,128 @@
+
+<app-header title="Manage Events" [showBack]="true" defaultBackHref="/my-businesses" />
+
+<ion-content class="ph-page-content">
+
+  @if (isLoading) {
+    <div class="list-container">
+      <div class="event-skeleton"></div>
+      <div class="event-skeleton"></div>
+    </div>
+  }
+
+  @if (hasError) {
+    <div class="empty-state"><p class="ph-caption">Could not load events.</p></div>
+  }
+
+  @if (!isLoading && !hasError) {
+
+    @if (showForm) {
+      <div class="form-card">
+        <h3 class="form-title">{{ editingEvent ? 'Edit Event' : 'New Event' }}</h3>
+
+        <label class="field-label">Title *</label>
+        <input class="ph-input" [(ngModel)]="title" placeholder="Event name" />
+
+        <label class="field-label">Description</label>
+        <textarea class="ph-textarea" [(ngModel)]="description" placeholder="Optional details..." rows="2"></textarea>
+
+        <div class="form-row">
+          <div class="form-col">
+            <label class="field-label">Location</label>
+            <input class="ph-input" [(ngModel)]="locationName" placeholder="Venue name" />
+          </div>
+          <div class="form-col">
+            <label class="field-label">City</label>
+            <input class="ph-input" [(ngModel)]="city" placeholder="City" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-col">
+            <label class="field-label">Starts *</label>
+            <input class="ph-input" type="datetime-local" [(ngModel)]="startsAt" />
+          </div>
+          <div class="form-col">
+            <label class="field-label">Ends</label>
+            <input class="ph-input" type="datetime-local" [(ngModel)]="endsAt" />
+          </div>
+        </div>
+
+        <div class="free-row">
+          <label class="field-label" style="margin:0">Free Event</label>
+          <ion-toggle [(ngModel)]="isFree" />
+        </div>
+
+        @if (!isFree) {
+          <label class="field-label">Price</label>
+          <input class="ph-input" type="number" [(ngModel)]="price" placeholder="0.00" min="0" />
+        }
+
+        <app-image-upload
+          label="Cover Image (optional)"
+          [value]="coverImageUrl"
+          (valueChange)="coverImageUrl = $event"
+        />
+
+        <div class="form-actions">
+          <button class="cancel-btn" (click)="cancelForm()">Cancel</button>
+          @if (editingEvent) {
+            <app-button size="small" [loading]="submitting" [disabled]="!title || !startsAt" (click)="submitEdit()">
+              Save
+            </app-button>
+          } @else {
+            <app-button size="small" [loading]="submitting" [disabled]="!title || !startsAt" (click)="submitEvent()">
+              Create
+            </app-button>
+          }
+        </div>
+      </div>
+    }
+
+    @if (!showForm) {
+      <button class="add-btn" (click)="showForm = true">
+        <ion-icon name="add-outline" /> Add New Event
+      </button>
+    }
+
+    @if (events.length === 0) {
+      <div class="empty-state">
+        <ion-icon name="calendar-outline" class="empty-icon" />
+        <p class="ph-caption">No events yet. Add your first one.</p>
+      </div>
+    } @else {
+      <div class="list-container">
+        @for (event of events; track event.id) {
+          <div class="event-row">
+            @if (event.coverImageUrl) {
+              <img [src]="event.coverImageUrl | uploadUrl" alt="Cover" class="event-thumb" />
+            }
+            <div class="event-date-block">
+              <span class="date-day">{{ event.startsAtUtc | date:'d' }}</span>
+              <span class="date-month">{{ event.startsAtUtc | date:'MMM' }}</span>
+            </div>
+            <div class="event-main">
+              <p class="event-title">{{ event.title }}</p>
+              @if (event.city) { <p class="event-city ph-caption">{{ event.city }}</p> }
+              <span class="price-badge" [class.free]="event.isFree">{{ priceLabel(event) }}</span>
+            </div>
+            <div class="event-toggle">
+              <span class="toggle-label">Published</span>
+              <ion-toggle [checked]="event.isPublished" (ionChange)="togglePublish(event)" />
+            </div>
+            <div class="event-row-actions">
+              <button class="row-action-btn" (click)="startEdit(event)" title="Edit">
+                <ion-icon name="create-outline" />
+              </button>
+              <button class="row-action-btn danger" (click)="deleteEvent(event)" title="Delete">
+                <ion-icon name="trash-outline" />
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+  }
+
+</ion-content>

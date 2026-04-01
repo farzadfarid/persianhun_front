@@ -1,0 +1,15 @@
+<ion-header>
+  <ion-toolbar>
+    @if (showMenu) {
+      <ion-buttons slot="start">
+        <ion-menu-button />
+      </ion-buttons>
+    } @else if (showBack) {
+      <ion-buttons slot="start">
+        <ion-back-button [defaultHref]="defaultBackHref" />
+      </ion-buttons>
+    }
+    <ion-title>{{ title }}</ion-title>
+    <ng-content slot="end" select="[slot=end]" />
+  </ion-toolbar>
+</ion-header>

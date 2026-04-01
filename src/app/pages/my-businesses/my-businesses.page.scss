@@ -1,0 +1,189 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--ph-space-10) var(--ph-space-6);
+  gap: var(--ph-space-2);
+}
+
+.empty-icon {
+  font-size: 48px;
+  color: var(--ph-surface-3);
+  margin-bottom: var(--ph-space-2);
+}
+
+.empty-title {
+  font-size: var(--ph-font-lg);
+  font-weight: var(--ph-weight-bold);
+  color: var(--ph-text-primary);
+  margin: 0;
+}
+
+.biz-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ph-space-3);
+}
+
+// FAB is slot="fixed" inside ion-content. Its default vertical="bottom" positions
+// it at bottom: 0 of the viewport — behind the fixed bottom nav. Push it up above the nav.
+:host ion-fab[vertical="bottom"] {
+  bottom: calc(60px + env(safe-area-inset-bottom, 0px) + 16px);
+}
+
+.biz-card {
+  background: var(--ph-surface-1);
+  border: 1px solid var(--ph-surface-2);
+  border-radius: var(--ph-radius-md);
+  padding: var(--ph-space-3) var(--ph-space-4);
+
+  &.skeleton-card {
+    padding: var(--ph-space-4);
+  }
+}
+
+.biz-info {
+  display: flex;
+  align-items: center;
+  gap: var(--ph-space-3);
+  text-decoration: none;
+  margin-bottom: var(--ph-space-3);
+}
+
+.biz-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--ph-radius-md);
+  background: var(--ph-surface-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--ph-font-lg);
+  font-weight: var(--ph-weight-bold);
+  color: var(--ph-text-muted);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.biz-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.biz-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.biz-name {
+  font-size: var(--ph-font-base);
+  font-weight: var(--ph-weight-semibold);
+  color: var(--ph-text-primary);
+  margin: 0 0 2px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.biz-city {
+  font-size: var(--ph-font-sm);
+  color: var(--ph-text-muted);
+  margin: 0;
+}
+
+.biz-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--ph-space-2);
+}
+
+.inactive-card {
+  opacity: 0.6;
+}
+
+.sub-status-row {
+  display: flex;
+  gap: var(--ph-space-2);
+  margin-bottom: var(--ph-space-2);
+  flex-wrap: wrap;
+}
+
+.sub-badge {
+  font-size: 11px;
+  font-weight: var(--ph-weight-semibold);
+  padding: 2px 10px;
+  border-radius: var(--ph-radius-pill);
+
+  &.active {
+    background: rgba(40, 167, 69, 0.12);
+    color: #28a745;
+  }
+
+  &.inactive {
+    background: var(--ph-surface-2);
+    color: var(--ph-text-muted);
+  }
+}
+
+.visibility-badge {
+  font-size: 11px;
+  font-weight: var(--ph-weight-semibold);
+  padding: 2px 10px;
+  border-radius: var(--ph-radius-pill);
+  background: rgba(224, 48, 48, 0.1);
+  color: var(--ph-accent);
+}
+
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ph-surface-2);
+  border: none;
+  border-radius: var(--ph-radius-sm);
+  cursor: pointer;
+
+  ion-icon {
+    font-size: 18px;
+    color: var(--ph-text-secondary);
+  }
+
+  &:active ion-icon { color: var(--ph-accent); }
+  &:disabled { opacity: 0.4; cursor: default; }
+
+  &.danger ion-icon { color: var(--ph-accent); }
+}
+
+.subscribe-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ph-space-2);
+  height: 36px;
+  background: transparent;
+  border: 1px solid var(--ph-accent);
+  border-radius: var(--ph-radius-sm);
+  color: var(--ph-accent);
+  font-size: var(--ph-font-sm);
+  font-weight: var(--ph-weight-medium);
+  cursor: pointer;
+  font-family: inherit;
+
+  ion-icon { font-size: 16px; }
+
+  &:active { background: rgba(224, 48, 48, 0.08); }
+}

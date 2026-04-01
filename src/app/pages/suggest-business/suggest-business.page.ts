@@ -1,0 +1,61 @@
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { IonContent } from '@ionic/angular/standalone';
+import { AuthService } from '../../core/services/auth.service';
+import { BusinessSuggestionsApiService } from '../../features/business-suggestions/services/business-suggestions-api.service';
+import { AppButtonComponent } from '../../shared/components/app-button/app-button.component';
+import { AppHeaderComponent } from '../../shared/components/app-header/app-header.component';
+
+@Component({
+  selector: 'app-suggest-business',
+  standalone: true,
+  imports: [IonContent, FormsModule, AppHeaderComponent, AppButtonComponent],
+  templateUrl: './suggest-business.page.html',
+  styleUrls: ['./suggest-business.page.scss'],
+})
+export class SuggestBusinessPage {
+  businessName = '';
+  categoryText = '';
+  phoneNumber = '';
+  city = '';
+  description = '';
+
+  submitting = false;
+  submitted = false;
+  error = '';
+
+  constructor(
+    private readonly auth: AuthService,
+    private readonly suggestionsApi: BusinessSuggestionsApiService,
+    private readonly router: Router,
+  ) {}
+
+  submit(): void {
+    if (!this.businessName || this.submitting) return;
+    this.submitting = true;
+    this.error = '';
+
+    this.suggestionsApi.create({
+      suggestedByUserId: this.auth.currentUser?.userId ?? null,
+      businessName: this.businessName,
+      categoryText: this.categoryText || null,
+      phoneNumber: this.phoneNumber || null,
+      email: null,
+      website: null,
+      addressLine: null,
+      city: this.city || null,
+      description: this.description || null,
+    }).subscribe({
+      next: () => {
+        this.submitted = true;
+        this.submitting = false;
+        setTimeout(() => this.router.navigate(['/home']), 2000);
+      },
+      error: () => {
+        this.error = 'Could not submit suggestion. Please try again.';
+        this.submitting = false;
+      },
+    });
+  }
+}

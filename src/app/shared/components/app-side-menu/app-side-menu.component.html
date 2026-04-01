@@ -1,0 +1,75 @@
+<!-- User Identity Block -->
+<div class="menu-header">
+  <div class="avatar-wrap">
+    <ng-container *ngIf="currentUser; else guestAvatar">
+      <img
+        *ngIf="fileUpload.getUrl(profileImageUrl) as imgSrc"
+        [src]="imgSrc"
+        alt="Profile"
+        class="avatar avatar-img"
+      />
+      <div *ngIf="!fileUpload.getUrl(profileImageUrl)" class="avatar">{{ userInitials }}</div>
+    </ng-container>
+    <ng-template #guestAvatar>
+      <div class="avatar guest">
+        <ion-icon name="person-outline" />
+      </div>
+    </ng-template>
+  </div>
+
+  <div class="user-info">
+    <ng-container *ngIf="currentUser; else guestInfo">
+      <p class="user-name">{{ fullName || currentUser.email }}</p>
+      <span class="role-badge" *ngIf="roleBadge">{{ roleBadge }}</span>
+    </ng-container>
+    <ng-template #guestInfo>
+      <p class="user-name guest-label">Welcome</p>
+    </ng-template>
+  </div>
+</div>
+
+<div class="menu-divider"></div>
+
+<!-- Navigation Items -->
+<ion-list lines="none" class="menu-list">
+  <ion-menu-toggle *ngFor="let item of visibleItems">
+    <ion-item
+      [routerLink]="item.route"
+      routerLinkActive="active-item"
+      detail="false"
+      class="menu-item"
+    >
+      <ion-icon slot="start" [name]="item.icon" class="menu-icon" />
+      <ion-label>{{ item.label }}</ion-label>
+    </ion-item>
+  </ion-menu-toggle>
+</ion-list>
+
+<div class="menu-divider"></div>
+
+<!-- Auth Actions -->
+<div class="auth-actions">
+  <ng-container *ngIf="currentUser; else loggedOut">
+    <ion-menu-toggle>
+      <button class="action-btn logout-btn" (click)="logout()">
+        <ion-icon name="log-out-outline" />
+        <span>Logout</span>
+      </button>
+    </ion-menu-toggle>
+  </ng-container>
+
+  <ng-template #loggedOut>
+    <ion-menu-toggle>
+      <button class="action-btn login-btn" (click)="navigate('/auth/login')">
+        <ion-icon name="log-in-outline" />
+        <span>Login</span>
+      </button>
+    </ion-menu-toggle>
+    <ion-menu-toggle>
+      <button class="action-btn register-btn" (click)="navigate('/auth/register')">
+        <ion-icon name="person-add-outline" />
+        <span>Register</span>
+      </button>
+    </ion-menu-toggle>
+  </ng-template>
+</div>

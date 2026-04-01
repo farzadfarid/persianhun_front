@@ -1,0 +1,10 @@
+:host {
+  display: block;
+}
+
+ion-button {
+  --border-radius: var(--ph-radius-md);
+  --box-shadow: none;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}

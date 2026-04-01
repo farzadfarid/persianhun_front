@@ -1,0 +1,15 @@
+// Makes the host element layout-transparent so ion-header behaves as a direct
+// child of the page host. Required for ion-content to correctly measure --offset-top.
+:host {
+  display: contents;
+}
+
+ion-toolbar {
+  --background: var(--ph-surface-0);
+  --border-color: var(--ph-surface-2);
+}
+
+ion-title {
+  font-weight: 700;
+  font-size: var(--ph-text-lg);
+}

@@ -1,0 +1,8 @@
+.auth-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  min-height: 100%;
+  padding: var(--ph-space-8) var(--ph-space-4);
+}

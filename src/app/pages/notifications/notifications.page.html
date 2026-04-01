@@ -1,0 +1,58 @@
+
+<app-header title="Notifications" />
+
+<ion-content class="ph-page-content">
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="notif-list">
+    <div *ngFor="let s of skeletons" class="notif-skeleton pulse"></div>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="!isLoading && hasError" class="empty-state">
+    <ion-icon name="notifications-outline" class="empty-icon" />
+    <p class="empty-message">Could not load notifications.</p>
+  </div>
+
+  <!-- Empty -->
+  <div *ngIf="!isLoading && !hasError && notifications.length === 0" class="empty-state">
+    <ion-icon name="notifications-outline" class="empty-icon" />
+    <p class="empty-title">No notifications</p>
+    <p class="empty-message">You're all caught up!</p>
+  </div>
+
+  <!-- List -->
+  <ng-container *ngIf="!isLoading && !hasError && notifications.length > 0">
+
+    <div class="notif-toolbar" *ngIf="unreadCount > 0">
+      <span class="unread-badge">{{ unreadCount }} unread</span>
+      <app-button
+        fill="clear"
+        color="danger"
+        [loading]="isMarkingAll"
+        (click)="markAllAsRead()"
+      >
+        <ion-icon name="checkmark-done-outline" slot="start" />
+        Mark all read
+      </app-button>
+    </div>
+
+    <div class="notif-list">
+      <div
+        *ngFor="let n of notifications"
+        class="notif-item"
+        [class.unread]="!n.isRead"
+        (click)="markAsRead(n)"
+      >
+        <div class="notif-dot" *ngIf="!n.isRead"></div>
+        <div class="notif-content">
+          <p class="notif-title">{{ n.title }}</p>
+          <p class="notif-meta">{{ n.createdAtUtc | date:'mediumDate' }}</p>
+        </div>
+      </div>
+    </div>
+
+  </ng-container>
+
+</ion-content>
+

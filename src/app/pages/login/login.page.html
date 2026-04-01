@@ -1,0 +1,40 @@
+<div class="login-container">
+  <div class="auth-logo">
+    <span class="logo-mark">PH</span>
+  </div>
+
+  <h1 class="ph-title">Sign In</h1>
+  <p class="ph-subtitle">Welcome back to PersianHub</p>
+
+  <div class="auth-error" *ngIf="errorMessage">
+    <ion-icon name="alert-circle-outline" class="error-icon" />
+    <span>{{ errorMessage }}</span>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="auth-form">
+    <app-input
+      label="Email"
+      type="email"
+      placeholder="your@email.com"
+      formControlName="email"
+      [errorMessage]="emailError"
+    />
+
+    <app-input
+      label="Password"
+      type="password"
+      placeholder="Your password"
+      formControlName="password"
+      [errorMessage]="passwordError"
+    />
+
+    <app-button type="submit" expand="block" [loading]="loading">
+      Sign In
+    </app-button>
+  </form>
+
+  <p class="ph-caption auth-footer">
+    Don't have an account?
+    <a routerLink="/auth/register" class="ph-accent-text">Register</a>
+  </p>
+</div>

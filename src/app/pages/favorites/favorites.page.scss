@@ -1,0 +1,130 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.fav-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ph-space-3);
+}
+
+.fav-card {
+  display: flex;
+  align-items: center;
+  gap: var(--ph-space-3);
+  background: var(--ph-surface-1);
+  border: 1px solid var(--ph-surface-2);
+  border-radius: var(--ph-radius-md);
+  padding: var(--ph-space-3);
+}
+
+.fav-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--ph-space-3);
+  text-decoration: none;
+}
+
+.fav-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--ph-radius-md);
+  background: var(--ph-surface-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--ph-font-xl);
+  font-weight: var(--ph-weight-bold);
+  color: var(--ph-text-muted);
+  flex-shrink: 0;
+}
+
+.fav-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.fav-name {
+  font-size: var(--ph-font-base);
+  font-weight: var(--ph-weight-semibold);
+  color: var(--ph-text-primary);
+  margin: 0 0 2px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fav-city {
+  font-size: var(--ph-font-sm);
+  color: var(--ph-text-muted);
+  margin: 0;
+}
+
+.fav-remove {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--ph-radius-sm);
+  flex-shrink: 0;
+
+  ion-icon {
+    font-size: 18px;
+    color: var(--ph-text-muted);
+  }
+
+  &:active ion-icon {
+    color: var(--ph-accent);
+  }
+}
+
+.fav-skeleton {
+  height: 72px;
+  background: var(--ph-surface-1);
+  border-radius: var(--ph-radius-md);
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ph-space-3);
+  padding: var(--ph-space-10) var(--ph-space-4);
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 56px;
+  color: var(--ph-surface-3);
+}
+
+.empty-title {
+  font-size: var(--ph-font-lg);
+  font-weight: var(--ph-weight-semibold);
+  color: var(--ph-text-primary);
+  margin: 0;
+}
+
+.empty-message {
+  font-size: var(--ph-font-sm);
+  color: var(--ph-text-muted);
+  margin: 0;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.pulse {
+  animation: pulse 1.4s ease-in-out infinite;
+}

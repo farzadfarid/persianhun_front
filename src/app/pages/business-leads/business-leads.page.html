@@ -1,0 +1,50 @@
+
+<app-header title="Leads" [showBack]="true" defaultBackHref="/my-businesses" />
+
+<ion-content class="ph-page-content">
+
+  @if (isLoading) {
+    <div class="leads-list">
+      @for (s of skeletons; track s) {
+        <div class="lead-skeleton">
+          <ion-skeleton-text animated style="width: 50%; height: 16px; margin-bottom: 6px;" />
+          <ion-skeleton-text animated style="width: 30%; height: 14px;" />
+        </div>
+      }
+    </div>
+  }
+
+  @if (hasError) {
+    <div class="empty-state"><p class="ph-caption">Could not load leads.</p></div>
+  }
+
+  @if (!isLoading && !hasError) {
+    @if (leads.length === 0) {
+      <div class="empty-state">
+        <ion-icon name="people-outline" class="empty-icon" />
+        <p class="ph-caption">No contact requests yet.</p>
+      </div>
+    } @else {
+      <div class="leads-list">
+        @for (lead of leads; track lead.id) {
+          <div class="lead-card" [class.converted]="lead.isConverted">
+            <div class="lead-icon">
+              <ion-icon [name]="contactTypeIcon(lead.contactType)" />
+            </div>
+            <div class="lead-info">
+              <p class="lead-name">{{ lead.name }}</p>
+              <p class="lead-type ph-caption">{{ lead.contactType }}</p>
+            </div>
+            <div class="lead-meta">
+              <span class="lead-date ph-caption">{{ lead.createdAtUtc | date:'d MMM yyyy' }}</span>
+              @if (lead.isConverted) {
+                <span class="converted-badge">Converted</span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+
+</ion-content>

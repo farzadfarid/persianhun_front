@@ -1,0 +1,63 @@
+
+<app-header title="Events" [showMenu]="true" />
+
+<ion-content class="ph-page-content">
+
+  @if (isLoading) {
+    <div class="events-list">
+      @for (s of skeletons; track s) {
+        <div class="event-skeleton">
+          <ion-skeleton-text animated style="width: 60%; height: 18px; margin-bottom: 6px;" />
+          <ion-skeleton-text animated style="width: 40%; height: 14px; margin-bottom: 4px;" />
+          <ion-skeleton-text animated style="width: 30%; height: 14px;" />
+        </div>
+      }
+    </div>
+  }
+
+  @if (hasError) {
+    <div class="empty-state">
+      <p class="ph-caption">Could not load events.</p>
+    </div>
+  }
+
+  @if (!isLoading && !hasError) {
+    @if (events.length === 0) {
+      <div class="empty-state">
+        <ion-icon name="calendar-outline" class="empty-icon" />
+        <p class="ph-caption">No upcoming events.</p>
+      </div>
+    } @else {
+      <div class="events-list">
+        @for (event of events; track event.id) {
+          <div class="event-card">
+            <div class="event-date">
+              <span class="date-day">{{ event.startsAtUtc | date:'d' }}</span>
+              <span class="date-month">{{ event.startsAtUtc | date:'MMM' }}</span>
+            </div>
+            <div class="event-info">
+              <p class="event-title">{{ event.title }}</p>
+              @if (event.city) {
+                <p class="event-meta">
+                  <ion-icon name="location-outline" class="meta-icon" />{{ event.city }}
+                </p>
+              }
+              <p class="event-price" [class.free]="event.isFree">
+                <ion-icon name="ticket-outline" class="meta-icon" />{{ priceLabel(event) }}
+              </p>
+              @if (event.businessId && myBusinessIds.has(event.businessId)) {
+                <a class="manage-btn" [routerLink]="['/business-events', event.businessId]">
+                  <ion-icon name="settings-outline" />Manage
+                </a>
+              }
+            </div>
+            @if (event.coverImageUrl) {
+              <img [src]="event.coverImageUrl | uploadUrl" alt="Cover" class="event-cover" />
+            }
+          </div>
+        }
+      </div>
+    }
+  }
+
+</ion-content>

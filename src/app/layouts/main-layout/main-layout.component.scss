@@ -1,0 +1,29 @@
+:host {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+ion-menu.app-menu {
+  --width: 280px;
+  --background: var(--ph-surface-0);
+}
+
+.main-layout {
+  // Use absolute fill instead of height:100% to avoid flex percentage-height
+  // resolution issues across browsers/WebViews.
+  position: absolute;
+  inset: 0;
+  background-color: var(--ph-surface-0);
+}
+
+ion-router-outlet {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}

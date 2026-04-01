@@ -1,0 +1,9 @@
+<div class="empty-state">
+  <div class="empty-icon">🔍</div>
+  <p class="empty-message">{{ message }}</p>
+  @if (showClear) {
+    <app-button fill="outline" color="danger" (click)="clear.emit()">
+      Clear filters
+    </app-button>
+  }
+</div>

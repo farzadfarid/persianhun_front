@@ -1,0 +1,84 @@
+<app-header title="Profile" [showMenu]="true" />
+
+<ion-content class="ph-page-content">
+
+  <!-- User avatar + info -->
+  <div class="profile-hero">
+    <label class="avatar-wrapper" [class.uploading]="uploadingPhoto">
+      @if (profileImageUrl) {
+        <img [src]="fileUpload.getUrl(profileImageUrl)" alt="Profile photo" class="profile-img" />
+      } @else {
+        <div class="profile-avatar">
+          {{ (auth.currentUser?.email ?? 'U')[0].toUpperCase() }}
+        </div>
+      }
+      <div class="camera-overlay">
+        <ion-icon name="camera-outline" />
+      </div>
+      <input type="file" accept="image/*" class="hidden-input" (change)="onPhotoSelected($event)" [disabled]="uploadingPhoto" />
+    </label>
+
+    <div class="profile-info">
+      <p class="profile-email">{{ auth.currentUser?.email ?? 'Not logged in' }}</p>
+      @if (auth.currentUser?.role) {
+        <span class="profile-role">{{ auth.currentUser!.role }}</span>
+      }
+    </div>
+  </div>
+
+  <!-- Business Owner section -->
+  @if (auth.currentUser?.role === 'BusinessOwner') {
+    <div class="menu-section">
+      <p class="section-label">Business</p>
+      <a class="menu-item" routerLink="/my-businesses">
+        <ion-icon name="business-outline" class="menu-icon" />
+        <span class="menu-label">My Businesses</span>
+        <ion-icon name="chevron-forward-outline" class="menu-arrow" />
+      </a>
+      <a class="menu-item" routerLink="/plans">
+        <ion-icon name="card-outline" class="menu-icon" />
+        <span class="menu-label">Subscription Plans</span>
+        <ion-icon name="chevron-forward-outline" class="menu-arrow" />
+      </a>
+    </div>
+  }
+
+  <!-- General section -->
+  <div class="menu-section">
+    <p class="section-label">General</p>
+    <a class="menu-item" routerLink="/favorites">
+      <ion-icon name="heart-outline" class="menu-icon" />
+      <span class="menu-label">Favorites</span>
+      <ion-icon name="chevron-forward-outline" class="menu-arrow" />
+    </a>
+    <a class="menu-item" routerLink="/notifications">
+      <ion-icon name="notifications-outline" class="menu-icon" />
+      <span class="menu-label">Notifications</span>
+      <ion-icon name="chevron-forward-outline" class="menu-arrow" />
+    </a>
+    <a class="menu-item" routerLink="/my-reviews">
+      <ion-icon name="star-outline" class="menu-icon" />
+      <span class="menu-label">My Reviews</span>
+      <ion-icon name="chevron-forward-outline" class="menu-arrow" />
+    </a>
+    <a class="menu-item" routerLink="/suggest-business">
+      <ion-icon name="bulb-outline" class="menu-icon" />
+      <span class="menu-label">Suggest a Business</span>
+      <ion-icon name="chevron-forward-outline" class="menu-arrow" />
+    </a>
+    <a class="menu-item" routerLink="/settings">
+      <ion-icon name="settings-outline" class="menu-icon" />
+      <span class="menu-label">Settings</span>
+      <ion-icon name="chevron-forward-outline" class="menu-arrow" />
+    </a>
+  </div>
+
+  <!-- Logout -->
+  <div class="logout-section">
+    <app-button fill="outline" color="danger" expand="block" (click)="logout()">
+      <ion-icon name="log-out-outline" slot="start" />
+      Sign Out
+    </app-button>
+  </div>
+
+</ion-content>

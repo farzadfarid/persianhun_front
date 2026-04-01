@@ -1,0 +1,43 @@
+.register-container {
+  width: 100%;
+}
+
+.auth-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--ph-space-8);
+}
+
+.logo-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--ph-radius-lg);
+  background: var(--ph-accent);
+  color: #ffffff;
+  font-size: var(--ph-font-lg);
+  font-weight: var(--ph-weight-bold);
+  letter-spacing: 0.05em;
+}
+
+.ph-title {
+  margin: 0 0 var(--ph-space-1) 0;
+  font-size: var(--ph-font-2xl);
+  text-align: center;
+}
+
+.ph-subtitle {
+  margin: 0 0 var(--ph-space-8) 0;
+  text-align: center;
+}
+
+.auth-form {
+  margin-bottom: var(--ph-space-4);
+}
+
+.auth-footer {
+  text-align: center;
+  margin-top: var(--ph-space-4);
+}

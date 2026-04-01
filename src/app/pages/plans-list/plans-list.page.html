@@ -1,0 +1,94 @@
+
+<app-header title="Subscription Plans" [showBack]="true" />
+
+<ion-content class="ph-page-content">
+
+  <!-- Loading skeletons -->
+  <div *ngIf="isLoading" class="plans-list">
+    <div *ngFor="let s of skeletons" class="plan-card skeleton-card">
+      <ion-skeleton-text animated style="width: 40%; height: 24px; margin-bottom: 8px;" />
+      <ion-skeleton-text animated style="width: 60%; height: 32px; margin-bottom: 16px;" />
+      <ion-skeleton-text animated style="width: 100%; height: 14px; margin-bottom: 6px;" />
+      <ion-skeleton-text animated style="width: 85%; height: 14px; margin-bottom: 6px;" />
+      <ion-skeleton-text animated style="width: 90%; height: 14px; margin-bottom: 20px;" />
+      <ion-skeleton-text animated style="width: 100%; height: 40px; border-radius: 8px;" />
+    </div>
+  </div>
+
+  <!-- Error state -->
+  <div *ngIf="!isLoading && hasError" class="error-state">
+    <ion-icon name="close-circle-outline" class="error-icon" />
+    <p class="error-message">Failed to load plans.</p>
+    <app-button (click)="retry()" fill="outline" color="danger">Retry</app-button>
+  </div>
+
+  <!-- Plans list -->
+  <div *ngIf="!isLoading && !hasError" class="plans-container">
+
+    <p class="page-intro ph-caption">
+      Choose a plan to get your business listed on PersianHub.
+    </p>
+
+    <div *ngIf="!businessId" class="notice-banner">
+      To subscribe, open a business from <strong>My Businesses</strong> and tap Upgrade.
+    </div>
+
+    <div class="plans-list">
+      <div
+        *ngFor="let plan of plans"
+        class="plan-card"
+        [class.featured]="plan.canBeFeatured && plan.priorityInSearch > 0"
+      >
+        <span
+          *ngIf="plan.canBeFeatured && plan.priorityInSearch > 0"
+          class="plan-badge"
+        >POPULAR</span>
+
+        <div class="plan-header">
+          <h2 class="plan-name">{{ plan.name }}</h2>
+          <div class="plan-price">
+            <span class="price-amount">{{ plan.price === 0 ? 'Free' : plan.price + ' ' + plan.currency }}</span>
+            <span *ngIf="plan.price > 0" class="price-period">/ {{ plan.billingCycle }}</span>
+          </div>
+          <p *ngIf="plan.description" class="plan-description">{{ plan.description }}</p>
+        </div>
+
+        <ul class="feature-list">
+          <li class="feature-item">
+            <ion-icon name="checkmark-outline" class="feature-check" />
+            Up to {{ plan.maxImages }} images
+          </li>
+          <li *ngIf="plan.canBeFeatured" class="feature-item">
+            <ion-icon name="checkmark-outline" class="feature-check" />
+            Featured in search results
+          </li>
+          <li *ngIf="plan.allowsDeals" class="feature-item">
+            <ion-icon name="checkmark-outline" class="feature-check" />
+            Post deals &amp; offers
+          </li>
+          <li *ngIf="plan.allowsAnalytics" class="feature-item">
+            <ion-icon name="checkmark-outline" class="feature-check" />
+            Analytics dashboard
+          </li>
+          <li *ngIf="plan.priorityInSearch > 0" class="feature-item">
+            <ion-icon name="checkmark-outline" class="feature-check" />
+            Priority #{{ plan.priorityInSearch }} search placement
+          </li>
+        </ul>
+
+        <app-button
+          expand="block"
+          [fill]="(plan.canBeFeatured && plan.priorityInSearch > 0) ? 'solid' : 'outline'"
+          color="danger"
+          [disabled]="!businessId"
+          (click)="selectPlan(plan)"
+        >
+          Get {{ plan.name }}
+        </app-button>
+      </div>
+    </div>
+
+  </div>
+
+</ion-content>
+

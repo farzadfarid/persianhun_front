@@ -1,0 +1,117 @@
+
+<app-header title="My Businesses" [showMenu]="true" />
+
+<ion-content class="ph-page-content">
+
+  <!-- Loading skeletons -->
+  <div *ngIf="isLoading" class="biz-list">
+    <div *ngFor="let s of skeletons" class="biz-card skeleton-card">
+      <ion-skeleton-text animated style="width: 45%; height: 18px; margin-bottom: 6px;" />
+      <ion-skeleton-text animated style="width: 30%; height: 14px; margin-bottom: 12px;" />
+      <ion-skeleton-text animated style="width: 60%; height: 34px; border-radius: 8px;" />
+    </div>
+  </div>
+
+  <!-- Error state -->
+  <div *ngIf="!isLoading && hasError" class="empty-state">
+    <ion-icon name="close-circle-outline" class="empty-icon" />
+    <p class="ph-caption">Could not load your businesses.</p>
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="!isLoading && !hasError && cards.length === 0" class="empty-state">
+    <ion-icon name="business-outline" class="empty-icon" />
+    <h3 class="empty-title">No businesses yet</h3>
+    <p class="ph-caption">Add your first business to get started.</p>
+  </div>
+
+  <!-- Business list -->
+  <div *ngIf="!isLoading && !hasError && cards.length > 0" class="biz-list">
+    <div *ngFor="let card of cards" class="biz-card" [class.inactive-card]="!card.isActive">
+
+      <!-- Business info -->
+      <a [routerLink]="['/businesses', card.biz.id]" class="biz-info">
+        <div class="biz-avatar">
+          @if (card.biz.logoUrl) {
+            <img [src]="card.biz.logoUrl | uploadUrl" [alt]="card.biz.name" class="biz-avatar-img" />
+          } @else {
+            {{ card.biz.name[0].toUpperCase() }}
+          }
+        </div>
+        <div class="biz-details">
+          <p class="biz-name">{{ card.biz.name }}</p>
+          <p *ngIf="card.biz.city" class="biz-city">{{ card.biz.city }}</p>
+        </div>
+      </a>
+
+      <!-- Subscription status badge -->
+      <div class="sub-status-row">
+        <span *ngIf="hasActiveSub(card)" class="sub-badge active">
+          {{ subLabel(card) }}
+        </span>
+        <span *ngIf="card.subscription && !hasActiveSub(card)" class="sub-badge inactive">
+          {{ subLabel(card) }}
+        </span>
+        <span *ngIf="!card.isActive" class="visibility-badge">Hidden</span>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="biz-actions">
+        <!-- Edit -->
+        <button class="icon-btn" [routerLink]="['/edit-business', card.biz.id]" aria-label="Edit">
+          <ion-icon name="create-outline" />
+        </button>
+
+        <!-- Manage Offers -->
+        <button class="icon-btn" [routerLink]="['/business-offers', card.biz.id]" aria-label="Offers">
+          <ion-icon name="pricetag-outline" />
+        </button>
+
+        <!-- Manage Events -->
+        <button class="icon-btn" [routerLink]="['/business-events', card.biz.id]" aria-label="Events">
+          <ion-icon name="calendar-outline" />
+        </button>
+
+        <!-- Leads -->
+        <button class="icon-btn" [routerLink]="['/business-leads', card.biz.id]" aria-label="Leads">
+          <ion-icon name="people-outline" />
+        </button>
+
+        <!-- Toggle active/inactive -->
+        <button class="icon-btn" (click)="toggleActive(card)" [disabled]="card.toggling" aria-label="Toggle visibility">
+          <ion-icon [name]="card.isActive ? 'eye-outline' : 'eye-off-outline'" />
+        </button>
+
+        <!-- Cancel subscription -->
+        <button
+          *ngIf="hasActiveSub(card)"
+          class="icon-btn danger"
+          (click)="cancelSubscription(card)"
+          [disabled]="card.cancelling"
+          aria-label="Cancel subscription"
+        >
+          <ion-icon name="ban-outline" />
+        </button>
+
+        <!-- Subscribe / upgrade -->
+        <button
+          *ngIf="!hasActiveSub(card)"
+          class="subscribe-btn"
+          (click)="subscribeForBusiness(card.biz.id)"
+        >
+          <ion-icon name="card-outline" />
+          <span>Subscribe</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FAB -->
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button routerLink="/create-business" color="danger">
+      <ion-icon name="add" />
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>

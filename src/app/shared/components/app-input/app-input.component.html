@@ -1,0 +1,17 @@
+<div class="app-input-wrapper" [class.has-error]="errorMessage">
+  <ion-input
+    fill="solid"
+    labelPlacement="stacked"
+    [label]="label"
+    [type]="type"
+    [placeholder]="placeholder"
+    [value]="value"
+    [disabled]="isDisabled"
+    [readonly]="readonly"
+    (ionInput)="onInput($event)"
+    (ionBlur)="onBlur()"
+  />
+  @if (errorMessage) {
+    <p class="error-msg">{{ errorMessage }}</p>
+  }
+</div>

@@ -1,0 +1,41 @@
+
+<app-header title="Suggest a Business" [showBack]="true" defaultBackHref="/profile" />
+
+<ion-content class="ph-page-content">
+
+  @if (submitted) {
+    <div class="success-state">
+      <p class="success-msg">Thank you! Your suggestion has been submitted for review.</p>
+    </div>
+  } @else {
+    <p class="page-desc ph-caption">Know a business that should be listed? Fill in the details below and we'll review it.</p>
+
+    <div class="form-card">
+      <label class="field-label">Business Name *</label>
+      <input class="ph-input" [(ngModel)]="businessName" placeholder="e.g. Tehran Bakery" />
+
+      <label class="field-label">Category</label>
+      <input class="ph-input" [(ngModel)]="categoryText" placeholder="e.g. Food & Drink" />
+
+      <label class="field-label">Phone Number</label>
+      <input class="ph-input" [(ngModel)]="phoneNumber" placeholder="+1 234 567 8900" type="tel" />
+
+      <label class="field-label">City</label>
+      <input class="ph-input" [(ngModel)]="city" placeholder="City" />
+
+      <label class="field-label">Description</label>
+      <textarea class="ph-textarea" [(ngModel)]="description" placeholder="Brief description (optional)..." rows="3"></textarea>
+
+      @if (error) {
+        <p class="error-msg">{{ error }}</p>
+      }
+
+      <div class="form-actions">
+        <app-button [loading]="submitting" [disabled]="!businessName" (click)="submit()">
+          Submit Suggestion
+        </app-button>
+      </div>
+    </div>
+  }
+
+</ion-content>

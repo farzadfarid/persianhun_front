@@ -1,0 +1,45 @@
+<div class="upload-wrapper" [class.circle]="shape === 'circle'">
+  <label class="upload-label">{{ label }}</label>
+
+  <div class="upload-zone"
+       [class.has-image]="!!value"
+       [class.uploading]="uploading"
+       (click)="openPicker()">
+
+    @if (uploading) {
+      <div class="upload-overlay">
+        <ion-spinner name="crescent" />
+      </div>
+    }
+
+    @if (value && !uploading) {
+      <img [src]="previewUrl" [alt]="label" class="preview-img" />
+      <div class="img-overlay">
+        <ion-icon name="camera-outline" />
+        <span>Change</span>
+      </div>
+      <button class="clear-btn" type="button" (click)="$event.stopPropagation(); clear()">
+        <ion-icon name="close-circle" />
+      </button>
+    }
+
+    @if (!value && !uploading) {
+      <div class="placeholder">
+        <ion-icon name="image-outline" class="placeholder-icon" />
+        <span class="placeholder-text">Tap to upload</span>
+      </div>
+    }
+  </div>
+
+  @if (error) {
+    <span class="upload-error">{{ error }}</span>
+  }
+
+  <input
+    #fileInput
+    type="file"
+    accept="image/jpeg,image/png,image/webp,image/gif"
+    class="hidden-input"
+    (change)="onFileSelected($event)"
+  />
+</div>

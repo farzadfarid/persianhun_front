@@ -1,0 +1,39 @@
+<div class="biz-card" [routerLink]="['/businesses', business.id]">
+
+  <!-- Logo -->
+  <div class="biz-logo">
+    @if (business.logoUrl) {
+      <img [src]="business.logoUrl | uploadUrl" [alt]="business.name" class="logo-img" />
+    } @else {
+      {{ business.name[0].toUpperCase() }}
+    }
+  </div>
+
+  <!-- Info -->
+  <div class="biz-info">
+    <div class="biz-name-row">
+      <span class="biz-name">{{ business.name }}</span>
+      @if (business.isVerified) {
+        <ion-icon name="checkmark-circle" class="verified-icon" title="Verified" />
+      }
+    </div>
+
+    @if (business.city) {
+      <span class="biz-city">{{ business.city }}</span>
+    }
+
+    @if (business.reviewCount > 0) {
+      <div class="biz-rating">
+        <ion-icon name="star-half" class="star-icon" />
+        <span>{{ business.averageRating.toFixed(1) }}</span>
+        <span class="review-count">({{ business.reviewCount }})</span>
+      </div>
+    }
+  </div>
+
+  <!-- Featured badge -->
+  @if (business.isFeatured) {
+    <span class="featured-badge">Featured</span>
+  }
+
+</div>

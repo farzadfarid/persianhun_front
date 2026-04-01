@@ -1,0 +1,103 @@
+.biz-card {
+  display: flex;
+  align-items: center;
+  gap: var(--ph-space-3);
+  background: var(--ph-surface-1);
+  border-radius: var(--ph-radius-md);
+  padding: var(--ph-space-3);
+  border: 1px solid var(--ph-surface-2);
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.15s;
+  text-decoration: none;
+
+  &:active {
+    border-color: var(--ph-accent);
+  }
+}
+
+.biz-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--ph-radius-md);
+  background: var(--ph-surface-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--ph-font-lg);
+  font-weight: var(--ph-weight-bold);
+  color: var(--ph-text-muted);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.biz-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.biz-name-row {
+  display: flex;
+  align-items: center;
+  gap: var(--ph-space-1);
+}
+
+.biz-name {
+  font-size: var(--ph-font-md);
+  font-weight: var(--ph-weight-semibold);
+  color: var(--ph-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.verified-icon {
+  font-size: 14px;
+  color: var(--ph-accent);
+  flex-shrink: 0;
+}
+
+.biz-city {
+  font-size: var(--ph-font-sm);
+  color: var(--ph-text-muted);
+}
+
+.biz-rating {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: var(--ph-font-sm);
+  color: var(--ph-text-secondary);
+}
+
+.star-icon {
+  font-size: 14px;
+  color: var(--ph-accent);
+}
+
+.review-count {
+  color: var(--ph-text-muted);
+}
+
+.featured-badge {
+  position: absolute;
+  top: var(--ph-space-2);
+  right: var(--ph-space-2);
+  font-size: 9px;
+  font-weight: var(--ph-weight-bold);
+  letter-spacing: 0.06em;
+  color: #ffffff;
+  background: var(--ph-accent);
+  padding: 2px 7px;
+  border-radius: var(--ph-radius-pill);
+  text-transform: uppercase;
+}

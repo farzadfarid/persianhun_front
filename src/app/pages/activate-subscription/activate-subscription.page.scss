@@ -1,0 +1,122 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.checkout-card {
+  background: var(--ph-surface-1);
+  border: 1px solid var(--ph-surface-2);
+  border-radius: var(--ph-radius-lg);
+  padding: var(--ph-space-5);
+
+  &.skeleton-card {
+    padding: var(--ph-space-5);
+  }
+}
+
+.checkout-header {
+  margin-bottom: var(--ph-space-4);
+}
+
+.plan-name {
+  font-size: var(--ph-font-2xl);
+  font-weight: var(--ph-weight-bold);
+  color: var(--ph-text-primary);
+  margin: 0 0 var(--ph-space-2) 0;
+}
+
+.plan-price {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ph-space-2);
+}
+
+.price-amount {
+  font-size: 32px;
+  font-weight: var(--ph-weight-bold);
+  color: var(--ph-accent);
+}
+
+.price-period {
+  font-size: var(--ph-font-sm);
+  color: var(--ph-text-muted);
+}
+
+.plan-description {
+  margin: var(--ph-space-2) 0 0 0;
+  font-size: var(--ph-font-sm);
+  color: var(--ph-text-muted);
+}
+
+.divider {
+  height: 1px;
+  background: var(--ph-surface-2);
+  margin: var(--ph-space-4) 0;
+}
+
+.feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--ph-space-4) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ph-space-2);
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: var(--ph-space-2);
+  font-size: var(--ph-font-sm);
+  color: var(--ph-text-secondary);
+}
+
+.feature-check {
+  color: var(--ph-accent);
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--ph-space-5);
+}
+
+.total-label {
+  font-size: var(--ph-font-base);
+  font-weight: var(--ph-weight-medium);
+  color: var(--ph-text-primary);
+}
+
+.total-amount {
+  font-size: var(--ph-font-xl);
+  font-weight: var(--ph-weight-bold);
+  color: var(--ph-text-primary);
+}
+
+.payment-note {
+  margin: var(--ph-space-3) 0 0 0;
+  font-size: var(--ph-font-xs);
+  color: var(--ph-text-muted);
+  text-align: center;
+}
+
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ph-space-3);
+  padding: var(--ph-space-8) var(--ph-space-4);
+  text-align: center;
+  color: var(--ph-text-secondary);
+}
+
+.error-icon {
+  font-size: 48px;
+  color: var(--ph-accent);
+}

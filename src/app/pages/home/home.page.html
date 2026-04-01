@@ -1,0 +1,64 @@
+
+<app-header title="PersianHub" [showMenu]="true" />
+
+<ion-content class="ph-page-content">
+
+  <!-- Hero search CTA -->
+  <div class="hero-search" routerLink="/businesses">
+    <ion-icon name="search-outline" class="hero-search-icon" />
+    <span class="hero-search-text">Search businesses...</span>
+  </div>
+
+  <!-- Featured Businesses -->
+  <section class="ph-section">
+    <div class="section-header">
+      <h2 class="ph-section-title">Top Businesses</h2>
+      <a routerLink="/businesses" class="section-link">
+        See all <ion-icon name="arrow-forward-outline" />
+      </a>
+    </div>
+
+    @if (isFeaturedLoading) {
+      <div class="featured-list">
+        @for (item of [1, 2, 3]; track item) {
+          <div class="skeleton-card">
+            <div class="skeleton-logo"></div>
+            <div class="skeleton-info">
+              <div class="skeleton-line long"></div>
+              <div class="skeleton-line short"></div>
+            </div>
+          </div>
+        }
+      </div>
+    } @else if (featuredBusinesses.length > 0) {
+      <div class="featured-list">
+        @for (biz of featuredBusinesses; track biz.id) {
+          <app-business-card [business]="biz" />
+        }
+      </div>
+    } @else {
+      <p class="ph-caption">No businesses yet.</p>
+    }
+  </section>
+
+  <!-- Quick Actions -->
+  <section class="ph-section">
+    <h2 class="ph-section-title">Quick Actions</h2>
+    <div class="quick-actions">
+      <a class="quick-action" routerLink="/create-business">
+        <span class="qa-label">Add Business</span>
+      </a>
+      <a class="quick-action" routerLink="/plans">
+        <span class="qa-label">View Plans</span>
+      </a>
+      <a class="quick-action" routerLink="/my-businesses">
+        <span class="qa-label">My Businesses</span>
+      </a>
+      <a class="quick-action" routerLink="/profile">
+        <span class="qa-label">Profile</span>
+      </a>
+    </div>
+  </section>
+
+</ion-content>
+

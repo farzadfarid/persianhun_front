@@ -1,0 +1,103 @@
+<app-header title="Add Business" [showBack]="true" defaultBackHref="/my-businesses" />
+
+<ion-content class="ph-page-content">
+  <form [formGroup]="form" (ngSubmit)="submit()">
+
+    <div class="section-title">Business Logo</div>
+    <app-image-upload
+      label="Logo"
+      [value]="logoUrl"
+      (valueChange)="logoUrl = $event"
+    />
+
+    <div class="section-title">Basic Info</div>
+
+    <app-input
+      label="Business Name *"
+      placeholder="e.g. Shiraz Restaurant"
+      formControlName="name"
+    />
+
+    <app-input
+      label="Description"
+      placeholder="What does your business offer?"
+      formControlName="description"
+    />
+
+    <div class="section-title">Contact</div>
+
+    <app-input
+      label="Phone"
+      type="tel"
+      placeholder="+46 70 000 00 00"
+      formControlName="phoneNumber"
+    />
+
+    <app-input
+      label="Email"
+      type="email"
+      placeholder="info@example.com"
+      formControlName="email"
+    />
+
+    <app-input
+      label="Website"
+      placeholder="https://example.com"
+      formControlName="website"
+    />
+
+    <app-input
+      label="Instagram URL"
+      placeholder="https://instagram.com/yourbusiness"
+      formControlName="instagramUrl"
+    />
+
+    <app-input
+      label="Telegram"
+      placeholder="https://t.me/yourbusiness"
+      formControlName="telegramUrl"
+    />
+
+    <app-input
+      label="WhatsApp Number"
+      placeholder="+46 70 000 00 00"
+      formControlName="whatsAppNumber"
+    />
+
+    <div class="section-title">Location</div>
+
+    <app-input
+      label="Address"
+      placeholder="Street 1"
+      formControlName="addressLine"
+    />
+
+    <app-input
+      label="City"
+      placeholder="Gothenburg"
+      formControlName="city"
+    />
+
+    <app-input
+      label="Region"
+      placeholder="Västra Götaland"
+      formControlName="region"
+    />
+
+    <app-input
+      label="Postal Code"
+      placeholder="411 01"
+      formControlName="postalCode"
+    />
+
+    <app-input
+      label="Country"
+      formControlName="country"
+    />
+
+    <app-button type="submit" expand="block" [loading]="saving" [disabled]="form.invalid">
+      Save Business
+    </app-button>
+
+  </form>
+</ion-content>

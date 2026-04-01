@@ -1,14 +1,3 @@
-/*
- * App Global CSS
- * ----------------------------------------------------------------------------
- * Put style rules here that you want to apply globally. These styles are for
- * the entire app and not just one component. Additionally, this file can be
- * used as an entry point to import other CSS/Sass files to be included in the
- * output CSS.
- * For more information on global stylesheets, visit the documentation:
- * https://ionicframework.com/docs/layout/global-stylesheets
- */
-
 /* Core CSS required for Ionic components to work properly */
 @import "@ionic/angular/css/core.css";
 
@@ -18,20 +7,189 @@
 @import "@ionic/angular/css/typography.css";
 @import "@ionic/angular/css/display.css";
 
-/* Optional CSS utils that can be commented out */
+/* Optional utility classes */
 @import "@ionic/angular/css/padding.css";
 @import "@ionic/angular/css/float-elements.css";
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
-/**
- * Ionic Dark Mode
- * -----------------------------------------------------
- * For more info, please see:
- * https://ionicframework.com/docs/theming/dark-mode
- */
+/* Force dark theme always — no system preference switching */
+@import "@ionic/angular/css/palettes/dark.always.css";
 
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+// ============================================================
+// PersianHub Global Styles
+// ============================================================
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+
+  // RTL-ready: direction is set per-language via JS on the <html> element.
+  // Default is LTR; set dir="rtl" on <html> when Persian (fa) is active.
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--ph-surface-0);
+  color: var(--ph-text-primary);
+
+  // Clean sans-serif stack — future: load a custom font (e.g. Vazirmatn for Persian)
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue',
+    Arial, sans-serif;
+  font-size: var(--ph-font-md);
+  font-weight: var(--ph-weight-regular);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// ---- Ionic component global overrides ----------------------
+
+ion-content {
+  --background: var(--ph-surface-0);
+}
+
+ion-header,
+ion-toolbar {
+  --background: #000000;
+  --color: #ffffff;
+  --border-color: var(--ph-surface-3);
+}
+
+ion-card {
+  --background: var(--ph-surface-1);
+  border-radius: var(--ph-radius-md);
+  box-shadow: var(--ph-shadow-sm);
+  margin: 0;
+}
+
+ion-item {
+  --background: var(--ph-surface-1);
+  --color: var(--ph-text-primary);
+  --border-color: var(--ph-surface-3);
+  --padding-start: var(--ph-space-4);
+  --padding-end: var(--ph-space-4);
+}
+
+ion-button {
+  --border-radius: var(--ph-radius-pill);
+  font-weight: var(--ph-weight-bold);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+ion-input,
+ion-textarea {
+  --background: var(--ph-surface-2);
+  --color: var(--ph-text-primary);
+  --placeholder-color: var(--ph-text-muted);
+  --border-radius: var(--ph-radius-md);
+}
+
+ion-searchbar {
+  --background: var(--ph-surface-1);
+  --color: var(--ph-text-primary);
+  --placeholder-color: var(--ph-text-muted);
+  --border-radius: var(--ph-radius-pill);
+  --box-shadow: none;
+}
+
+ion-label {
+  color: var(--ph-text-primary);
+
+  &.label-secondary {
+    color: var(--ph-text-secondary);
+  }
+
+  &.label-muted {
+    color: var(--ph-text-muted);
+  }
+}
+
+// ---- RTL support -------------------------------------------
+// When dir="rtl" is applied to <html>, Ionic handles most layout mirroring.
+// Additional RTL overrides go here as needed.
+
+[dir='rtl'] {
+  ion-back-button {
+    transform: scaleX(-1);
+  }
+}
+
+// ---- Typography helpers ------------------------------------
+
+.ph-title {
+  font-size: var(--ph-font-2xl);
+  font-weight: var(--ph-weight-bold);
+  color: var(--ph-text-primary);
+  line-height: 1.2;
+}
+
+.ph-subtitle {
+  font-size: var(--ph-font-lg);
+  font-weight: var(--ph-weight-medium);
+  color: var(--ph-text-secondary);
+}
+
+.ph-body {
+  font-size: var(--ph-font-md);
+  color: var(--ph-text-primary);
+}
+
+.ph-caption {
+  font-size: var(--ph-font-sm);
+  color: var(--ph-text-muted);
+}
+
+.ph-accent-text {
+  color: var(--ph-accent);
+}
+
+// ---- Layout helpers ----------------------------------------
+
+.ph-page-content {
+  --padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px) + var(--ph-space-4));
+  --padding-start: var(--ph-space-4);
+  --padding-end: var(--ph-space-4);
+  --padding-top: var(--ph-space-4);
+}
+
+// Use on ion-content when page has edge-to-edge elements (e.g. ion-searchbar).
+// Removes content-level side padding; add a .page-body div for padded sections.
+.ph-no-side-pad {
+  --padding-start: 0;
+  --padding-end: 0;
+}
+
+.ph-section-title {
+  font-size: var(--ph-font-lg);
+  font-weight: var(--ph-weight-bold);
+  color: var(--ph-text-primary);
+  margin: 0 0 var(--ph-space-3) 0;
+}
+
+.ph-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ph-auth-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100%;
+  padding: var(--ph-space-8) 0;
+}
+
+.ph-fill {
+  width: 100%;
+}

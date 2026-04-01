@@ -1,0 +1,283 @@
+
+<app-header
+  [title]="business?.name ?? 'Business'"
+  [showBack]="true"
+  defaultBackHref="/businesses"
+/>
+
+<ion-content class="ph-page-content">
+
+  @if (isLoading) {
+    <div class="skeleton-banner"></div>
+    <div class="skeleton-identity">
+      <div class="skeleton-logo"></div>
+      <div class="skeleton-text">
+        <div class="skeleton-line name"></div>
+        <div class="skeleton-line city"></div>
+      </div>
+    </div>
+    <div class="skeleton-block"></div>
+    <div class="skeleton-block short"></div>
+  }
+
+  @if (hasError) {
+    <div class="error-state">
+      <p class="ph-caption">Could not load business details.</p>
+    </div>
+  }
+
+  @if (!isLoading && !hasError && business) {
+
+    <!-- Banner: cover image or fallback initial -->
+    <div class="biz-banner">
+      @if (coverImage) {
+        <img [src]="coverImage.imageUrl | uploadUrl" [alt]="business.name" class="banner-cover-img" />
+      } @else {
+        <span class="banner-initial">{{ business.name[0].toUpperCase() }}</span>
+      }
+
+      <!-- Logo overlay — bottom-right corner -->
+      @if (business.logoUrl) {
+        <div class="logo-overlay">
+          <img [src]="business.logoUrl | uploadUrl" [alt]="business.name + ' logo'" class="logo-overlay-img" />
+        </div>
+      }
+    </div>
+
+    <!-- Identity row -->
+    <div class="biz-identity-row">
+      <div class="biz-identity">
+        <div class="biz-badges">
+          @if (business.isFeatured) { <span class="badge featured">Featured</span> }
+          @if (business.isVerified) {
+            <span class="badge verified"><ion-icon name="checkmark-circle" /> Verified</span>
+          }
+        </div>
+        <h1 class="biz-name">{{ business.name }}</h1>
+        @if (business.city) {
+          <p class="biz-location">
+            <ion-icon name="location-outline" />
+            {{ business.city }}@if (business.country) {, {{ business.country }}}
+          </p>
+        }
+        @if (reviews.length) {
+          <div class="rating-row">
+            @for (s of stars; track s) {
+              <ion-icon [name]="s <= averageRating ? 'star' : 'star-outline'" class="rating-star" />
+            }
+            <span class="rating-count">({{ reviews.length }})</span>
+          </div>
+        }
+      </div>
+      <div class="meta-actions">
+        <button class="meta-btn" [class.active]="isFavorite" [disabled]="isFavoriteLoading" (click)="toggleFavorite()">
+          <ion-icon [name]="isFavorite ? 'heart' : 'heart-outline'" />
+        </button>
+        <button class="meta-btn" (click)="shareBusiness()">
+          <ion-icon name="share-outline" />
+        </button>
+      </div>
+    </div>
+
+    <!-- Contact actions -->
+    <div class="action-row">
+      @if (business.phoneNumber) {
+        <button class="action-btn" (click)="call()"><ion-icon name="call-outline" /><span>Call</span></button>
+      }
+      @if (business.website) {
+        <button class="action-btn" (click)="openWebsite()"><ion-icon name="globe-outline" /><span>Website</span></button>
+      }
+      @if (business.whatsAppNumber) {
+        <button class="action-btn" (click)="openWhatsApp()"><ion-icon name="logo-whatsapp" /><span>WhatsApp</span></button>
+      }
+      @if (business.instagramUrl) {
+        <button class="action-btn" (click)="openInstagram()"><ion-icon name="logo-instagram" /><span>Instagram</span></button>
+      }
+      @if (business.telegramUrl) {
+        <button class="action-btn" (click)="openTelegram()"><ion-icon name="send-outline" /><span>Telegram</span></button>
+      }
+      <button class="action-btn" (click)="showContactForm = true"><ion-icon name="mail-outline" /><span>Message</span></button>
+    </div>
+
+    <!-- Contact form -->
+    @if (showContactForm) {
+      <div class="contact-form-card">
+        <h3 class="cf-title">Send a Message</h3>
+        <input class="ph-input" [(ngModel)]="contactName" placeholder="Your name *" />
+        <input class="ph-input" [(ngModel)]="contactEmail" placeholder="Your email *" type="email" />
+        <input class="ph-input" [(ngModel)]="contactPhone" placeholder="Phone number (optional)" />
+        <textarea class="ph-textarea" [(ngModel)]="contactMessage" placeholder="Your message..." rows="3"></textarea>
+        <div class="cf-actions">
+          <button class="cancel-btn" (click)="showContactForm = false; resetContactForm()">Cancel</button>
+          <app-button size="small" [loading]="contactSubmitting" [disabled]="!contactName || !contactEmail" (click)="submitContact()">
+            Send
+          </app-button>
+        </div>
+        @if (contactSent) {
+          <p class="contact-success">Message sent successfully!</p>
+        }
+      </div>
+    }
+
+    <!-- About -->
+    @if (business.description) {
+      <section class="detail-section">
+        <h2 class="ph-section-title">About</h2>
+        <p class="biz-description">{{ business.description }}</p>
+      </section>
+    }
+
+    <!-- Address -->
+    @if (fullAddress) {
+      <section class="detail-section">
+        <h2 class="ph-section-title">Address</h2>
+        <div class="address-block">
+          <ion-icon name="location-outline" class="address-icon" />
+          <p class="address-text">{{ fullAddress }}</p>
+        </div>
+      </section>
+    }
+
+    <!-- Offers -->
+    <section class="detail-section">
+      <h2 class="ph-section-title">
+        <ion-icon name="pricetag-outline" class="section-icon" /> Offers
+      </h2>
+      @if (offersLoading) {
+        <div class="skeleton-line short"></div>
+      } @else if (offers.length === 0) {
+        <p class="ph-caption muted-text">No active offers at the moment.</p>
+      } @else {
+        <div class="offers-list">
+          @for (offer of offers; track offer.id) {
+            <div class="offer-card">
+              <div class="offer-badge">{{ discountLabel(offer) }}</div>
+              <p class="offer-title">{{ offer.title }}</p>
+              <p class="offer-dates ph-caption">
+                {{ offer.startsAtUtc | date:'d MMM' }} – {{ offer.endsAtUtc | date:'d MMM yyyy' }}
+              </p>
+            </div>
+          }
+        </div>
+      }
+    </section>
+
+    <!-- Photo Gallery -->
+    @if (business.images && business.images.length > 0) {
+      <section class="detail-section">
+        <h2 class="ph-section-title">
+          <ion-icon name="images-outline" class="section-icon" /> Photos
+        </h2>
+        <div class="gallery-scroll">
+          @for (img of business.images; track img.id) {
+            <div class="gallery-thumb" [class.cover]="img.isCover">
+              <img [src]="img.imageUrl | uploadUrl" [alt]="img.altText || business.name" />
+              @if (img.isCover) { <span class="cover-label">Cover</span> }
+            </div>
+          }
+        </div>
+      </section>
+    }
+
+    <!-- Events -->
+    <section class="detail-section">
+      <h2 class="ph-section-title">
+        <ion-icon name="calendar-outline" class="section-icon" /> Events
+      </h2>
+      @if (eventsLoading) {
+        <div class="skeleton-line short"></div>
+      } @else if (events.length === 0) {
+        <p class="ph-caption muted-text">No upcoming events.</p>
+      } @else {
+        <div class="events-list">
+          @for (event of events; track event.id) {
+            <div class="event-item">
+              <div class="event-date-badge">
+                <span class="edb-day">{{ event.startsAtUtc | date:'d' }}</span>
+                <span class="edb-month">{{ event.startsAtUtc | date:'MMM' }}</span>
+              </div>
+              <div class="event-body">
+                <p class="event-title">{{ event.title }}</p>
+                @if (event.city) { <p class="event-city ph-caption">{{ event.city }}</p> }
+                <span class="event-price" [class.free]="event.isFree">{{ event.isFree ? 'Free' : (event.price ? (event.price + ' ' + (event.currency ?? '')) : 'Paid') }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </section>
+
+    <!-- Reviews -->
+    <section class="detail-section">
+      <div class="section-header-row">
+        <h2 class="ph-section-title">
+          <ion-icon name="chatbubble-outline" class="section-icon" /> Reviews
+        </h2>
+        @if (auth.currentUser && !hasUserReviewed && !showReviewForm) {
+          <button class="write-review-btn" (click)="showReviewForm = true">Write a Review</button>
+        }
+      </div>
+
+      <!-- Write review form -->
+      @if (showReviewForm) {
+        <div class="review-form">
+          <p class="form-label">Your Rating</p>
+          <div class="star-picker">
+            @for (s of stars; track s) {
+              <button class="star-btn" (click)="setRating(s)">
+                <ion-icon [name]="s <= reviewRating ? 'star' : 'star-outline'" class="pick-star" />
+              </button>
+            }
+          </div>
+          <ion-textarea
+            class="review-textarea"
+            placeholder="Share your experience (optional)..."
+            [(ngModel)]="reviewComment"
+            [rows]="3"
+            fill="outline"
+          />
+          <div class="review-form-actions">
+            <button class="cancel-btn" (click)="showReviewForm = false; reviewRating = 0; reviewComment = ''">
+              Cancel
+            </button>
+            <app-button
+              size="small"
+              [loading]="reviewSubmitting"
+              [disabled]="reviewRating === 0"
+              (click)="submitReview()"
+            >
+              Submit
+            </app-button>
+          </div>
+        </div>
+      }
+
+      @if (reviewsLoading) {
+        <div class="skeleton-line short" style="margin-top:8px"></div>
+        <div class="skeleton-line" style="margin-top:8px"></div>
+      } @else if (reviews.length === 0) {
+        <p class="ph-caption muted-text">No reviews yet. Be the first to review!</p>
+      } @else {
+        <div class="reviews-list">
+          @for (review of reviews; track review.id) {
+            <div class="review-card">
+              <div class="review-header">
+                <div class="review-stars">
+                  @for (s of stars; track s) {
+                    <ion-icon [name]="s <= review.rating ? 'star' : 'star-outline'" class="review-star" />
+                  }
+                </div>
+                <span class="review-date ph-caption">{{ review.createdAtUtc | date:'d MMM yyyy' }}</span>
+              </div>
+              @if (review.title) {
+                <p class="review-title">{{ review.title }}</p>
+              }
+            </div>
+          }
+        </div>
+      }
+    </section>
+
+  }
+
+</ion-content>

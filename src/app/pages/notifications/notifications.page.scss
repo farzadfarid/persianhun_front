@@ -1,0 +1,116 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.notif-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--ph-space-3);
+  padding: 0 var(--ph-space-1);
+}
+
+.unread-badge {
+  font-size: var(--ph-font-sm);
+  color: var(--ph-text-muted);
+}
+
+.notif-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ph-space-2);
+}
+
+.notif-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ph-space-3);
+  background: var(--ph-surface-1);
+  border: 1px solid var(--ph-surface-2);
+  border-radius: var(--ph-radius-md);
+  padding: var(--ph-space-3) var(--ph-space-4);
+  cursor: pointer;
+  transition: border-color 0.15s;
+
+  &.unread {
+    border-color: rgba(224, 48, 48, 0.3);
+    background: rgba(224, 48, 48, 0.03);
+  }
+
+  &:active {
+    border-color: var(--ph-accent);
+  }
+}
+
+.notif-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ph-accent);
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+
+.notif-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.notif-title {
+  font-size: var(--ph-font-sm);
+  color: var(--ph-text-primary);
+  margin: 0 0 4px 0;
+  line-height: 1.4;
+}
+
+.notif-meta {
+  font-size: var(--ph-font-xs);
+  color: var(--ph-text-muted);
+  margin: 0;
+}
+
+.notif-skeleton {
+  height: 64px;
+  background: var(--ph-surface-1);
+  border-radius: var(--ph-radius-md);
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ph-space-3);
+  padding: var(--ph-space-10) var(--ph-space-4);
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 56px;
+  color: var(--ph-surface-3);
+}
+
+.empty-title {
+  font-size: var(--ph-font-lg);
+  font-weight: var(--ph-weight-semibold);
+  color: var(--ph-text-primary);
+  margin: 0;
+}
+
+.empty-message {
+  font-size: var(--ph-font-sm);
+  color: var(--ph-text-muted);
+  margin: 0;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.pulse {
+  animation: pulse 1.4s ease-in-out infinite;
+}

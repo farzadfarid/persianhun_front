@@ -1,0 +1,46 @@
+
+<app-header title="Payment Result" />
+
+<ion-content class="ph-page-content">
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="result-container">
+    <div class="result-icon-skeleton pulse"></div>
+    <p class="loading-text">Verifying your payment...</p>
+  </div>
+
+  <!-- System error -->
+  <div *ngIf="!isLoading && hasError" class="result-container">
+    <ion-icon name="close-circle-outline" class="result-icon failure" />
+    <h2 class="result-title">Something went wrong</h2>
+    <p class="result-message">We could not verify your payment. Please contact support or try again.</p>
+    <app-button expand="block" fill="outline" color="danger" (click)="tryAgain()">
+      Try Again
+    </app-button>
+  </div>
+
+  <!-- Success result -->
+  <div *ngIf="!isLoading && !hasError && result?.success" class="result-container">
+    <ion-icon name="checkmark-circle-outline" class="result-icon success" />
+    <h2 class="result-title">Payment Successful!</h2>
+    <p class="result-message">{{ result?.message || 'Your subscription has been activated.' }}</p>
+    <div *ngIf="result?.paymentReference" class="ref-box">
+      Reference: <strong>{{ result!.paymentReference }}</strong>
+    </div>
+    <app-button expand="block" fill="solid" color="danger" (click)="goToMyBusinesses()">
+      Go to My Businesses
+    </app-button>
+  </div>
+
+  <!-- Failed payment -->
+  <div *ngIf="!isLoading && !hasError && result && !result.success" class="result-container">
+    <ion-icon name="close-circle-outline" class="result-icon failure" />
+    <h2 class="result-title">Payment Failed</h2>
+    <p class="result-message">{{ result.message || 'Your payment could not be processed.' }}</p>
+    <app-button expand="block" fill="outline" color="danger" (click)="tryAgain()">
+      Try Again
+    </app-button>
+  </div>
+
+</ion-content>
+

@@ -1,0 +1,35 @@
+<div class="register-container">
+  <div class="auth-logo">
+    <span class="logo-mark">PH</span>
+  </div>
+
+  <h1 class="ph-title">Create Account</h1>
+  <p class="ph-subtitle">Join PersianHub today</p>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="auth-form">
+    <app-input
+      label="Email"
+      type="email"
+      placeholder="your@email.com"
+      formControlName="email"
+      [errorMessage]="emailError"
+    />
+
+    <app-input
+      label="Password"
+      type="password"
+      placeholder="At least 6 characters"
+      formControlName="password"
+      [errorMessage]="passwordError"
+    />
+
+    <app-button type="submit" expand="block" [loading]="loading">
+      Create Account
+    </app-button>
+  </form>
+
+  <p class="ph-caption auth-footer">
+    Already have an account?
+    <a routerLink="/auth/login" class="ph-accent-text">Sign In</a>
+  </p>
+</div>

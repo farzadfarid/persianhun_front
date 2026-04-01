@@ -1,0 +1,58 @@
+
+<app-header title="Offers" [showMenu]="true" />
+
+<ion-content class="ph-page-content">
+
+  @if (isLoading) {
+    <div class="offers-list">
+      @for (s of skeletons; track s) {
+        <div class="offer-skeleton">
+          <ion-skeleton-text animated style="width: 30%; height: 24px; margin-bottom: 8px;" />
+          <ion-skeleton-text animated style="width: 65%; height: 16px; margin-bottom: 4px;" />
+          <ion-skeleton-text animated style="width: 45%; height: 14px;" />
+        </div>
+      }
+    </div>
+  }
+
+  @if (hasError) {
+    <div class="empty-state">
+      <p class="ph-caption">Could not load offers.</p>
+    </div>
+  }
+
+  @if (!isLoading && !hasError) {
+    @if (offers.length === 0) {
+      <div class="empty-state">
+        <ion-icon name="pricetag-outline" class="empty-icon" />
+        <p class="ph-caption">No active offers right now.</p>
+      </div>
+    } @else {
+      <div class="offers-list">
+        @for (offer of offers; track offer.id) {
+          <div class="offer-card">
+            <div class="offer-content">
+              <div class="offer-badge">{{ discountLabel(offer) }}</div>
+              <p class="offer-title">{{ offer.title }}</p>
+              @if (offer.description) {
+                <p class="offer-desc ph-caption">{{ offer.description }}</p>
+              }
+              <p class="offer-dates ph-caption">
+                {{ offer.startsAtUtc | date:'d MMM' }} – {{ offer.endsAtUtc | date:'d MMM yyyy' }}
+              </p>
+              @if (myBusinessIds.has(offer.businessId)) {
+                <a class="manage-btn" [routerLink]="['/business-offers', offer.businessId]">
+                  <ion-icon name="settings-outline" />Manage
+                </a>
+              }
+            </div>
+            @if (offer.coverImageUrl) {
+              <img [src]="offer.coverImageUrl | uploadUrl" alt="Cover" class="offer-cover" />
+            }
+          </div>
+        }
+      </div>
+    }
+  }
+
+</ion-content>

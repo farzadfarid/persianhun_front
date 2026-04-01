@@ -1,0 +1,98 @@
+<app-header title="Edit Business" [showBack]="true" defaultBackHref="/my-businesses" />
+
+<ion-content class="ph-page-content">
+
+  @if (loading) {
+    <div class="loading-state">
+      <ion-spinner name="crescent" />
+    </div>
+  }
+
+  @if (!loading) {
+    <form [formGroup]="form" (ngSubmit)="submit()">
+
+      <div class="section-label">Business Logo</div>
+      <app-image-upload
+        label="Logo"
+        [value]="logoUrl"
+        (valueChange)="logoUrl = $event"
+      />
+
+      <div class="section-label">Basic Info</div>
+
+      <app-input label="Business Name *" placeholder="e.g. Shiraz Restaurant" formControlName="name" />
+      <app-input label="Description" placeholder="Tell customers about your business..." formControlName="description" />
+
+      <div class="section-label">Contact</div>
+
+      <app-input label="Phone" type="tel" placeholder="+46 70 000 00 00" formControlName="phoneNumber" />
+      <app-input label="Email" type="email" placeholder="contact@yourbusiness.com" formControlName="email" />
+      <app-input label="Website" placeholder="https://yourbusiness.com" formControlName="website" />
+
+      <div class="section-label">Social</div>
+
+      <app-input label="Instagram URL" placeholder="https://instagram.com/yourbusiness" formControlName="instagramUrl" />
+      <app-input label="Telegram" placeholder="https://t.me/yourbusiness" formControlName="telegramUrl" />
+      <app-input label="WhatsApp Number" placeholder="+46700000000" formControlName="whatsAppNumber" />
+
+      <div class="section-label">Location</div>
+
+      <app-input label="Address" placeholder="Street, Number" formControlName="addressLine" />
+      <app-input label="City" placeholder="Gothenburg" formControlName="city" />
+      <app-input label="Region" placeholder="Västra Götaland" formControlName="region" />
+      <app-input label="Postal Code" placeholder="41101" formControlName="postalCode" />
+
+      <div class="form-actions">
+        <app-button type="submit" expand="block" [loading]="saving" [disabled]="form.invalid">
+          Save Changes
+        </app-button>
+      </div>
+
+    </form>
+
+    <!-- Gallery Section -->
+    <div class="gallery-section">
+      <div class="gallery-header">
+        <span class="section-label">Photo Gallery</span>
+        <label class="add-photo-btn" [class.loading]="galleryUploading">
+          @if (galleryUploading) {
+            <ion-spinner name="crescent" style="width:16px;height:16px" />
+          } @else {
+            + Add Photo
+          }
+          <input type="file" accept="image/*" class="hidden-input" (change)="onGalleryFileSelected($event)" [disabled]="galleryUploading" />
+        </label>
+      </div>
+
+      @if (galleryImages.length === 0) {
+        <p class="gallery-empty">No photos added yet. Photos help attract customers!</p>
+      }
+
+      <div class="gallery-grid">
+        @for (img of galleryImages; track img.id) {
+          <div class="gallery-item" [class.is-cover]="img.isCover">
+            <img [src]="img.imageUrl | uploadUrl" [alt]="img.altText || 'Gallery photo'" />
+            @if (img.isCover) {
+              <span class="cover-badge">Cover</span>
+            }
+            <div class="gallery-actions">
+              @if (!img.isCover) {
+                <button type="button" class="action-btn" title="Set as cover" (click)="setCover(img)">
+                  <ion-icon name="star-outline" />
+                </button>
+              } @else {
+                <button type="button" class="action-btn active" title="Cover photo">
+                  <ion-icon name="star" />
+                </button>
+              }
+              <button type="button" class="action-btn danger" title="Remove" (click)="removeGalleryImage(img)">
+                <ion-icon name="trash-outline" />
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+</ion-content>

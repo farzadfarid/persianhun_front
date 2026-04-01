@@ -1,0 +1,47 @@
+
+<app-header title="My Reviews" [showBack]="true" defaultBackHref="/profile" />
+
+<ion-content class="ph-page-content">
+
+  @if (isLoading) {
+    <div class="reviews-list">
+      @for (s of skeletons; track s) {
+        <div class="review-skeleton">
+          <ion-skeleton-text animated style="width: 40%; height: 14px; margin-bottom: 6px;" />
+          <ion-skeleton-text animated style="width: 70%; height: 16px;" />
+        </div>
+      }
+    </div>
+  }
+
+  @if (hasError) {
+    <div class="empty-state"><p class="ph-caption">Could not load your reviews.</p></div>
+  }
+
+  @if (!isLoading && !hasError) {
+    @if (reviews.length === 0) {
+      <div class="empty-state">
+        <ion-icon name="chatbubble-outline" class="empty-icon" />
+        <p class="ph-caption">You haven't written any reviews yet.</p>
+        <a class="browse-link" routerLink="/businesses">Browse businesses</a>
+      </div>
+    } @else {
+      <div class="reviews-list">
+        @for (review of reviews; track review.id) {
+          <div class="review-card">
+            <div class="review-stars">
+              @for (s of stars; track s) {
+                <ion-icon [name]="s <= review.rating ? 'star' : 'star-outline'" class="star-icon" />
+              }
+            </div>
+            @if (review.title) {
+              <p class="review-title">{{ review.title }}</p>
+            }
+            <p class="review-date ph-caption">{{ review.createdAtUtc | date:'d MMM yyyy' }}</p>
+          </div>
+        }
+      </div>
+    }
+  }
+
+</ion-content>

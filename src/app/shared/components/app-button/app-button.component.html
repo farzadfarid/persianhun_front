@@ -1,0 +1,12 @@
+<ion-button
+  [type]="type"
+  [expand]="expand"
+  [fill]="fill"
+  [color]="color"
+  [disabled]="disabled || loading"
+>
+  @if (loading) {
+    <ion-spinner name="crescent" slot="start" />
+  }
+  <ng-content />
+</ion-button>

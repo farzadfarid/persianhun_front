@@ -1,0 +1,128 @@
+
+<app-header title="Manage Offers" [showBack]="true" defaultBackHref="/my-businesses" />
+
+<ion-content class="ph-page-content">
+
+  @if (isLoading) {
+    <div class="list-container">
+      <div class="offer-skeleton"></div>
+      <div class="offer-skeleton"></div>
+    </div>
+  }
+
+  @if (hasError) {
+    <div class="empty-state">
+      <p class="ph-caption">Could not load offers.</p>
+    </div>
+  }
+
+  @if (!isLoading && !hasError) {
+
+    <!-- Create offer form -->
+    @if (showForm) {
+      <div class="form-card">
+        <h3 class="form-title">{{ editingOffer ? 'Edit Offer' : 'New Offer' }}</h3>
+
+        <label class="field-label">Title *</label>
+        <input class="ph-input" [(ngModel)]="title" placeholder="e.g. Weekend Special" />
+
+        <label class="field-label">Description</label>
+        <textarea class="ph-textarea" [(ngModel)]="description" placeholder="Optional details..." rows="2"></textarea>
+
+        <div class="form-row">
+          <div class="form-col">
+            <label class="field-label">Discount Type *</label>
+            <select class="ph-select" [(ngModel)]="discountType">
+              <option value="Percentage">Percentage (%)</option>
+              <option value="Fixed">Fixed Amount</option>
+            </select>
+          </div>
+          <div class="form-col">
+            <label class="field-label">Value *</label>
+            <input class="ph-input" type="number" [(ngModel)]="discountValue" placeholder="0" min="0" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-col">
+            <label class="field-label">Starts *</label>
+            <input class="ph-input" type="datetime-local" [(ngModel)]="startsAt" />
+          </div>
+          <div class="form-col">
+            <label class="field-label">Ends *</label>
+            <input class="ph-input" type="datetime-local" [(ngModel)]="endsAt" />
+          </div>
+        </div>
+
+        <app-image-upload
+          label="Cover Image (optional)"
+          [value]="coverImageUrl"
+          (valueChange)="coverImageUrl = $event"
+        />
+
+        <div class="form-actions">
+          <button class="cancel-btn" (click)="cancelForm()">Cancel</button>
+          @if (editingOffer) {
+            <app-button size="small" [loading]="submitting" [disabled]="!title || !discountValue || !startsAt || !endsAt" (click)="submitEdit()">
+              Save
+            </app-button>
+          } @else {
+            <app-button size="small" [loading]="submitting" [disabled]="!title || !discountValue || !startsAt || !endsAt" (click)="submitOffer()">
+              Create
+            </app-button>
+          }
+        </div>
+      </div>
+    }
+
+    @if (!showForm) {
+      <button class="add-btn" (click)="showForm = true">
+        <ion-icon name="add-outline" /> Add New Offer
+      </button>
+    }
+
+    @if (offers.length === 0) {
+      <div class="empty-state">
+        <ion-icon name="pricetag-outline" class="empty-icon" />
+        <p class="ph-caption">No offers yet. Add your first one.</p>
+      </div>
+    } @else {
+      <div class="list-container">
+        @for (offer of offers; track offer.id) {
+          <div class="offer-row">
+            @if (offer.coverImageUrl) {
+              <img [src]="offer.coverImageUrl | uploadUrl" alt="Cover" class="offer-thumb" />
+            }
+            <div class="offer-main">
+              <span class="offer-badge">{{ discountLabel(offer) }}</span>
+              <p class="offer-title">{{ offer.title }}</p>
+              <p class="offer-dates ph-caption">
+                {{ offer.startsAtUtc | date:'d MMM' }} – {{ offer.endsAtUtc | date:'d MMM yyyy' }}
+              </p>
+            </div>
+            <div class="offer-toggles">
+              <div class="toggle-row">
+                <span class="toggle-label">Active</span>
+                <ion-toggle [checked]="offer.isActive" (ionChange)="toggleActive(offer)" />
+              </div>
+              <div class="toggle-row">
+                <span class="toggle-label">Published</span>
+                <ion-toggle [checked]="offer.isPublished" (ionChange)="togglePublish(offer)" />
+              </div>
+            </div>
+            <div class="offer-row-actions">
+              <button class="row-action-btn" (click)="startEdit(offer)" title="Edit">
+                <ion-icon name="create-outline" />
+              </button>
+              <button class="row-action-btn danger" (click)="deleteOffer(offer)" title="Delete">
+                <ion-icon name="trash-outline" />
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+  }
+
+</ion-content>

@@ -1,0 +1,15 @@
+<ion-card>
+  @if (title || subtitle) {
+    <ion-card-header>
+      @if (title) {
+        <ion-card-title>{{ title }}</ion-card-title>
+      }
+      @if (subtitle) {
+        <ion-card-subtitle>{{ subtitle }}</ion-card-subtitle>
+      }
+    </ion-card-header>
+  }
+  <ion-card-content>
+    <ng-content />
+  </ion-card-content>
+</ion-card>
