@@ -1,0 +1,124 @@
+
+<app-header [title]="'MY_BUSINESS_REVIEWS.TITLE' | translate" [showBack]="true" defaultBackHref="/my-businesses" />
+
+<ion-content class="ph-page-content">
+
+  @if (isLoading) {
+    <div class="skeleton-list">
+      @for (s of [1,2,3]; track s) { <div class="skeleton-card"></div> }
+    </div>
+  }
+
+  @if (hasError) {
+    <div class="empty-state">
+      <ion-icon name="chatbubble-outline" class="empty-icon" />
+      <p class="ph-caption">{{ 'MY_BUSINESS_REVIEWS.LOAD_ERROR' | translate }}</p>
+      <button class="retry-btn" (click)="load()">{{ 'COMMON.TRY_AGAIN' | translate }}</button>
+    </div>
+  }
+
+  @if (!isLoading && !hasError) {
+
+    <!-- Filters -->
+    <div class="filter-row">
+      @if (businesses.length > 1) {
+        <select class="ph-select" [(ngModel)]="selectedBusinessId">
+          <option [ngValue]="null">{{ 'MY_BUSINESS_REVIEWS.ALL_BUSINESSES' | translate }}</option>
+          @for (b of businesses; track b.id) {
+            <option [ngValue]="b.id">{{ b.name }}</option>
+          }
+        </select>
+      }
+      <select class="ph-select" [(ngModel)]="selectedStatus">
+        <option value="all">{{ 'MY_BUSINESS_REVIEWS.ALL_STATUSES' | translate }}</option>
+        <option value="pending">{{ 'MY_BUSINESS_REVIEWS.PENDING' | translate }} @if (pendingCount > 0) { ({{ pendingCount }}) }</option>
+        <option value="approved">{{ 'MY_BUSINESS_REVIEWS.APPROVED' | translate }}</option>
+        <option value="rejected">{{ 'MY_BUSINESS_REVIEWS.REJECTED' | translate }}</option>
+      </select>
+    </div>
+
+    @if (pendingCount > 0) {
+      <div class="pending-banner">
+        <ion-icon name="time-outline" />
+        {{ 'MY_BUSINESS_REVIEWS.PENDING_BANNER' | translate:{ count: pendingCount } }}
+      </div>
+    }
+
+    @if (filtered.length === 0) {
+      <div class="empty-state">
+        <ion-icon name="chatbubble-outline" class="empty-icon" />
+        <p class="ph-caption">{{ 'MY_BUSINESS_REVIEWS.EMPTY' | translate }}</p>
+      </div>
+    } @else {
+      <div class="item-list">
+        @for (review of filtered; track review.id) {
+          <div class="review-card" [class.review-card--pending]="review.status === 'Pending'" [class.review-card--rejected]="review.status === 'Rejected'">
+
+            <div class="review-top">
+              <div class="review-stars">
+                @for (s of stars; track s) {
+                  <ion-icon [name]="s <= review.rating ? 'star' : 'star-outline'" class="review-star" />
+                }
+              </div>
+              <div class="review-meta">
+                <span class="status-badge status-badge--{{ review.status.toLowerCase() }}">
+                  {{ statusLabel(review.status) }}
+                </span>
+                <span class="ph-caption muted">{{ review.createdAtUtc | date:'d MMM yyyy' }}</span>
+              </div>
+            </div>
+
+            @if (businesses.length > 1) {
+              <span class="biz-tag">{{ review.businessName }}</span>
+            }
+            @if (review.title) { <p class="review-title">{{ review.title }}</p> }
+            @if (review.comment) { <p class="review-comment">{{ review.comment }}</p> }
+
+            <div class="review-actions">
+              @if (review.status === 'Pending') {
+                <button class="action-btn action-btn--approve" [disabled]="review.actionLoading" (click)="approve(review)">
+                  <ion-icon name="checkmark-circle-outline" /> {{ 'MY_BUSINESS_REVIEWS.APPROVE' | translate }}
+                </button>
+                <button class="action-btn action-btn--reject" [disabled]="review.actionLoading" (click)="reject(review)">
+                  <ion-icon name="close-circle-outline" /> {{ 'MY_BUSINESS_REVIEWS.REJECT' | translate }}
+                </button>
+              }
+              <button class="action-btn action-btn--delete" [disabled]="review.actionLoading" (click)="confirmDelete(review)">
+                <ion-icon name="trash-outline" /> {{ 'COMMON.DELETE' | translate }}
+              </button>
+            </div>
+
+          </div>
+        }
+      </div>
+    }
+  }
+
+  <!-- Delete confirm dialog -->
+  @if (confirmDeleteTarget) {
+    <div class="confirm-backdrop" slot="fixed" (click)="cancelDelete()">
+      <div class="confirm-dialog" (click)="$event.stopPropagation()">
+        <div class="confirm-icon">
+          <ion-icon name="trash-outline" />
+        </div>
+        <h3 class="confirm-title">{{ 'MY_BUSINESS_REVIEWS.DELETE_TITLE' | translate }}</h3>
+        <p class="confirm-body">
+          @if (confirmDeleteTarget.title) {
+            "{{ confirmDeleteTarget.title }}"
+          } @else if (confirmDeleteTarget.comment) {
+            "{{ confirmDeleteTarget.comment | slice:0:80 }}{{ confirmDeleteTarget.comment!.length > 80 ? '…' : '' }}"
+          } @else {
+            {{ 'MY_BUSINESS_REVIEWS.DELETE_CONFIRM' | translate }}
+          }
+        </p>
+        <div class="confirm-actions">
+          <button class="confirm-btn confirm-btn--cancel" (click)="cancelDelete()">{{ 'COMMON.CANCEL' | translate }}</button>
+          <button class="confirm-btn confirm-btn--delete" (click)="executeDelete()">
+            <ion-icon name="trash-outline" /> {{ 'COMMON.DELETE' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+</ion-content>

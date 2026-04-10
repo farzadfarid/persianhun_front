@@ -1,6 +1,7 @@
 import { DatePipe, NgFor, NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { IonContent, IonIcon } from '@ionic/angular/standalone';
+import { TranslateModule } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import { notificationsOutline, checkmarkDoneOutline } from 'ionicons/icons';
 import { AuthService } from '../../core/services/auth.service';
@@ -12,20 +13,20 @@ import { AppHeaderComponent } from '../../shared/components/app-header/app-heade
 @Component({
   selector: 'app-notifications',
   standalone: true,
-  imports: [IonContent, IonIcon, NgIf, NgFor, DatePipe, AppHeaderComponent, AppButtonComponent],
+  imports: [IonContent, IonIcon, NgIf, NgFor, DatePipe, TranslateModule, AppHeaderComponent, AppButtonComponent],
   templateUrl: './notifications.page.html',
   styleUrls: ['./notifications.page.scss'],
 })
 export class NotificationsPage implements OnInit {
+  private readonly auth = inject(AuthService);
+  private readonly notificationsApi = inject(NotificationsApiService);
+
   notifications: NotificationListItemDto[] = [];
   isLoading = true;
   hasError = false;
   isMarkingAll = false;
 
-  constructor(
-    private readonly auth: AuthService,
-    private readonly notificationsApi: NotificationsApiService
-  ) {
+  constructor() {
     addIcons({ notificationsOutline, checkmarkDoneOutline });
   }
 
@@ -35,31 +36,19 @@ export class NotificationsPage implements OnInit {
 
   load(): void {
     const user = this.auth.currentUser;
-    if (!user) {
-      this.isLoading = false;
-      return;
-    }
+    if (!user) { this.isLoading = false; return; }
 
     this.notificationsApi.getUserNotifications(user.userId).subscribe({
-      next: (items) => {
-        this.notifications = items;
-        this.isLoading = false;
-      },
-      error: () => {
-        this.hasError = true;
-        this.isLoading = false;
-      },
+      next: (items) => { this.notifications = items; this.isLoading = false; },
+      error: () => { this.hasError = true; this.isLoading = false; },
     });
   }
 
   markAsRead(notification: NotificationListItemDto): void {
     if (notification.isRead) return;
-
     this.notificationsApi.markAsRead(notification.id).subscribe({
-      next: () => {
-        notification.isRead = true;
-      },
-      error: () => { /* interceptor handles error */ },
+      next: () => { notification.isRead = true; },
+      error: () => {},
     });
   }
 

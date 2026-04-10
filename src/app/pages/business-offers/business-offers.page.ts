@@ -1,26 +1,42 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { LanguageService } from '../../core/services/language.service';
+
 import { FormsModule } from '@angular/forms';
+
 import { ActivatedRoute } from '@angular/router';
+
 import { IonContent, IonIcon, IonToggle } from '@ionic/angular/standalone';
+
 import { addIcons } from 'ionicons';
+
 import { addOutline, pricetagOutline, trashOutline, createOutline } from 'ionicons/icons';
+
 import { ToastService } from '../../core/services/toast.service';
+
 import { CreateDailyOfferRequest, DailyOfferListItem } from '../../features/daily-offers/models/daily-offer.model';
+
 import { DailyOffersApiService } from '../../features/daily-offers/services/daily-offers-api.service';
+
 import { AppButtonComponent } from '../../shared/components/app-button/app-button.component';
+
 import { AppHeaderComponent } from '../../shared/components/app-header/app-header.component';
+
 import { ImageUploadComponent } from '../../shared/components/image-upload/image-upload.component';
+
 import { UploadUrlPipe } from '../../shared/pipes/upload-url.pipe';
 
 @Component({
   selector: 'app-business-offers',
   standalone: true,
-  imports: [IonContent, IonIcon, IonToggle, FormsModule, DatePipe, AppHeaderComponent, AppButtonComponent, ImageUploadComponent, UploadUrlPipe],
+  imports: [TranslateModule, IonContent, IonIcon, IonToggle, FormsModule, DatePipe, AppHeaderComponent, AppButtonComponent, ImageUploadComponent, UploadUrlPipe],
   templateUrl: './business-offers.page.html',
   styleUrls: ['./business-offers.page.scss'],
 })
 export class BusinessOffersPage implements OnInit {
+  readonly lang = inject(LanguageService);
+  private readonly translate = inject(TranslateService);
   businessId = 0;
   offers: DailyOfferListItem[] = [];
   isLoading = true;
@@ -31,8 +47,10 @@ export class BusinessOffersPage implements OnInit {
   editingOffer: DailyOfferListItem | null = null;
 
   title = '';
+  titleFa = '';
   description = '';
-  discountType: 'Percentage' | 'Fixed' = 'Percentage';
+  descriptionFa = '';
+  discountType: 'Percentage' | 'FixedAmount' = 'Percentage';
   discountValue = 0;
   startsAt = '';
   endsAt = '';
@@ -80,8 +98,10 @@ export class BusinessOffersPage implements OnInit {
     const request: CreateDailyOfferRequest = {
       businessId: this.businessId,
       title: this.title,
+      titleFa: this.titleFa || null,
       slug: null,
       description: this.description || null,
+      descriptionFa: this.descriptionFa || null,
       discountType: this.discountType,
       discountValue: this.discountValue,
       originalPrice: null,
@@ -108,8 +128,10 @@ export class BusinessOffersPage implements OnInit {
     this.offersApi.getById(offer.id).subscribe({
       next: (detail) => {
         this.title = detail.title;
+        this.titleFa = detail.titleFa ?? '';
         this.description = detail.description ?? '';
-        this.discountType = detail.discountType as 'Percentage' | 'Fixed';
+        this.descriptionFa = detail.descriptionFa ?? '';
+        this.discountType = detail.discountType as 'Percentage' | 'FixedAmount';
         this.discountValue = detail.discountValue;
         this.startsAt = detail.startsAtUtc.slice(0, 16);
         this.endsAt = detail.endsAtUtc.slice(0, 16);
@@ -125,7 +147,9 @@ export class BusinessOffersPage implements OnInit {
 
     this.offersApi.update(this.editingOffer.id, {
       title: this.title,
+      titleFa: this.titleFa || null,
       description: this.description || null,
+      descriptionFa: this.descriptionFa || null,
       discountType: this.discountType,
       discountValue: this.discountValue,
       originalPrice: null,
@@ -164,7 +188,9 @@ export class BusinessOffersPage implements OnInit {
 
   private resetForm(): void {
     this.title = '';
+    this.titleFa = '';
     this.description = '';
+    this.descriptionFa = '';
     this.discountType = 'Percentage';
     this.discountValue = 0;
     this.startsAt = '';
@@ -173,8 +199,9 @@ export class BusinessOffersPage implements OnInit {
   }
 
   discountLabel(offer: DailyOfferListItem): string {
+    const off = this.translate.instant('COMMON.OFF');
     return offer.discountType === 'Percentage'
-      ? `${offer.discountValue}% off`
-      : `${offer.discountValue} SEK off`;
+      ? `${offer.discountValue}% ${off}`
+      : `${offer.discountValue} ${off}`;
   }
 }

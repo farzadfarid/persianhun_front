@@ -1,58 +1,83 @@
+<app-header [title]="'OFFERS.TITLE' | translate" [showMenu]="true" />
 
-<app-header title="Offers" [showMenu]="true" />
+<ion-content class="ph-page-content ph-no-side-pad">
 
-<ion-content class="ph-page-content">
+  <ion-searchbar
+    [(ngModel)]="keyword"
+    (ionInput)="onSearchChange()"
+    [placeholder]="'OFFERS.SEARCH_PLACEHOLDER' | translate"
+    [animated]="true"
+  />
 
-  @if (isLoading) {
-    <div class="offers-list">
-      @for (s of skeletons; track s) {
-        <div class="offer-skeleton">
-          <ion-skeleton-text animated style="width: 30%; height: 24px; margin-bottom: 8px;" />
-          <ion-skeleton-text animated style="width: 65%; height: 16px; margin-bottom: 4px;" />
-          <ion-skeleton-text animated style="width: 45%; height: 14px;" />
-        </div>
-      }
+  <div class="page-body">
+
+    <div class="city-filter-row">
+      <input
+        class="city-input"
+        [(ngModel)]="city"
+        (input)="onSearchChange()"
+        [placeholder]="'OFFERS.CITY_PLACEHOLDER' | translate"
+      />
     </div>
-  }
 
-  @if (hasError) {
-    <div class="empty-state">
-      <p class="ph-caption">Could not load offers.</p>
-    </div>
-  }
-
-  @if (!isLoading && !hasError) {
-    @if (offers.length === 0) {
-      <div class="empty-state">
-        <ion-icon name="pricetag-outline" class="empty-icon" />
-        <p class="ph-caption">No active offers right now.</p>
-      </div>
-    } @else {
+    @if (isLoading) {
       <div class="offers-list">
-        @for (offer of offers; track offer.id) {
-          <div class="offer-card">
-            <div class="offer-content">
-              <div class="offer-badge">{{ discountLabel(offer) }}</div>
-              <p class="offer-title">{{ offer.title }}</p>
-              @if (offer.description) {
-                <p class="offer-desc ph-caption">{{ offer.description }}</p>
-              }
-              <p class="offer-dates ph-caption">
-                {{ offer.startsAtUtc | date:'d MMM' }} – {{ offer.endsAtUtc | date:'d MMM yyyy' }}
-              </p>
-              @if (myBusinessIds.has(offer.businessId)) {
-                <a class="manage-btn" [routerLink]="['/business-offers', offer.businessId]">
-                  <ion-icon name="settings-outline" />Manage
-                </a>
-              }
-            </div>
-            @if (offer.coverImageUrl) {
-              <img [src]="offer.coverImageUrl | uploadUrl" alt="Cover" class="offer-cover" />
-            }
+        @for (s of skeletons; track s) {
+          <div class="offer-skeleton">
+            <ion-skeleton-text animated style="width: 30%; height: 24px; margin-bottom: 8px;" />
+            <ion-skeleton-text animated style="width: 65%; height: 16px; margin-bottom: 4px;" />
+            <ion-skeleton-text animated style="width: 45%; height: 14px;" />
           </div>
         }
       </div>
     }
-  }
+
+    @if (hasError) {
+      <div class="error-state">
+        <p class="ph-caption">{{ 'OFFERS.LOAD_ERROR' | translate }}</p>
+        <app-button fill="outline" color="danger" (click)="retry()">{{ 'OFFERS.TRY_AGAIN' | translate }}</app-button>
+      </div>
+    }
+
+    @if (!isLoading && !hasError) {
+      @if (offers.length === 0) {
+        <div class="empty-state">
+          <ion-icon name="pricetag-outline" class="empty-icon" />
+          <p class="ph-caption">{{ emptyMessage }}</p>
+          @if (keyword || city) {
+            <app-button fill="clear" (click)="clearFilters()">{{ 'OFFERS.CLEAR_FILTERS' | translate }}</app-button>
+          }
+        </div>
+      } @else {
+        <div class="offers-list">
+          @for (offer of offers; track offer.id) {
+            <div class="offer-card" (click)="goToDetail(offer.id)">
+              <div class="offer-content">
+                <div class="offer-badge">{{ discountLabel(offer) }}</div>
+                <p class="offer-title">{{ lang.pick(offer.title, offer.titleFa) }}</p>
+                <p class="offer-business ph-caption">{{ lang.pick(offer.businessName, offer.businessNameFa) }}</p>
+                <p class="offer-dates ph-caption">
+                  {{ 'OFFERS.ENDS' | translate }} {{ offer.endsAtUtc | date:'d MMM yyyy' }}
+                </p>
+                @if (myBusinessIds.has(offer.businessId)) {
+                  <button class="manage-btn" (click)="goToManage($event, offer.businessId)">
+                    <ion-icon name="settings-outline" />{{ 'OFFERS.MANAGE' | translate }}
+                  </button>
+                }
+              </div>
+              @if (offer.coverImageUrl) {
+                <img [src]="offer.coverImageUrl | uploadUrl" alt="Cover" class="offer-cover" />
+              }
+            </div>
+          }
+        </div>
+      }
+    }
+
+  </div>
+
+  <ion-infinite-scroll [disabled]="!hasMore" (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content [loadingText]="'COMMON.LOADING' | translate" />
+  </ion-infinite-scroll>
 
 </ion-content>

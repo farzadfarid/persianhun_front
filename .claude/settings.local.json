@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//g/Projects/PersianHub/**)",
+      "Bash(openspec list:*)",
+      "Bash(openspec validate:*)"
+    ]
+  }
+}

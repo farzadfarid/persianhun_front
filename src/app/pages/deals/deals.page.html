@@ -1,0 +1,72 @@
+<app-header [title]="'DEALS.TITLE' | translate" [showMenu]="true" />
+
+<ion-content class="ph-page-content ph-no-side-pad">
+
+  <ion-searchbar
+    [(ngModel)]="keyword"
+    [placeholder]="'DEALS.SEARCH_PLACEHOLDER' | translate"
+    [animated]="true"
+  />
+
+  <div class="page-body">
+
+    @if (isLoading) {
+      <div class="deals-list">
+        @for (s of skeletons; track s) {
+          <div class="deal-skeleton">
+            <ion-skeleton-text animated style="width: 30%; height: 24px; margin-bottom: 8px;" />
+            <ion-skeleton-text animated style="width: 65%; height: 16px; margin-bottom: 4px;" />
+            <ion-skeleton-text animated style="width: 45%; height: 14px;" />
+          </div>
+        }
+      </div>
+    }
+
+    @if (hasError) {
+      <div class="error-state">
+        <p class="ph-caption">{{ 'DEALS.LOAD_ERROR' | translate }}</p>
+        <app-button fill="outline" color="danger" (click)="retry()">{{ 'DEALS.TRY_AGAIN' | translate }}</app-button>
+      </div>
+    }
+
+    @if (!isLoading && !hasError) {
+      @if (filteredDeals.length === 0) {
+        <div class="empty-state">
+          <ion-icon name="ticket-outline" class="empty-icon" />
+          <p class="ph-caption">{{ emptyMessage }}</p>
+          @if (keyword) {
+            <app-button fill="clear" (click)="clearSearch()">{{ 'DEALS.CLEAR_SEARCH' | translate }}</app-button>
+          }
+        </div>
+      } @else {
+        <div class="deals-list">
+          @for (deal of filteredDeals; track deal.id) {
+            <a class="deal-card" [routerLink]="['/deals', deal.id]">
+              <div class="deal-content">
+                <div class="deal-badge">{{ discountLabel(deal) }}</div>
+                <p class="deal-title">{{ lang.pick(deal.title, deal.titleFa) }}</p>
+                @if (deal.couponCode) {
+                  <p class="deal-coupon">
+                    <ion-icon name="ticket-outline" class="coupon-icon" />
+                    {{ 'DEALS.CODE' | translate }} <strong>{{ deal.couponCode }}</strong>
+                  </p>
+                }
+                @if (deal.validToUtc) {
+                  <p class="deal-expiry ph-caption">
+                    <ion-icon name="calendar-outline" class="coupon-icon" />
+                    {{ 'DEALS.EXPIRES' | translate }} {{ deal.validToUtc | date:'d MMM yyyy' }}
+                  </p>
+                }
+              </div>
+              @if (deal.coverImageUrl) {
+                <img [src]="deal.coverImageUrl | uploadUrl" alt="Cover" class="deal-cover" />
+              }
+            </a>
+          }
+        </div>
+      }
+    }
+
+  </div>
+
+</ion-content>

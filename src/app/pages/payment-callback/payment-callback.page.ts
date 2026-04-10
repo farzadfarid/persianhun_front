@@ -2,6 +2,7 @@ import { NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonContent, IonIcon } from '@ionic/angular/standalone';
+import { TranslateModule } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import { checkmarkCircleOutline, closeCircleOutline } from 'ionicons/icons';
 import { PaymentApiService } from '../../features/payment/services/payment-api.service';
@@ -12,7 +13,7 @@ import { AppHeaderComponent } from '../../shared/components/app-header/app-heade
 @Component({
   selector: 'app-payment-callback',
   standalone: true,
-  imports: [IonContent, IonIcon, NgIf, AppHeaderComponent, AppButtonComponent],
+  imports: [IonContent, IonIcon, NgIf, TranslateModule, AppHeaderComponent, AppButtonComponent],
   templateUrl: './payment-callback.page.html',
   styleUrls: ['./payment-callback.page.scss'],
 })

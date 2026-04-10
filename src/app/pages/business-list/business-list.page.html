@@ -1,37 +1,31 @@
-
-<app-header title="Businesses" [showMenu]="true" />
+<app-header [title]="'BUSINESS_LIST.TITLE' | translate" [showMenu]="true" />
 
 <ion-content class="ph-page-content ph-no-side-pad">
 
-  <!-- Search bar — edge-to-edge, uses its own internal padding -->
   <ion-searchbar
     [(ngModel)]="keyword"
     (ionInput)="onSearchChange()"
-    placeholder="Search businesses..."
+    [placeholder]="'BUSINESS_LIST.SEARCH_PLACEHOLDER' | translate"
     [animated]="true"
   />
 
-  <!-- Padded content body -->
   <div class="page-body">
 
-    <!-- City filter -->
     <div class="city-filter-row">
       <input
         class="city-input"
         [(ngModel)]="city"
         (input)="onSearchChange()"
-        placeholder="Filter by city..."
+        [placeholder]="'BUSINESS_LIST.CITY_PLACEHOLDER' | translate"
       />
     </div>
 
-    <!-- Results count -->
     @if (!isLoading && !hasError && businesses.length > 0) {
       <p class="results-count ph-caption">
-        {{ totalCount }} {{ totalCount === 1 ? 'business' : 'businesses' }} found
+        {{ totalCount }} {{ totalCount === 1 ? ('BUSINESS_LIST.FOUND_SINGULAR' | translate) : ('BUSINESS_LIST.FOUND_PLURAL' | translate) }}
       </p>
     }
 
-    <!-- Loading skeleton -->
     @if (isLoading) {
       <div class="skeleton-list">
         @for (item of [1, 2, 3, 4, 5]; track item) {
@@ -46,26 +40,23 @@
       </div>
     }
 
-    <!-- Error state -->
     @if (hasError) {
       <div class="error-state">
-        <p class="ph-caption">Something went wrong.</p>
+        <p class="ph-caption">{{ 'BUSINESS_LIST.ERROR' | translate }}</p>
         <app-button fill="outline" color="danger" (click)="retry()">
-          Try again
+          {{ 'BUSINESS_LIST.TRY_AGAIN' | translate }}
         </app-button>
       </div>
     }
 
-    <!-- Empty state -->
     @if (!isLoading && !hasError && businesses.length === 0) {
       <app-business-empty-state
-        [message]="keyword || city ? 'No businesses match your search.' : 'No businesses available yet.'"
+        [message]="emptyMessage"
         [showClear]="!!(keyword || city)"
         (clear)="clearFilters()"
       />
     }
 
-    <!-- Business list -->
     @if (!isLoading && !hasError && businesses.length > 0) {
       <div class="biz-list">
         @for (biz of businesses; track biz.id) {
@@ -76,10 +67,8 @@
 
   </div>
 
-  <!-- Infinite scroll — outside .page-body, direct child of ion-content -->
   <ion-infinite-scroll [disabled]="!hasMore" (ionInfinite)="loadMore($event)">
-    <ion-infinite-scroll-content loadingText="Loading more..." />
+    <ion-infinite-scroll-content [loadingText]="'BUSINESS_LIST.LOADING_MORE' | translate" />
   </ion-infinite-scroll>
 
 </ion-content>
-

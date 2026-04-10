@@ -4,7 +4,17 @@ export interface ReviewListItem {
   appUserId: number;
   rating: number;
   title: string | null;
+  comment: string | null;
   status: string;
+  createdAtUtc: string;
+  likeCount: number;
+}
+
+export interface ReviewReaction {
+  id: number;
+  reviewId: number;
+  appUserId: number;
+  reactionType: number; // 1=Like, 2=Helpful, 3=Love
   createdAtUtc: string;
 }
 

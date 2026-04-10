@@ -4,6 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { IonIcon } from '@ionic/angular/standalone';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import { alertCircleOutline } from 'ionicons/icons';
 import { AuthService } from '../../core/services/auth.service';
@@ -13,7 +14,7 @@ import { AppInputComponent } from '../../shared/components/app-input/app-input.c
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [RouterLink, ReactiveFormsModule, NgIf, IonIcon, AppButtonComponent, AppInputComponent],
+  imports: [RouterLink, ReactiveFormsModule, NgIf, IonIcon, AppButtonComponent, AppInputComponent, TranslateModule],
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
@@ -21,6 +22,7 @@ export class LoginPage {
   private readonly fb = inject(FormBuilder);
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly translate = inject(TranslateService);
 
   loading = false;
   errorMessage = '';
@@ -36,14 +38,14 @@ export class LoginPage {
 
   get emailError(): string {
     const c = this.form.controls.email;
-    if (c.touched && c.hasError('required')) return 'Email is required.';
-    if (c.touched && c.hasError('email')) return 'Enter a valid email address.';
+    if (c.touched && c.hasError('required')) return this.translate.instant('AUTH.EMAIL_REQUIRED');
+    if (c.touched && c.hasError('email')) return this.translate.instant('AUTH.EMAIL_INVALID');
     return '';
   }
 
   get passwordError(): string {
     const c = this.form.controls.password;
-    if (c.touched && c.hasError('required')) return 'Password is required.';
+    if (c.touched && c.hasError('required')) return this.translate.instant('AUTH.PASSWORD_REQUIRED');
     return '';
   }
 
@@ -64,7 +66,7 @@ export class LoginPage {
         this.errorMessage =
           err.error?.detail ??
           err.error?.title ??
-          'An unexpected error occurred. Please try again.';
+          this.translate.instant('AUTH.UNEXPECTED_ERROR');
       },
     });
   }

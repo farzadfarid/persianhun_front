@@ -1,5 +1,5 @@
 
-<app-header title="My Reviews" [showBack]="true" defaultBackHref="/profile" />
+<app-header [title]="isOwner ? ('MY_BUSINESS_REVIEWS.TITLE' | translate) : ('MY_REVIEWS.TITLE' | translate)" [showBack]="true" defaultBackHref="/profile" />
 
 <ion-content class="ph-page-content">
 
@@ -15,29 +15,96 @@
   }
 
   @if (hasError) {
-    <div class="empty-state"><p class="ph-caption">Could not load your reviews.</p></div>
+    <div class="empty-state">
+      <ion-icon name="chatbubble-outline" class="empty-icon" />
+      <p class="ph-caption">{{ 'MY_REVIEWS.LOAD_ERROR' | translate }}</p>
+      <button class="retry-btn" (click)="load()">Retry</button>
+    </div>
   }
 
   @if (!isLoading && !hasError) {
-    @if (reviews.length === 0) {
+
+    <!-- Owner filters -->
+    @if (isOwner) {
+      <div class="filter-row">
+        @if (businesses.length > 1) {
+          <select class="ph-select" [(ngModel)]="selectedBusinessId">
+            <option [ngValue]="null">All businesses</option>
+            @for (b of businesses; track b.id) {
+              <option [ngValue]="b.id">{{ b.name }}</option>
+            }
+          </select>
+        }
+        <select class="ph-select" [(ngModel)]="selectedStatus">
+          <option value="all">All statuses</option>
+          <option value="pending">Pending @if (pendingCount > 0) { ({{ pendingCount }}) }</option>
+          <option value="approved">Approved</option>
+          <option value="rejected">Rejected</option>
+        </select>
+      </div>
+
+      @if (pendingCount > 0) {
+        <div class="pending-banner">
+          <ion-icon name="time-outline" />
+          {{ pendingCount }} review{{ pendingCount !== 1 ? 's' : '' }} waiting for your approval
+        </div>
+      }
+    }
+
+    @if (filtered.length === 0) {
       <div class="empty-state">
         <ion-icon name="chatbubble-outline" class="empty-icon" />
-        <p class="ph-caption">You haven't written any reviews yet.</p>
-        <a class="browse-link" routerLink="/businesses">Browse businesses</a>
+        @if (isOwner) {
+          <p class="ph-caption">No reviews found.</p>
+        } @else {
+          <p class="ph-caption">You haven't written any reviews yet.</p>
+          <a class="browse-link" routerLink="/businesses">Browse businesses</a>
+        }
       </div>
     } @else {
       <div class="reviews-list">
-        @for (review of reviews; track review.id) {
-          <div class="review-card">
-            <div class="review-stars">
-              @for (s of stars; track s) {
-                <ion-icon [name]="s <= review.rating ? 'star' : 'star-outline'" class="star-icon" />
-              }
+        @for (review of filtered; track review.id) {
+          <div class="review-card"
+            [class.review-card--pending]="review.status === 'Pending'"
+            [class.review-card--rejected]="review.status === 'Rejected'">
+
+            <div class="review-header">
+              <div class="review-stars">
+                @for (s of stars; track s) {
+                  <ion-icon [name]="s <= review.rating ? 'star' : 'star-outline'" class="star-icon" />
+                }
+              </div>
+              <div class="review-header-right">
+                <span class="status-badge status-badge--{{ review.status.toLowerCase() }}">{{ statusLabel(review.status) }}</span>
+                <span class="review-date ph-caption">{{ review.createdAtUtc | date:'d MMM yyyy' }}</span>
+              </div>
             </div>
-            @if (review.title) {
-              <p class="review-title">{{ review.title }}</p>
+
+            @if (isOwner && review.businessName) {
+              <span class="biz-tag">
+                <ion-icon name="business-outline" /> {{ review.businessName }}
+              </span>
             }
-            <p class="review-date ph-caption">{{ review.createdAtUtc | date:'d MMM yyyy' }}</p>
+
+            @if (review.title) { <p class="review-title">{{ review.title }}</p> }
+            @if (review.comment) { <p class="review-comment">{{ review.comment }}</p> }
+
+            @if (isOwner) {
+              <div class="review-actions">
+                @if (review.status === 'Pending') {
+                  <button class="action-btn action-btn--approve" [disabled]="review.actionLoading" (click)="approve(review)">
+                    <ion-icon name="checkmark-circle-outline" /> Approve
+                  </button>
+                  <button class="action-btn action-btn--reject" [disabled]="review.actionLoading" (click)="reject(review)">
+                    <ion-icon name="close-circle-outline" /> Reject
+                  </button>
+                }
+                <button class="action-btn action-btn--delete" [disabled]="review.actionLoading" (click)="confirmDelete(review)">
+                  <ion-icon name="trash-outline" /> Delete
+                </button>
+              </div>
+            }
+
           </div>
         }
       </div>
@@ -45,3 +112,4 @@
   }
 
 </ion-content>
+

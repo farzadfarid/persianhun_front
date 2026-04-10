@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 import { AppToastComponent } from './shared/components/app-toast/app-toast.component';
+import { LanguageService } from './core/services/language.service';
+import { SplashScreen } from '@capacitor/splash-screen';
 
 @Component({
   selector: 'app-root',
@@ -8,5 +10,8 @@ import { AppToastComponent } from './shared/components/app-toast/app-toast.compo
   imports: [IonApp, IonRouterOutlet, AppToastComponent],
 })
 export class AppComponent {
-  constructor() {}
+  constructor() {
+    inject(LanguageService).init();
+    SplashScreen.hide();
+  }
 }

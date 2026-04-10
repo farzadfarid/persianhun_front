@@ -1,19 +1,29 @@
 import { NgIf } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { Component, OnInit } from '@angular/core';
+
 import { ActivatedRoute } from '@angular/router';
+
 import { IonContent, IonIcon, IonSkeletonText } from '@ionic/angular/standalone';
+
 import { addIcons } from 'ionicons';
+
 import { checkmarkOutline, closeCircleOutline, cardOutline } from 'ionicons/icons';
+
 import { PaymentApiService } from '../../features/payment/services/payment-api.service';
+
 import { SubscriptionPlanListItemDto } from '../../features/subscription/models/subscription.model';
+
 import { SubscriptionPlanApiService } from '../../features/subscription/services/subscription-plan-api.service';
+
 import { AppButtonComponent } from '../../shared/components/app-button/app-button.component';
+
 import { AppHeaderComponent } from '../../shared/components/app-header/app-header.component';
 
 @Component({
   selector: 'app-activate-subscription',
   standalone: true,
-  imports: [IonContent, IonIcon, IonSkeletonText, NgIf, AppHeaderComponent, AppButtonComponent],
+  imports: [TranslateModule, IonContent, IonIcon, IonSkeletonText, NgIf, AppHeaderComponent, AppButtonComponent],
   templateUrl: './activate-subscription.page.html',
   styleUrls: ['./activate-subscription.page.scss'],
 })

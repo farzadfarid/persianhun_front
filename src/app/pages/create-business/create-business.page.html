@@ -1,102 +1,47 @@
-<app-header title="Add Business" [showBack]="true" defaultBackHref="/my-businesses" />
+<app-header [title]="'CREATE_BUSINESS.TITLE' | translate" [showBack]="true" defaultBackHref="/my-businesses" />
 
 <ion-content class="ph-page-content">
   <form [formGroup]="form" (ngSubmit)="submit()">
 
-    <div class="section-title">Business Logo</div>
+    <div class="section-title">{{ 'CREATE_BUSINESS.SECTION_LOGO' | translate }}</div>
     <app-image-upload
-      label="Logo"
+      [label]="'CREATE_BUSINESS.LOGO_LABEL' | translate"
       [value]="logoUrl"
       (valueChange)="logoUrl = $event"
     />
 
-    <div class="section-title">Basic Info</div>
+    <div class="section-title">{{ 'CREATE_BUSINESS.SECTION_BASIC' | translate }}</div>
+    <div class="english-section-label">🇬🇧 {{ 'COMMON.ENGLISH_SECTION' | translate }}</div>
+    <app-input [label]="'CREATE_BUSINESS.NAME_LABEL' | translate" [placeholder]="'CREATE_BUSINESS.NAME_PLACEHOLDER' | translate" formControlName="name" />
+    <app-input [label]="'CREATE_BUSINESS.DESC_LABEL' | translate" [placeholder]="'CREATE_BUSINESS.DESC_PLACEHOLDER' | translate" formControlName="description" />
 
-    <app-input
-      label="Business Name *"
-      placeholder="e.g. Shiraz Restaurant"
-      formControlName="name"
-    />
+    <div class="section-title persian-section">🇮🇷 {{ 'COMMON.PERSIAN_SECTION' | translate }}</div>
+    <app-input [label]="'CREATE_BUSINESS.NAME_FA_LABEL' | translate" [placeholder]="'CREATE_BUSINESS.NAME_FA_PLACEHOLDER' | translate" formControlName="nameFa" dir="rtl" />
+    <app-input [label]="'CREATE_BUSINESS.DESC_FA_LABEL' | translate" [placeholder]="'CREATE_BUSINESS.DESC_FA_PLACEHOLDER' | translate" formControlName="descriptionFa" dir="rtl" />
 
-    <app-input
-      label="Description"
-      placeholder="What does your business offer?"
-      formControlName="description"
-    />
+    <div class="section-title">{{ 'CREATE_BUSINESS.SECTION_CONTACT' | translate }}</div>
+    <app-input [label]="'CREATE_BUSINESS.PHONE_LABEL' | translate" type="tel" [placeholder]="'CREATE_BUSINESS.PHONE_PLACEHOLDER' | translate" formControlName="phoneNumber" />
+    <app-input [label]="'CREATE_BUSINESS.EMAIL_LABEL' | translate" type="email" [placeholder]="'CREATE_BUSINESS.EMAIL_PLACEHOLDER' | translate" formControlName="email" />
+    <app-input [label]="'CREATE_BUSINESS.WEBSITE_LABEL' | translate" [placeholder]="'CREATE_BUSINESS.WEBSITE_PLACEHOLDER' | translate" formControlName="website" />
+    <app-input [label]="'CREATE_BUSINESS.INSTAGRAM_LABEL' | translate" [placeholder]="'CREATE_BUSINESS.INSTAGRAM_PLACEHOLDER' | translate" formControlName="instagramUrl" />
+    <app-input [label]="'CREATE_BUSINESS.TELEGRAM_LABEL' | translate" [placeholder]="'CREATE_BUSINESS.TELEGRAM_PLACEHOLDER' | translate" formControlName="telegramUrl" />
+    <app-input [label]="'CREATE_BUSINESS.WHATSAPP_LABEL' | translate" [placeholder]="'CREATE_BUSINESS.WHATSAPP_PLACEHOLDER' | translate" formControlName="whatsAppNumber" />
 
-    <div class="section-title">Contact</div>
+    <div class="section-title">{{ 'CREATE_BUSINESS.SECTION_LOCATION' | translate }}</div>
+    <div class="english-section-label">🇬🇧 {{ 'COMMON.ENGLISH_SECTION' | translate }}</div>
+    <app-input [label]="'CREATE_BUSINESS.ADDRESS_LABEL' | translate" [placeholder]="'CREATE_BUSINESS.ADDRESS_PLACEHOLDER' | translate" formControlName="addressLine" />
+    <app-input [label]="'CREATE_BUSINESS.CITY_LABEL' | translate" [placeholder]="'CREATE_BUSINESS.CITY_PLACEHOLDER' | translate" formControlName="city" />
+    <app-input [label]="'CREATE_BUSINESS.REGION_LABEL' | translate" [placeholder]="'CREATE_BUSINESS.REGION_PLACEHOLDER' | translate" formControlName="region" />
+    <app-input [label]="'CREATE_BUSINESS.POSTAL_LABEL' | translate" [placeholder]="'CREATE_BUSINESS.POSTAL_PLACEHOLDER' | translate" formControlName="postalCode" />
+    <app-input [label]="'CREATE_BUSINESS.COUNTRY_LABEL' | translate" formControlName="country" />
 
-    <app-input
-      label="Phone"
-      type="tel"
-      placeholder="+46 70 000 00 00"
-      formControlName="phoneNumber"
-    />
-
-    <app-input
-      label="Email"
-      type="email"
-      placeholder="info@example.com"
-      formControlName="email"
-    />
-
-    <app-input
-      label="Website"
-      placeholder="https://example.com"
-      formControlName="website"
-    />
-
-    <app-input
-      label="Instagram URL"
-      placeholder="https://instagram.com/yourbusiness"
-      formControlName="instagramUrl"
-    />
-
-    <app-input
-      label="Telegram"
-      placeholder="https://t.me/yourbusiness"
-      formControlName="telegramUrl"
-    />
-
-    <app-input
-      label="WhatsApp Number"
-      placeholder="+46 70 000 00 00"
-      formControlName="whatsAppNumber"
-    />
-
-    <div class="section-title">Location</div>
-
-    <app-input
-      label="Address"
-      placeholder="Street 1"
-      formControlName="addressLine"
-    />
-
-    <app-input
-      label="City"
-      placeholder="Gothenburg"
-      formControlName="city"
-    />
-
-    <app-input
-      label="Region"
-      placeholder="Västra Götaland"
-      formControlName="region"
-    />
-
-    <app-input
-      label="Postal Code"
-      placeholder="411 01"
-      formControlName="postalCode"
-    />
-
-    <app-input
-      label="Country"
-      formControlName="country"
-    />
+    <div class="section-title persian-section">🇮🇷 {{ 'COMMON.PERSIAN_SECTION' | translate }}</div>
+    <app-input [label]="'CREATE_BUSINESS.ADDRESS_FA_LABEL' | translate" [placeholder]="'CREATE_BUSINESS.ADDRESS_FA_PLACEHOLDER' | translate" formControlName="addressLineFa" dir="rtl" />
+    <app-input [label]="'CREATE_BUSINESS.CITY_FA_LABEL' | translate" [placeholder]="'CREATE_BUSINESS.CITY_FA_PLACEHOLDER' | translate" formControlName="cityFa" dir="rtl" />
+    <app-input [label]="'CREATE_BUSINESS.REGION_FA_LABEL' | translate" [placeholder]="'CREATE_BUSINESS.REGION_FA_PLACEHOLDER' | translate" formControlName="regionFa" dir="rtl" />
 
     <app-button type="submit" expand="block" [loading]="saving" [disabled]="form.invalid">
-      Save Business
+      {{ 'CREATE_BUSINESS.SAVE' | translate }}
     </app-button>
 
   </form>

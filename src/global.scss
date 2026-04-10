@@ -41,7 +41,6 @@ body {
   background-color: var(--ph-surface-0);
   color: var(--ph-text-primary);
 
-  // Clean sans-serif stack — future: load a custom font (e.g. Vazirmatn for Persian)
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue',
     Arial, sans-serif;
   font-size: var(--ph-font-md);
@@ -114,13 +113,27 @@ ion-label {
   }
 }
 
-// ---- RTL support -------------------------------------------
-// When dir="rtl" is applied to <html>, Ionic handles most layout mirroring.
-// Additional RTL overrides go here as needed.
+// ---- RTL / Persian support ---------------------------------
+// When dir="rtl" is applied to <html> by LanguageService, Ionic handles
+// most layout mirroring automatically. Vazirmatn is loaded and applied here.
 
 [dir='rtl'] {
+  font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+
+  body {
+    font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  }
+
   ion-back-button {
     transform: scaleX(-1);
+  }
+
+  // Ensure text alignment follows RTL direction
+  ion-label,
+  ion-input,
+  ion-textarea,
+  ion-searchbar {
+    text-align: right;
   }
 }
 
@@ -176,6 +189,20 @@ ion-label {
   margin: 0 0 var(--ph-space-3) 0;
 }
 
+.persian-section,
+.persian-section-label,
+.english-section-label {
+  margin-top: var(--ph-space-5);
+  padding: var(--ph-space-2) var(--ph-space-3);
+  background: rgba(255, 255, 255, 0.05);
+  border-left: 3px solid var(--ion-color-danger);
+  border-radius: 4px;
+  font-size: var(--ph-font-sm);
+  font-weight: var(--ph-weight-bold);
+  color: var(--ph-text-secondary);
+  letter-spacing: 0.5px;
+}
+
 .ph-center {
   display: flex;
   align-items: center;
@@ -192,4 +219,35 @@ ion-label {
 
 .ph-fill {
   width: 100%;
+}
+
+// ── Ionic Alert override ──────────────────────────────────
+.alert-wrapper {
+  background: var(--ph-surface-1) !important;
+  border-radius: var(--ph-radius-md) !important;
+}
+
+.alert-head .alert-title {
+  color: var(--ph-text-primary) !important;
+  font-size: var(--ph-font-base) !important;
+  font-weight: var(--ph-weight-bold) !important;
+}
+
+.alert-message {
+  color: var(--ph-text-muted) !important;
+  font-size: var(--ph-font-sm) !important;
+}
+
+.alert-button-group {
+  border-top: 1px solid var(--ph-surface-2) !important;
+}
+
+.alert-button {
+  color: var(--ph-text-primary) !important;
+  font-weight: var(--ph-weight-medium) !important;
+
+  &.alert-btn-danger {
+    color: var(--ph-accent) !important;
+    font-weight: var(--ph-weight-semibold) !important;
+  }
 }

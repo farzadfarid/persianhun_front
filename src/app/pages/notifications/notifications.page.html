@@ -1,31 +1,26 @@
-
-<app-header title="Notifications" />
+<app-header [title]="'NOTIFICATIONS.TITLE' | translate" />
 
 <ion-content class="ph-page-content">
 
-  <!-- Loading -->
   <div *ngIf="isLoading" class="notif-list">
     <div *ngFor="let s of skeletons" class="notif-skeleton pulse"></div>
   </div>
 
-  <!-- Error -->
   <div *ngIf="!isLoading && hasError" class="empty-state">
     <ion-icon name="notifications-outline" class="empty-icon" />
-    <p class="empty-message">Could not load notifications.</p>
+    <p class="empty-message">{{ 'NOTIFICATIONS.LOAD_ERROR' | translate }}</p>
   </div>
 
-  <!-- Empty -->
   <div *ngIf="!isLoading && !hasError && notifications.length === 0" class="empty-state">
     <ion-icon name="notifications-outline" class="empty-icon" />
-    <p class="empty-title">No notifications</p>
-    <p class="empty-message">You're all caught up!</p>
+    <p class="empty-title">{{ 'NOTIFICATIONS.EMPTY_TITLE' | translate }}</p>
+    <p class="empty-message">{{ 'NOTIFICATIONS.EMPTY_MSG' | translate }}</p>
   </div>
 
-  <!-- List -->
   <ng-container *ngIf="!isLoading && !hasError && notifications.length > 0">
 
     <div class="notif-toolbar" *ngIf="unreadCount > 0">
-      <span class="unread-badge">{{ unreadCount }} unread</span>
+      <span class="unread-badge">{{ unreadCount }}</span>
       <app-button
         fill="clear"
         color="danger"
@@ -33,7 +28,7 @@
         (click)="markAllAsRead()"
       >
         <ion-icon name="checkmark-done-outline" slot="start" />
-        Mark all read
+        {{ 'NOTIFICATIONS.MARK_ALL_READ' | translate }}
       </app-button>
     </div>
 
@@ -55,4 +50,3 @@
   </ng-container>
 
 </ion-content>
-

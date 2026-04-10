@@ -1,0 +1,35 @@
+<app-header [title]="'ADD_REVIEW.TITLE' | translate" [showBack]="true" [defaultBackHref]="'/businesses/' + businessId" />
+
+<ion-content class="ph-page-content">
+
+  <div class="add-review-container">
+
+    <p class="section-label">{{ 'ADD_REVIEW.RATING_LABEL' | translate }}</p>
+    <div class="star-picker">
+      @for (s of stars; track s) {
+        <button class="star-btn" (click)="setRating(s)">
+          <ion-icon [name]="s <= rating ? 'star' : 'star-outline'" class="pick-star" />
+        </button>
+      }
+    </div>
+
+    <p class="section-label">{{ 'ADD_REVIEW.EXPERIENCE_LABEL' | translate }}</p>
+    <textarea
+      class="ph-textarea"
+      [placeholder]="'ADD_REVIEW.EXPERIENCE_PLACEHOLDER' | translate"
+      [(ngModel)]="comment"
+      rows="5"
+    ></textarea>
+
+    <app-button
+      class="submit-btn"
+      [loading]="submitting"
+      [disabled]="rating === 0"
+      (click)="submit()"
+    >
+      {{ 'ADD_REVIEW.SUBMIT' | translate }}
+    </app-button>
+
+  </div>
+
+</ion-content>

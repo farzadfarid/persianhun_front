@@ -1,64 +1,156 @@
 
-<app-header title="PersianHub" [showMenu]="true" />
+<app-header [title]="'HOME.TITLE' | translate" [showMenu]="true" />
 
 <ion-content class="ph-page-content">
 
   <!-- Hero search CTA -->
   <div class="hero-search" routerLink="/businesses">
     <ion-icon name="search-outline" class="hero-search-icon" />
-    <span class="hero-search-text">Search businesses...</span>
+    <span class="hero-search-text">{{ 'HOME.SEARCH_PLACEHOLDER' | translate }}</span>
   </div>
 
-  <!-- Featured Businesses -->
-  <section class="ph-section">
-    <div class="section-header">
-      <h2 class="ph-section-title">Top Businesses</h2>
-      <a routerLink="/businesses" class="section-link">
-        See all <ion-icon name="arrow-forward-outline" />
-      </a>
-    </div>
-
-    @if (isFeaturedLoading) {
-      <div class="featured-list">
-        @for (item of [1, 2, 3]; track item) {
-          <div class="skeleton-card">
-            <div class="skeleton-logo"></div>
-            <div class="skeleton-info">
-              <div class="skeleton-line long"></div>
-              <div class="skeleton-line short"></div>
+  @if (isLoading) {
+    @for (section of [1, 2, 3, 4]; track section) {
+      <section class="ph-section">
+        <div class="section-header">
+          <div class="skeleton-line long"></div>
+        </div>
+        <div class="featured-list">
+          @for (item of [1, 2, 3]; track item) {
+            <div class="skeleton-card">
+              <div class="skeleton-logo"></div>
+              <div class="skeleton-info">
+                <div class="skeleton-line long"></div>
+                <div class="skeleton-line short"></div>
+              </div>
             </div>
-          </div>
-        }
-      </div>
-    } @else if (featuredBusinesses.length > 0) {
-      <div class="featured-list">
-        @for (biz of featuredBusinesses; track biz.id) {
-          <app-business-card [business]="biz" />
-        }
-      </div>
-    } @else {
-      <p class="ph-caption">No businesses yet.</p>
+          }
+        </div>
+      </section>
     }
-  </section>
+  } @else {
 
-  <!-- Quick Actions -->
-  <section class="ph-section">
-    <h2 class="ph-section-title">Quick Actions</h2>
-    <div class="quick-actions">
-      <a class="quick-action" routerLink="/create-business">
-        <span class="qa-label">Add Business</span>
-      </a>
-      <a class="quick-action" routerLink="/plans">
-        <span class="qa-label">View Plans</span>
-      </a>
-      <a class="quick-action" routerLink="/my-businesses">
-        <span class="qa-label">My Businesses</span>
-      </a>
-      <a class="quick-action" routerLink="/profile">
-        <span class="qa-label">Profile</span>
-      </a>
-    </div>
-  </section>
+    <!-- Featured Businesses -->
+    <section class="ph-section">
+      <div class="section-header">
+        <h2 class="ph-section-title">{{ 'HOME.TOP_BUSINESSES' | translate }}</h2>
+        <a routerLink="/businesses" class="section-link">
+          {{ 'HOME.SEE_ALL' | translate }} <ion-icon name="arrow-forward-outline" />
+        </a>
+      </div>
+      @if (featuredBusinesses.length > 0) {
+        <div class="featured-list">
+          @for (biz of featuredBusinesses; track biz.id) {
+            <app-business-card [business]="biz" />
+          }
+        </div>
+      } @else {
+        <p class="ph-caption section-empty">{{ 'HOME.NO_BUSINESSES' | translate }}</p>
+      }
+    </section>
+
+    <!-- Latest Deals -->
+    <section class="ph-section">
+      <div class="section-header">
+        <h2 class="ph-section-title">{{ 'HOME.LATEST_DEALS' | translate }}</h2>
+        <a routerLink="/deals" class="section-link">
+          {{ 'HOME.SEE_ALL' | translate }} <ion-icon name="arrow-forward-outline" />
+        </a>
+      </div>
+      @if (latestDeals.length > 0) {
+        <div class="preview-list">
+          @for (deal of latestDeals; track deal.id) {
+            <a class="preview-card" [routerLink]="['/deals', deal.id]">
+              <div class="preview-badge">{{ discountLabel(deal) }}</div>
+              <p class="preview-title">{{ lang.pick(deal.title, deal.titleFa) }}</p>
+              @if (deal.validToUtc) {
+                <p class="preview-meta ph-caption">{{ 'HOME.EXPIRES' | translate }} {{ deal.validToUtc | date:'d MMM' }}</p>
+              }
+            </a>
+          }
+        </div>
+      } @else {
+        <p class="ph-caption section-empty">{{ 'HOME.NO_DEALS' | translate }}</p>
+      }
+    </section>
+
+    <!-- Today's Offers -->
+    <section class="ph-section">
+      <div class="section-header">
+        <h2 class="ph-section-title">{{ 'HOME.TODAYS_OFFERS' | translate }}</h2>
+        <a routerLink="/offers" class="section-link">
+          {{ 'HOME.SEE_ALL' | translate }} <ion-icon name="arrow-forward-outline" />
+        </a>
+      </div>
+      @if (latestOffers.length > 0) {
+        <div class="preview-list">
+          @for (offer of latestOffers; track offer.id) {
+            <a class="preview-card" [routerLink]="['/offers', offer.id]">
+              <div class="preview-badge">{{ offerDiscountLabel(offer) }}</div>
+              <p class="preview-title">{{ lang.pick(offer.title, offer.titleFa) }}</p>
+              <p class="preview-meta ph-caption">{{ lang.pick(offer.businessName, offer.businessNameFa) }}</p>
+            </a>
+          }
+        </div>
+      } @else {
+        <p class="ph-caption section-empty">{{ 'HOME.NO_OFFERS' | translate }}</p>
+      }
+    </section>
+
+    <!-- Upcoming Events -->
+    <section class="ph-section">
+      <div class="section-header">
+        <h2 class="ph-section-title">{{ 'HOME.UPCOMING_EVENTS' | translate }}</h2>
+        <a routerLink="/events" class="section-link">
+          {{ 'HOME.SEE_ALL' | translate }} <ion-icon name="arrow-forward-outline" />
+        </a>
+      </div>
+      @if (upcomingEvents.length > 0) {
+        <div class="events-preview">
+          @for (event of upcomingEvents; track event.id) {
+            <a class="event-preview-card" [routerLink]="['/events', event.id]">
+              <div class="event-date-badge">
+                <span class="date-day">{{ event.startsAtUtc | date:'d' }}</span>
+                <span class="date-month">{{ event.startsAtUtc | date:'MMM' }}</span>
+              </div>
+              <div class="event-preview-info">
+                <p class="preview-title">{{ lang.pick(event.title, event.titleFa) }}</p>
+                @if (event.city) {
+                  <p class="preview-meta ph-caption">{{ lang.pick(event.city, event.cityFa) }}</p>
+                }
+                <p class="preview-meta ph-caption" [class.free-label]="event.isFree">{{ priceLabel(event) }}</p>
+              </div>
+            </a>
+          }
+        </div>
+      } @else {
+        <p class="ph-caption section-empty">{{ 'HOME.NO_EVENTS' | translate }}</p>
+      }
+    </section>
+
+    <!-- Quick Actions — auth-aware -->
+    @if (auth.currentUser) {
+      <section class="ph-section">
+        <h2 class="ph-section-title">{{ 'HOME.QUICK_ACTIONS' | translate }}</h2>
+        <div class="quick-actions">
+          <a class="quick-action" routerLink="/profile">
+            <span class="qa-label">{{ 'HOME.MY_PROFILE' | translate }}</span>
+          </a>
+          <a class="quick-action" routerLink="/favorites">
+            <span class="qa-label">{{ 'MENU.FAVORITES' | translate }}</span>
+          </a>
+          @if (auth.currentUser.role === 'BusinessOwner') {
+            <a class="quick-action" routerLink="/my-businesses">
+              <span class="qa-label">{{ 'HOME.MY_BUSINESSES' | translate }}</span>
+            </a>
+            <a class="quick-action" routerLink="/plans">
+              <span class="qa-label">{{ 'HOME.VIEW_PLANS' | translate }}</span>
+            </a>
+          }
+        </div>
+      </section>
+    }
+
+  }
 
 </ion-content>
-

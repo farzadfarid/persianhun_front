@@ -1,5 +1,5 @@
 
-<app-header title="Manage Events" [showBack]="true" defaultBackHref="/my-businesses" />
+<app-header [title]="'BUSINESS_EVENTS.TITLE' | translate" [showBack]="true" defaultBackHref="/my-businesses" />
 
 <ion-content class="ph-page-content">
 
@@ -11,68 +11,89 @@
   }
 
   @if (hasError) {
-    <div class="empty-state"><p class="ph-caption">Could not load events.</p></div>
+    <div class="empty-state"><p class="ph-caption">{{ 'BUSINESS_EVENTS.LOAD_ERROR' | translate }}</p></div>
   }
 
   @if (!isLoading && !hasError) {
 
     @if (showForm) {
       <div class="form-card">
-        <h3 class="form-title">{{ editingEvent ? 'Edit Event' : 'New Event' }}</h3>
+        <h3 class="form-title">{{ editingEvent ? ('BUSINESS_EVENTS.EDIT_EVENT' | translate) : ('BUSINESS_EVENTS.NEW_EVENT' | translate) }}</h3>
 
-        <label class="field-label">Title *</label>
-        <input class="ph-input" [(ngModel)]="title" placeholder="Event name" />
+        <div class="english-section-label">🇬🇧 {{ 'COMMON.ENGLISH_SECTION' | translate }}</div>
 
-        <label class="field-label">Description</label>
-        <textarea class="ph-textarea" [(ngModel)]="description" placeholder="Optional details..." rows="2"></textarea>
+        <label class="field-label">{{ 'BUSINESS_EVENTS.TITLE_LABEL' | translate }} *</label>
+        <input class="ph-input" [(ngModel)]="title" [placeholder]="'BUSINESS_EVENTS.TITLE_PLACEHOLDER' | translate" />
+
+        <label class="field-label">{{ 'BUSINESS_EVENTS.DESC_LABEL' | translate }}</label>
+        <textarea class="ph-textarea" [(ngModel)]="description" [placeholder]="'BUSINESS_EVENTS.DESC_PLACEHOLDER' | translate" rows="2"></textarea>
 
         <div class="form-row">
           <div class="form-col">
-            <label class="field-label">Location</label>
-            <input class="ph-input" [(ngModel)]="locationName" placeholder="Venue name" />
+            <label class="field-label">{{ 'BUSINESS_EVENTS.LOCATION_LABEL' | translate }}</label>
+            <input class="ph-input" [(ngModel)]="locationName" [placeholder]="'BUSINESS_EVENTS.LOCATION_PLACEHOLDER' | translate" />
           </div>
           <div class="form-col">
-            <label class="field-label">City</label>
-            <input class="ph-input" [(ngModel)]="city" placeholder="City" />
+            <label class="field-label">{{ 'BUSINESS_EVENTS.CITY_LABEL' | translate }}</label>
+            <input class="ph-input" [(ngModel)]="city" [placeholder]="'BUSINESS_EVENTS.CITY_PLACEHOLDER' | translate" />
+          </div>
+        </div>
+
+        <div class="persian-section-label">🇮🇷 {{ 'COMMON.PERSIAN_SECTION' | translate }}</div>
+
+        <label class="field-label">{{ 'BUSINESS_EVENTS.TITLE_FA_LABEL' | translate }}</label>
+        <input class="ph-input" dir="rtl" [(ngModel)]="titleFa" [placeholder]="'BUSINESS_EVENTS.TITLE_FA_PLACEHOLDER' | translate" />
+
+        <label class="field-label">{{ 'BUSINESS_EVENTS.DESC_FA_LABEL' | translate }}</label>
+        <textarea class="ph-textarea" dir="rtl" [(ngModel)]="descriptionFa" [placeholder]="'BUSINESS_EVENTS.DESC_FA_PLACEHOLDER' | translate" rows="2"></textarea>
+
+        <div class="form-row">
+          <div class="form-col">
+            <label class="field-label">{{ 'BUSINESS_EVENTS.LOCATION_FA_LABEL' | translate }}</label>
+            <input class="ph-input" dir="rtl" [(ngModel)]="locationNameFa" [placeholder]="'BUSINESS_EVENTS.LOCATION_FA_PLACEHOLDER' | translate" />
+          </div>
+          <div class="form-col">
+            <label class="field-label">{{ 'BUSINESS_EVENTS.CITY_FA_LABEL' | translate }}</label>
+            <input class="ph-input" dir="rtl" [(ngModel)]="cityFa" [placeholder]="'BUSINESS_EVENTS.CITY_FA_PLACEHOLDER' | translate" />
           </div>
         </div>
 
         <div class="form-row">
           <div class="form-col">
-            <label class="field-label">Starts *</label>
+            <label class="field-label">{{ 'BUSINESS_EVENTS.STARTS_LABEL' | translate }} *</label>
             <input class="ph-input" type="datetime-local" [(ngModel)]="startsAt" />
           </div>
           <div class="form-col">
-            <label class="field-label">Ends</label>
+            <label class="field-label">{{ 'BUSINESS_EVENTS.ENDS_LABEL' | translate }}</label>
             <input class="ph-input" type="datetime-local" [(ngModel)]="endsAt" />
           </div>
         </div>
 
         <div class="free-row">
-          <label class="field-label" style="margin:0">Free Event</label>
+          <label class="field-label" style="margin:0">{{ 'BUSINESS_EVENTS.FREE_LABEL' | translate }}</label>
           <ion-toggle [(ngModel)]="isFree" />
         </div>
 
         @if (!isFree) {
-          <label class="field-label">Price</label>
+          <label class="field-label">{{ 'BUSINESS_EVENTS.PRICE_LABEL' | translate }}</label>
           <input class="ph-input" type="number" [(ngModel)]="price" placeholder="0.00" min="0" />
         }
 
         <app-image-upload
-          label="Cover Image (optional)"
+          [label]="'BUSINESS_EVENTS.COVER_LABEL' | translate"
           [value]="coverImageUrl"
           (valueChange)="coverImageUrl = $event"
         />
 
         <div class="form-actions">
-          <button class="cancel-btn" (click)="cancelForm()">Cancel</button>
+          <button class="cancel-btn" (click)="cancelForm()">{{ 'COMMON.CANCEL' | translate }}</button>
           @if (editingEvent) {
             <app-button size="small" [loading]="submitting" [disabled]="!title || !startsAt" (click)="submitEdit()">
-              Save
+              {{ 'COMMON.SAVE' | translate }}
             </app-button>
           } @else {
             <app-button size="small" [loading]="submitting" [disabled]="!title || !startsAt" (click)="submitEvent()">
-              Create
+              {{ 'COMMON.CREATE' | translate }}
             </app-button>
           }
         </div>
@@ -81,14 +102,14 @@
 
     @if (!showForm) {
       <button class="add-btn" (click)="showForm = true">
-        <ion-icon name="add-outline" /> Add New Event
+        <ion-icon name="add-outline" /> {{ 'BUSINESS_EVENTS.ADD_NEW' | translate }}
       </button>
     }
 
     @if (events.length === 0) {
       <div class="empty-state">
         <ion-icon name="calendar-outline" class="empty-icon" />
-        <p class="ph-caption">No events yet. Add your first one.</p>
+        <p class="ph-caption">{{ 'BUSINESS_EVENTS.EMPTY' | translate }}</p>
       </div>
     } @else {
       <div class="list-container">
@@ -102,19 +123,19 @@
               <span class="date-month">{{ event.startsAtUtc | date:'MMM' }}</span>
             </div>
             <div class="event-main">
-              <p class="event-title">{{ event.title }}</p>
-              @if (event.city) { <p class="event-city ph-caption">{{ event.city }}</p> }
+              <p class="event-title">{{ lang.pick(event.title, event.titleFa) }}</p>
+              @if (event.city || event.cityFa) { <p class="event-city ph-caption">{{ lang.pick(event.city, event.cityFa) }}</p> }
               <span class="price-badge" [class.free]="event.isFree">{{ priceLabel(event) }}</span>
             </div>
             <div class="event-toggle">
-              <span class="toggle-label">Published</span>
+              <span class="toggle-label">{{ 'COMMON.PUBLISHED' | translate }}</span>
               <ion-toggle [checked]="event.isPublished" (ionChange)="togglePublish(event)" />
             </div>
             <div class="event-row-actions">
-              <button class="row-action-btn" (click)="startEdit(event)" title="Edit">
+              <button class="row-action-btn" (click)="startEdit(event)" [title]="'COMMON.EDIT' | translate">
                 <ion-icon name="create-outline" />
               </button>
-              <button class="row-action-btn danger" (click)="deleteEvent(event)" title="Delete">
+              <button class="row-action-btn danger" (click)="deleteEvent(event)" [title]="'COMMON.DELETE' | translate">
                 <ion-icon name="trash-outline" />
               </button>
             </div>

@@ -1,26 +1,42 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { LanguageService } from '../../core/services/language.service';
+
 import { FormsModule } from '@angular/forms';
+
 import { ActivatedRoute } from '@angular/router';
+
 import { IonContent, IonIcon, IonToggle } from '@ionic/angular/standalone';
+
 import { addIcons } from 'ionicons';
+
 import { addOutline, calendarOutline, createOutline, trashOutline } from 'ionicons/icons';
+
 import { CreateEventRequest, EventListItem } from '../../features/events/models/event.model';
+
 import { EventsApiService } from '../../features/events/services/events-api.service';
+
 import { AppButtonComponent } from '../../shared/components/app-button/app-button.component';
+
 import { AppHeaderComponent } from '../../shared/components/app-header/app-header.component';
+
 import { ImageUploadComponent } from '../../shared/components/image-upload/image-upload.component';
+
 import { UploadUrlPipe } from '../../shared/pipes/upload-url.pipe';
+
 import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-business-events',
   standalone: true,
-  imports: [IonContent, IonIcon, IonToggle, FormsModule, DatePipe, AppHeaderComponent, AppButtonComponent, ImageUploadComponent, UploadUrlPipe],
+  imports: [TranslateModule, IonContent, IonIcon, IonToggle, FormsModule, DatePipe, AppHeaderComponent, AppButtonComponent, ImageUploadComponent, UploadUrlPipe],
   templateUrl: './business-events.page.html',
   styleUrls: ['./business-events.page.scss'],
 })
 export class BusinessEventsPage implements OnInit {
+  readonly lang = inject(LanguageService);
+  private readonly translate = inject(TranslateService);
   businessId = 0;
   events: EventListItem[] = [];
   isLoading = true;
@@ -31,9 +47,13 @@ export class BusinessEventsPage implements OnInit {
   editingEvent: EventListItem | null = null;
 
   title = '';
+  titleFa = '';
   description = '';
+  descriptionFa = '';
   locationName = '';
+  locationNameFa = '';
   city = '';
+  cityFa = '';
   startsAt = '';
   endsAt = '';
   isFree = true;
@@ -74,18 +94,25 @@ export class BusinessEventsPage implements OnInit {
 
     const request: CreateEventRequest = {
       title: this.title,
+      titleFa: this.titleFa || null,
       slug: null,
       description: this.description || null,
+      descriptionFa: this.descriptionFa || null,
       locationName: this.locationName || null,
+      locationNameFa: this.locationNameFa || null,
       addressLine: null,
+      addressLineFa: null,
       city: this.city || null,
+      cityFa: this.cityFa || null,
       region: null,
+      regionFa: null,
       postalCode: null,
       country: null,
       startsAtUtc: new Date(this.startsAt).toISOString(),
       endsAtUtc: this.endsAt ? new Date(this.endsAt).toISOString() : null,
       businessId: this.businessId,
       organizerName: null,
+      organizerNameFa: null,
       organizerPhoneNumber: null,
       organizerEmail: null,
       coverImageUrl: this.coverImageUrl,
@@ -111,9 +138,13 @@ export class BusinessEventsPage implements OnInit {
     this.eventsApi.getById(event.id).subscribe({
       next: (detail) => {
         this.title = detail.title;
+        this.titleFa = detail.titleFa ?? '';
         this.description = detail.description ?? '';
+        this.descriptionFa = detail.descriptionFa ?? '';
         this.locationName = detail.locationName ?? '';
+        this.locationNameFa = detail.locationNameFa ?? '';
         this.city = detail.city ?? '';
+        this.cityFa = detail.cityFa ?? '';
         this.startsAt = detail.startsAtUtc.slice(0, 16);
         this.endsAt = detail.endsAtUtc ? detail.endsAtUtc.slice(0, 16) : '';
         this.isFree = detail.isFree;
@@ -130,17 +161,24 @@ export class BusinessEventsPage implements OnInit {
 
     this.eventsApi.update(this.editingEvent.id, {
       title: this.title,
+      titleFa: this.titleFa || null,
       description: this.description || null,
+      descriptionFa: this.descriptionFa || null,
       locationName: this.locationName || null,
+      locationNameFa: this.locationNameFa || null,
       addressLine: null,
+      addressLineFa: null,
       city: this.city || null,
+      cityFa: this.cityFa || null,
       region: null,
+      regionFa: null,
       postalCode: null,
       country: null,
       startsAtUtc: new Date(this.startsAt).toISOString(),
       endsAtUtc: this.endsAt ? new Date(this.endsAt).toISOString() : null,
       businessId: this.businessId,
       organizerName: null,
+      organizerNameFa: null,
       organizerPhoneNumber: null,
       organizerEmail: null,
       coverImageUrl: this.coverImageUrl,
@@ -173,9 +211,13 @@ export class BusinessEventsPage implements OnInit {
 
   private resetForm(): void {
     this.title = '';
+    this.titleFa = '';
     this.description = '';
+    this.descriptionFa = '';
     this.locationName = '';
+    this.locationNameFa = '';
     this.city = '';
+    this.cityFa = '';
     this.startsAt = '';
     this.endsAt = '';
     this.isFree = true;
@@ -184,8 +226,8 @@ export class BusinessEventsPage implements OnInit {
   }
 
   priceLabel(event: EventListItem): string {
-    if (event.isFree) return 'Free';
+    if (event.isFree) return this.translate.instant('COMMON.FREE');
     if (event.price) return `${event.price} ${event.currency ?? ''}`.trim();
-    return 'Paid';
+    return this.translate.instant('COMMON.PAID');
   }
 }

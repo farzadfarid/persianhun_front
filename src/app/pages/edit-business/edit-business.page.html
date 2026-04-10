@@ -1,4 +1,4 @@
-<app-header title="Edit Business" [showBack]="true" defaultBackHref="/my-businesses" />
+<app-header [title]="'EDIT_BUSINESS.TITLE' | translate" [showBack]="true" defaultBackHref="/my-businesses" />
 
 <ion-content class="ph-page-content">
 
@@ -11,40 +11,45 @@
   @if (!loading) {
     <form [formGroup]="form" (ngSubmit)="submit()">
 
-      <div class="section-label">Business Logo</div>
+      <div class="section-label">{{ 'EDIT_BUSINESS.SECTION_LOGO' | translate }}</div>
       <app-image-upload
-        label="Logo"
+        [label]="'EDIT_BUSINESS.LOGO_LABEL' | translate"
         [value]="logoUrl"
         (valueChange)="logoUrl = $event"
       />
 
-      <div class="section-label">Basic Info</div>
+      <div class="section-label">{{ 'EDIT_BUSINESS.SECTION_BASIC' | translate }}</div>
+      <div class="english-section-label">🇬🇧 {{ 'COMMON.ENGLISH_SECTION' | translate }}</div>
+      <app-input [label]="'EDIT_BUSINESS.NAME_LABEL' | translate" [placeholder]="'EDIT_BUSINESS.NAME_PLACEHOLDER' | translate" formControlName="name" />
+      <app-input [label]="'EDIT_BUSINESS.DESC_LABEL' | translate" [placeholder]="'EDIT_BUSINESS.DESC_PLACEHOLDER' | translate" formControlName="description" />
 
-      <app-input label="Business Name *" placeholder="e.g. Shiraz Restaurant" formControlName="name" />
-      <app-input label="Description" placeholder="Tell customers about your business..." formControlName="description" />
+      <div class="section-label persian-section">🇮🇷 {{ 'COMMON.PERSIAN_SECTION' | translate }}</div>
+      <app-input [label]="'EDIT_BUSINESS.NAME_FA_LABEL' | translate" [placeholder]="'EDIT_BUSINESS.NAME_FA_PLACEHOLDER' | translate" formControlName="nameFa" dir="rtl" />
+      <app-input [label]="'EDIT_BUSINESS.DESC_FA_LABEL' | translate" [placeholder]="'EDIT_BUSINESS.DESC_FA_PLACEHOLDER' | translate" formControlName="descriptionFa" dir="rtl" />
 
-      <div class="section-label">Contact</div>
+      <div class="section-label">{{ 'EDIT_BUSINESS.SECTION_CONTACT' | translate }}</div>
+      <app-input [label]="'EDIT_BUSINESS.PHONE_LABEL' | translate" type="tel" [placeholder]="'EDIT_BUSINESS.PHONE_PLACEHOLDER' | translate" formControlName="phoneNumber" />
+      <app-input [label]="'EDIT_BUSINESS.EMAIL_LABEL' | translate" type="email" [placeholder]="'EDIT_BUSINESS.EMAIL_PLACEHOLDER' | translate" formControlName="email" />
+      <app-input [label]="'EDIT_BUSINESS.WEBSITE_LABEL' | translate" [placeholder]="'EDIT_BUSINESS.WEBSITE_PLACEHOLDER' | translate" formControlName="website" />
+      <app-input [label]="'EDIT_BUSINESS.INSTAGRAM_LABEL' | translate" [placeholder]="'EDIT_BUSINESS.INSTAGRAM_PLACEHOLDER' | translate" formControlName="instagramUrl" />
+      <app-input [label]="'EDIT_BUSINESS.TELEGRAM_LABEL' | translate" [placeholder]="'EDIT_BUSINESS.TELEGRAM_PLACEHOLDER' | translate" formControlName="telegramUrl" />
+      <app-input [label]="'EDIT_BUSINESS.WHATSAPP_LABEL' | translate" [placeholder]="'EDIT_BUSINESS.WHATSAPP_PLACEHOLDER' | translate" formControlName="whatsAppNumber" />
 
-      <app-input label="Phone" type="tel" placeholder="+46 70 000 00 00" formControlName="phoneNumber" />
-      <app-input label="Email" type="email" placeholder="contact@yourbusiness.com" formControlName="email" />
-      <app-input label="Website" placeholder="https://yourbusiness.com" formControlName="website" />
+      <div class="section-label">{{ 'EDIT_BUSINESS.SECTION_LOCATION' | translate }}</div>
+      <div class="english-section-label">🇬🇧 {{ 'COMMON.ENGLISH_SECTION' | translate }}</div>
+      <app-input [label]="'EDIT_BUSINESS.ADDRESS_LABEL' | translate" [placeholder]="'EDIT_BUSINESS.ADDRESS_PLACEHOLDER' | translate" formControlName="addressLine" />
+      <app-input [label]="'EDIT_BUSINESS.CITY_LABEL' | translate" [placeholder]="'EDIT_BUSINESS.CITY_PLACEHOLDER' | translate" formControlName="city" />
+      <app-input [label]="'EDIT_BUSINESS.REGION_LABEL' | translate" [placeholder]="'EDIT_BUSINESS.REGION_PLACEHOLDER' | translate" formControlName="region" />
+      <app-input [label]="'EDIT_BUSINESS.POSTAL_LABEL' | translate" [placeholder]="'EDIT_BUSINESS.POSTAL_PLACEHOLDER' | translate" formControlName="postalCode" />
 
-      <div class="section-label">Social</div>
-
-      <app-input label="Instagram URL" placeholder="https://instagram.com/yourbusiness" formControlName="instagramUrl" />
-      <app-input label="Telegram" placeholder="https://t.me/yourbusiness" formControlName="telegramUrl" />
-      <app-input label="WhatsApp Number" placeholder="+46700000000" formControlName="whatsAppNumber" />
-
-      <div class="section-label">Location</div>
-
-      <app-input label="Address" placeholder="Street, Number" formControlName="addressLine" />
-      <app-input label="City" placeholder="Gothenburg" formControlName="city" />
-      <app-input label="Region" placeholder="Västra Götaland" formControlName="region" />
-      <app-input label="Postal Code" placeholder="41101" formControlName="postalCode" />
+      <div class="section-label persian-section">🇮🇷 {{ 'COMMON.PERSIAN_SECTION' | translate }}</div>
+      <app-input [label]="'EDIT_BUSINESS.ADDRESS_FA_LABEL' | translate" [placeholder]="'EDIT_BUSINESS.ADDRESS_FA_PLACEHOLDER' | translate" formControlName="addressLineFa" dir="rtl" />
+      <app-input [label]="'EDIT_BUSINESS.CITY_FA_LABEL' | translate" [placeholder]="'EDIT_BUSINESS.CITY_FA_PLACEHOLDER' | translate" formControlName="cityFa" dir="rtl" />
+      <app-input [label]="'EDIT_BUSINESS.REGION_FA_LABEL' | translate" [placeholder]="'EDIT_BUSINESS.REGION_FA_PLACEHOLDER' | translate" formControlName="regionFa" dir="rtl" />
 
       <div class="form-actions">
         <app-button type="submit" expand="block" [loading]="saving" [disabled]="form.invalid">
-          Save Changes
+          {{ 'EDIT_BUSINESS.SAVE' | translate }}
         </app-button>
       </div>
 
@@ -53,19 +58,19 @@
     <!-- Gallery Section -->
     <div class="gallery-section">
       <div class="gallery-header">
-        <span class="section-label">Photo Gallery</span>
+        <span class="section-label">{{ 'EDIT_BUSINESS.SECTION_GALLERY' | translate }}</span>
         <label class="add-photo-btn" [class.loading]="galleryUploading">
           @if (galleryUploading) {
             <ion-spinner name="crescent" style="width:16px;height:16px" />
           } @else {
-            + Add Photo
+            + {{ 'EDIT_BUSINESS.ADD_PHOTO' | translate }}
           }
           <input type="file" accept="image/*" class="hidden-input" (change)="onGalleryFileSelected($event)" [disabled]="galleryUploading" />
         </label>
       </div>
 
       @if (galleryImages.length === 0) {
-        <p class="gallery-empty">No photos added yet. Photos help attract customers!</p>
+        <p class="gallery-empty">{{ 'EDIT_BUSINESS.GALLERY_EMPTY' | translate }}</p>
       }
 
       <div class="gallery-grid">
@@ -73,19 +78,19 @@
           <div class="gallery-item" [class.is-cover]="img.isCover">
             <img [src]="img.imageUrl | uploadUrl" [alt]="img.altText || 'Gallery photo'" />
             @if (img.isCover) {
-              <span class="cover-badge">Cover</span>
+              <span class="cover-badge">{{ 'EDIT_BUSINESS.COVER' | translate }}</span>
             }
             <div class="gallery-actions">
               @if (!img.isCover) {
-                <button type="button" class="action-btn" title="Set as cover" (click)="setCover(img)">
+                <button type="button" class="action-btn" [title]="'EDIT_BUSINESS.SET_COVER' | translate" (click)="setCover(img)">
                   <ion-icon name="star-outline" />
                 </button>
               } @else {
-                <button type="button" class="action-btn active" title="Cover photo">
+                <button type="button" class="action-btn active" [title]="'EDIT_BUSINESS.COVER' | translate">
                   <ion-icon name="star" />
                 </button>
               }
-              <button type="button" class="action-btn danger" title="Remove" (click)="removeGalleryImage(img)">
+              <button type="button" class="action-btn danger" [title]="'COMMON.DELETE' | translate" (click)="removeGalleryImage(img)">
                 <ion-icon name="trash-outline" />
               </button>
             </div>

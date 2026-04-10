@@ -1,5 +1,5 @@
 
-<app-header title="Checkout" [showBack]="true" />
+<app-header [title]="'ACTIVATE_SUBSCRIPTION.CHECKOUT' | translate" [showBack]="true" />
 
 <ion-content class="ph-page-content">
 
@@ -15,7 +15,7 @@
   <!-- Error -->
   <div *ngIf="!isLoading && hasError" class="error-state">
     <ion-icon name="close-circle-outline" class="error-icon" />
-    <p>Missing plan or business information. Please go back and try again.</p>
+    <p>{{ 'ACTIVATE_SUBSCRIPTION.MISSING_INFO' | translate }}</p>
   </div>
 
   <!-- Checkout -->
@@ -23,7 +23,7 @@
     <div class="checkout-header">
       <h2 class="plan-name">{{ plan.name }}</h2>
       <div class="plan-price">
-        <span class="price-amount">{{ plan.price === 0 ? 'Free' : plan.price + ' ' + plan.currency }}</span>
+        <span class="price-amount">{{ plan.price === 0 ? ('ACTIVATE_SUBSCRIPTION.FREE' | translate) : (plan.price + ' ' + plan.currency) }}</span>
         <span *ngIf="plan.price > 0" class="price-period">/ {{ plan.billingCycle }}</span>
       </div>
       <p *ngIf="plan.description" class="plan-description">{{ plan.description }}</p>
@@ -34,27 +34,27 @@
     <ul class="feature-list">
       <li class="feature-item">
         <ion-icon name="checkmark-outline" class="feature-check" />
-        Up to {{ plan.maxImages }} images
+        {{ 'ACTIVATE_SUBSCRIPTION.MAX_IMAGES' | translate:{ count: plan.maxImages } }}
       </li>
       <li *ngIf="plan.canBeFeatured" class="feature-item">
         <ion-icon name="checkmark-outline" class="feature-check" />
-        Featured in search results
+        {{ 'ACTIVATE_SUBSCRIPTION.FEATURED_SEARCH' | translate }}
       </li>
       <li *ngIf="plan.allowsDeals" class="feature-item">
         <ion-icon name="checkmark-outline" class="feature-check" />
-        Post deals &amp; offers
+        {{ 'ACTIVATE_SUBSCRIPTION.POST_DEALS' | translate }}
       </li>
       <li *ngIf="plan.allowsAnalytics" class="feature-item">
         <ion-icon name="checkmark-outline" class="feature-check" />
-        Analytics dashboard
+        {{ 'ACTIVATE_SUBSCRIPTION.ANALYTICS' | translate }}
       </li>
     </ul>
 
     <div class="divider"></div>
 
     <div class="total-row">
-      <span class="total-label">Total</span>
-      <span class="total-amount">{{ plan.price === 0 ? 'Free' : plan.price + ' ' + plan.currency }}</span>
+      <span class="total-label">{{ 'ACTIVATE_SUBSCRIPTION.TOTAL' | translate }}</span>
+      <span class="total-amount">{{ plan.price === 0 ? ('ACTIVATE_SUBSCRIPTION.FREE' | translate) : (plan.price + ' ' + plan.currency) }}</span>
     </div>
 
     <app-button
@@ -65,10 +65,10 @@
       (click)="proceedToPayment()"
     >
       <ion-icon name="card-outline" slot="start" />
-      Proceed to Payment
+      {{ 'ACTIVATE_SUBSCRIPTION.PROCEED_PAYMENT' | translate }}
     </app-button>
 
-    <p class="payment-note">You will be redirected to our secure payment gateway.</p>
+    <p class="payment-note">{{ 'ACTIVATE_SUBSCRIPTION.PAYMENT_NOTE' | translate }}</p>
   </div>
 
 </ion-content>

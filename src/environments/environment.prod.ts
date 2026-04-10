@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://api.persianhub.se/api/v1'
+  apiUrl: 'http://192.168.1.212:5239/api/v1'
 };

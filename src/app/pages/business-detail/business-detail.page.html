@@ -1,6 +1,6 @@
 
 <app-header
-  [title]="business?.name ?? 'Business'"
+  [title]="lang.pick(business?.name, business?.nameFa) || 'Business'"
   [showBack]="true"
   defaultBackHref="/businesses"
 />
@@ -22,7 +22,7 @@
 
   @if (hasError) {
     <div class="error-state">
-      <p class="ph-caption">Could not load business details.</p>
+      <p class="ph-caption">{{ 'BUSINESS_DETAIL.LOAD_ERROR' | translate }}</p>
     </div>
   }
 
@@ -31,15 +31,15 @@
     <!-- Banner: cover image or fallback initial -->
     <div class="biz-banner">
       @if (coverImage) {
-        <img [src]="coverImage.imageUrl | uploadUrl" [alt]="business.name" class="banner-cover-img" />
+        <img [src]="coverImage.imageUrl | uploadUrl" [alt]="lang.pick(business.name, business.nameFa)" class="banner-cover-img" />
       } @else {
-        <span class="banner-initial">{{ business.name[0].toUpperCase() }}</span>
+        <span class="banner-initial">{{ (lang.pick(business.name, business.nameFa))[0].toUpperCase() }}</span>
       }
 
       <!-- Logo overlay — bottom-right corner -->
       @if (business.logoUrl) {
         <div class="logo-overlay">
-          <img [src]="business.logoUrl | uploadUrl" [alt]="business.name + ' logo'" class="logo-overlay-img" />
+          <img [src]="business.logoUrl | uploadUrl" [alt]="lang.pick(business.name, business.nameFa) + ' logo'" class="logo-overlay-img" />
         </div>
       }
     </div>
@@ -48,16 +48,16 @@
     <div class="biz-identity-row">
       <div class="biz-identity">
         <div class="biz-badges">
-          @if (business.isFeatured) { <span class="badge featured">Featured</span> }
+          @if (business.isFeatured) { <span class="badge featured">{{ 'BUSINESS_DETAIL.FEATURED' | translate }}</span> }
           @if (business.isVerified) {
-            <span class="badge verified"><ion-icon name="checkmark-circle" /> Verified</span>
+            <span class="badge verified"><ion-icon name="checkmark-circle" /> {{ 'BUSINESS_DETAIL.VERIFIED' | translate }}</span>
           }
         </div>
-        <h1 class="biz-name">{{ business.name }}</h1>
+        <h1 class="biz-name">{{ lang.pick(business.name, business.nameFa) }}</h1>
         @if (business.city) {
           <p class="biz-location">
             <ion-icon name="location-outline" />
-            {{ business.city }}@if (business.country) {, {{ business.country }}}
+            {{ lang.pick(business.city, business.cityFa) }}@if (business.country) {, {{ business.country }}}
           </p>
         }
         @if (reviews.length) {
@@ -70,22 +70,30 @@
         }
       </div>
       <div class="meta-actions">
-        <button class="meta-btn" [class.active]="isFavorite" [disabled]="isFavoriteLoading" (click)="toggleFavorite()">
+        <button class="meta-btn fav-btn" [class.active]="isFavorite" [disabled]="isFavoriteLoading" (click)="toggleFavorite()">
           <ion-icon [name]="isFavorite ? 'heart' : 'heart-outline'" />
+          @if (favoriteCount > 0) {
+            <span class="fav-count">{{ favoriteCount }}</span>
+          }
         </button>
         <button class="meta-btn" (click)="shareBusiness()">
           <ion-icon name="share-outline" />
         </button>
+        @if (auth.currentUser) {
+          <button class="meta-btn" (click)="reportBusiness()">
+            <ion-icon name="flag-outline" />
+          </button>
+        }
       </div>
     </div>
 
     <!-- Contact actions -->
     <div class="action-row">
       @if (business.phoneNumber) {
-        <button class="action-btn" (click)="call()"><ion-icon name="call-outline" /><span>Call</span></button>
+        <button class="action-btn" (click)="call()"><ion-icon name="call-outline" /><span>{{ 'BUSINESS_DETAIL.CALL' | translate }}</span></button>
       }
       @if (business.website) {
-        <button class="action-btn" (click)="openWebsite()"><ion-icon name="globe-outline" /><span>Website</span></button>
+        <button class="action-btn" (click)="openWebsite()"><ion-icon name="globe-outline" /><span>{{ 'BUSINESS_DETAIL.WEBSITE' | translate }}</span></button>
       }
       @if (business.whatsAppNumber) {
         <button class="action-btn" (click)="openWhatsApp()"><ion-icon name="logo-whatsapp" /><span>WhatsApp</span></button>
@@ -96,25 +104,27 @@
       @if (business.telegramUrl) {
         <button class="action-btn" (click)="openTelegram()"><ion-icon name="send-outline" /><span>Telegram</span></button>
       }
-      <button class="action-btn" (click)="showContactForm = true"><ion-icon name="mail-outline" /><span>Message</span></button>
+      <button class="action-btn" (click)="openContactForm()"><ion-icon name="mail-outline" /><span>{{ 'BUSINESS_DETAIL.MESSAGE' | translate }}</span></button>
     </div>
 
     <!-- Contact form -->
     @if (showContactForm) {
       <div class="contact-form-card">
-        <h3 class="cf-title">Send a Message</h3>
-        <input class="ph-input" [(ngModel)]="contactName" placeholder="Your name *" />
-        <input class="ph-input" [(ngModel)]="contactEmail" placeholder="Your email *" type="email" />
-        <input class="ph-input" [(ngModel)]="contactPhone" placeholder="Phone number (optional)" />
-        <textarea class="ph-textarea" [(ngModel)]="contactMessage" placeholder="Your message..." rows="3"></textarea>
+        <h3 class="cf-title">{{ 'BUSINESS_DETAIL.SEND_MESSAGE' | translate }}</h3>
+        @if (!auth.currentUser) {
+          <input class="ph-input" [(ngModel)]="contactName" [placeholder]="'BUSINESS_DETAIL.YOUR_NAME' | translate" />
+          <input class="ph-input" [(ngModel)]="contactEmail" [placeholder]="'BUSINESS_DETAIL.YOUR_EMAIL' | translate" type="email" />
+        }
+        <input class="ph-input" [(ngModel)]="contactPhone" [placeholder]="'BUSINESS_DETAIL.PHONE_OPTIONAL' | translate" />
+        <textarea class="ph-textarea" [(ngModel)]="contactMessage" [placeholder]="'BUSINESS_DETAIL.YOUR_MESSAGE' | translate" rows="3"></textarea>
         <div class="cf-actions">
-          <button class="cancel-btn" (click)="showContactForm = false; resetContactForm()">Cancel</button>
+          <button class="cancel-btn" (click)="showContactForm = false; resetContactForm()">{{ 'COMMON.CANCEL' | translate }}</button>
           <app-button size="small" [loading]="contactSubmitting" [disabled]="!contactName || !contactEmail" (click)="submitContact()">
-            Send
+            {{ 'COMMON.SEND' | translate }}
           </app-button>
         </div>
         @if (contactSent) {
-          <p class="contact-success">Message sent successfully!</p>
+          <p class="contact-success">{{ 'BUSINESS_DETAIL.MESSAGE_SENT' | translate }}</p>
         }
       </div>
     }
@@ -122,15 +132,15 @@
     <!-- About -->
     @if (business.description) {
       <section class="detail-section">
-        <h2 class="ph-section-title">About</h2>
-        <p class="biz-description">{{ business.description }}</p>
+        <h2 class="ph-section-title">{{ 'BUSINESS_DETAIL.ABOUT' | translate }}</h2>
+        <p class="biz-description">{{ lang.pick(business.description, business.descriptionFa) }}</p>
       </section>
     }
 
     <!-- Address -->
     @if (fullAddress) {
       <section class="detail-section">
-        <h2 class="ph-section-title">Address</h2>
+        <h2 class="ph-section-title">{{ 'BUSINESS_DETAIL.ADDRESS' | translate }}</h2>
         <div class="address-block">
           <ion-icon name="location-outline" class="address-icon" />
           <p class="address-text">{{ fullAddress }}</p>
@@ -138,69 +148,268 @@
       </section>
     }
 
-    <!-- Offers -->
-    <section class="detail-section">
-      <h2 class="ph-section-title">
-        <ion-icon name="pricetag-outline" class="section-icon" /> Offers
-      </h2>
-      @if (offersLoading) {
-        <div class="skeleton-line short"></div>
-      } @else if (offers.length === 0) {
-        <p class="ph-caption muted-text">No active offers at the moment.</p>
-      } @else {
-        <div class="offers-list">
-          @for (offer of offers; track offer.id) {
-            <div class="offer-card">
-              <div class="offer-badge">{{ discountLabel(offer) }}</div>
-              <p class="offer-title">{{ offer.title }}</p>
-              <p class="offer-dates ph-caption">
-                {{ offer.startsAtUtc | date:'d MMM' }} – {{ offer.endsAtUtc | date:'d MMM yyyy' }}
-              </p>
-            </div>
-          }
-        </div>
-      }
-    </section>
-
     <!-- Photo Gallery -->
     @if (business.images && business.images.length > 0) {
       <section class="detail-section">
         <h2 class="ph-section-title">
-          <ion-icon name="images-outline" class="section-icon" /> Photos
+          <ion-icon name="images-outline" class="section-icon" /> {{ 'BUSINESS_DETAIL.PHOTOS' | translate }}
         </h2>
         <div class="gallery-scroll">
-          @for (img of business.images; track img.id) {
-            <div class="gallery-thumb" [class.cover]="img.isCover">
-              <img [src]="img.imageUrl | uploadUrl" [alt]="img.altText || business.name" />
-              @if (img.isCover) { <span class="cover-label">Cover</span> }
+          @for (img of business.images; track img.id; let i = $index) {
+            <div class="gallery-thumb" [class.cover]="img.isCover" (click)="openLightbox(i)">
+              <img [src]="img.imageUrl | uploadUrl" [alt]="img.altText || lang.pick(business.name, business.nameFa)" />
+              @if (img.isCover) { <span class="cover-label">{{ 'BUSINESS_DETAIL.COVER' | translate }}</span> }
+              <div class="gallery-thumb-overlay"><ion-icon name="expand-outline" /></div>
             </div>
           }
         </div>
       </section>
     }
 
+    <!-- Offers -->
+    <section class="detail-section">
+      <h2 class="ph-section-title">
+        <ion-icon name="pricetag-outline" class="section-icon" /> {{ 'BUSINESS_DETAIL.OFFERS' | translate }}
+      </h2>
+      @if (offersLoading) {
+        <div class="skeleton-line short"></div>
+      } @else if (offers.length === 0) {
+        <p class="ph-caption muted-text">{{ 'BUSINESS_DETAIL.NO_OFFERS' | translate }}</p>
+      } @else {
+        <div class="offers-list">
+          @for (offer of offers; track offer.id) {
+            @let expanded = expandedOfferId === offer.id;
+            <div class="offer-card" [class.offer-card--open]="expanded" (click)="toggleOffer(offer.id)">
+
+              <!-- Header row (always visible) -->
+              <div class="offer-header">
+                <div class="offer-header-left">
+                  <span class="offer-badge">{{ discountLabel(offer) }}</span>
+                  <p class="offer-title">{{ lang.pick(offer.title, offer.titleFa) }}</p>
+                  <p class="offer-dates ph-caption">
+                    {{ offer.startsAtUtc | date:'d MMM' }} – {{ offer.endsAtUtc | date:'d MMM yyyy' }}
+                  </p>
+                  @if (offerUrgency(offer); as urgency) {
+                    <p class="offer-urgency">
+                      <ion-icon name="time-outline" /> {{ urgency }}
+                    </p>
+                  }
+                </div>
+                <ion-icon
+                  [name]="expanded ? 'chevron-up-outline' : 'chevron-down-outline'"
+                  class="offer-chevron"
+                />
+              </div>
+
+              <!-- Expanded detail -->
+              @if (expanded) {
+                <div class="offer-detail" (click)="$event.stopPropagation()">
+                  @if (offerDetailLoading.has(offer.id)) {
+                    <div class="offer-detail-skeleton"></div>
+                  } @else if (offerDetailMap.has(offer.id)) {
+                    @let d = offerDetailMap.get(offer.id)!;
+
+                    @if (d.coverImageUrl) {
+                      <img [src]="d.coverImageUrl | uploadUrl" [alt]="lang.pick(d.title, d.titleFa)" class="offer-cover" />
+                    }
+
+                    @if (d.description) {
+                      <p class="offer-description">{{ lang.pick(d.description, d.descriptionFa) }}</p>
+                    }
+
+                    <div class="offer-price-row">
+                      @if (d.originalPrice) {
+                        <span class="offer-original-price">{{ d.originalPrice }} {{ d.currency }}</span>
+                      }
+                      @if (d.discountedPrice) {
+                        <span class="offer-discounted-price">{{ d.discountedPrice }} {{ d.currency }}</span>
+                      }
+                    </div>
+                  }
+                </div>
+              }
+
+            </div>
+          }
+        </div>
+      }
+    </section>
+
+    <!-- Deals -->
+    <section class="detail-section">
+      <h2 class="ph-section-title">
+        <ion-icon name="ticket-outline" class="section-icon" /> {{ 'BUSINESS_DETAIL.DEALS' | translate }}
+      </h2>
+      @if (dealsLoading) {
+        <div class="skeleton-line short"></div>
+      } @else if (deals.length === 0) {
+        <p class="ph-caption muted-text">{{ 'BUSINESS_DETAIL.NO_DEALS' | translate }}</p>
+      } @else {
+        <div class="deals-list">
+          @for (deal of deals; track deal.id) {
+            @let expanded = expandedDealId === deal.id;
+            <div class="deal-card" [class.deal-card--open]="expanded" (click)="toggleDeal(deal.id)">
+
+              <!-- Header row (always visible) -->
+              <div class="deal-header">
+                <div class="deal-header-left">
+                  <span class="deal-badge">{{ dealDiscountLabel(deal) }}</span>
+                  <p class="deal-title">{{ lang.pick(deal.title, deal.titleFa) }}</p>
+                  @if (deal.validFromUtc || deal.validToUtc) {
+                    <p class="offer-dates ph-caption">
+                      @if (deal.validFromUtc) { {{ deal.validFromUtc | date:'d MMM' }} }
+                      @if (deal.validFromUtc && deal.validToUtc) { – }
+                      @if (deal.validToUtc) { {{ deal.validToUtc | date:'d MMM yyyy' }} }
+                    </p>
+                  }
+                </div>
+                <ion-icon
+                  [name]="expanded ? 'chevron-up-outline' : 'chevron-down-outline'"
+                  class="offer-chevron"
+                />
+              </div>
+
+              <!-- Coupon code — always visible if present -->
+              @if (deal.couponCode) {
+                <div class="deal-coupon-row" (click)="$event.stopPropagation()">
+                  <div class="deal-coupon-box">
+                    <span class="deal-coupon-code">{{ deal.couponCode }}</span>
+                    <button class="deal-copy-btn" (click)="copyCoupon(deal.couponCode!, $event)">
+                      @if (copiedCode === deal.couponCode) {
+                        <ion-icon name="checkmark-outline" /> {{ 'BUSINESS_DETAIL.COPIED' | translate }}
+                      } @else {
+                        <ion-icon name="copy-outline" /> {{ 'BUSINESS_DETAIL.COPY' | translate }}
+                      }
+                    </button>
+                  </div>
+                </div>
+              } @else {
+                <div class="deal-no-code">
+                  <ion-icon name="storefront-outline" /> {{ 'BUSINESS_DETAIL.SHOW_COUNTER' | translate }}
+                </div>
+              }
+
+              <!-- Expanded detail -->
+              @if (expanded) {
+                <div class="offer-detail" (click)="$event.stopPropagation()">
+                  @if (dealDetailLoading.has(deal.id)) {
+                    <div class="offer-detail-skeleton"></div>
+                  } @else if (dealDetailMap.has(deal.id)) {
+                    @let d = dealDetailMap.get(deal.id)!;
+
+                    @if (d.coverImageUrl) {
+                      <img [src]="d.coverImageUrl | uploadUrl" [alt]="lang.pick(d.title, d.titleFa)" class="offer-cover" />
+                    }
+
+                    @if (d.description) {
+                      <p class="offer-description">{{ lang.pick(d.description, d.descriptionFa) }}</p>
+                    }
+
+                    <div class="offer-price-row">
+                      @if (d.originalPrice) {
+                        <span class="offer-original-price">{{ d.originalPrice }} {{ d.currency }}</span>
+                      }
+                      @if (d.discountedPrice) {
+                        <span class="offer-discounted-price deal-discounted-price">{{ d.discountedPrice }} {{ d.currency }}</span>
+                      }
+                    </div>
+
+                    @if (d.termsAndConditions) {
+                      <p class="deal-terms ph-caption">{{ lang.pick(d.termsAndConditions, d.termsAndConditionsFa) }}</p>
+                    }
+                  }
+                </div>
+              }
+
+            </div>
+          }
+        </div>
+      }
+    </section>
+
     <!-- Events -->
     <section class="detail-section">
       <h2 class="ph-section-title">
-        <ion-icon name="calendar-outline" class="section-icon" /> Events
+        <ion-icon name="calendar-outline" class="section-icon" /> {{ 'BUSINESS_DETAIL.EVENTS' | translate }}
       </h2>
       @if (eventsLoading) {
         <div class="skeleton-line short"></div>
       } @else if (events.length === 0) {
-        <p class="ph-caption muted-text">No upcoming events.</p>
+        <p class="ph-caption muted-text">{{ 'BUSINESS_DETAIL.NO_EVENTS' | translate }}</p>
       } @else {
         <div class="events-list">
           @for (event of events; track event.id) {
-            <div class="event-item">
-              <div class="event-date-badge">
-                <span class="edb-day">{{ event.startsAtUtc | date:'d' }}</span>
-                <span class="edb-month">{{ event.startsAtUtc | date:'MMM' }}</span>
+            @let expanded = expandedEventId === event.id;
+            <div class="event-item" [class.event-item--open]="expanded" (click)="toggleEvent(event.id)">
+
+              <!-- Header row (always visible) -->
+              <div class="event-header">
+                <div class="event-date-badge">
+                  <span class="edb-day">{{ event.startsAtUtc | date:'d' }}</span>
+                  <span class="edb-month">{{ event.startsAtUtc | date:'MMM' }}</span>
+                </div>
+                <div class="event-body">
+                  <p class="event-title">{{ lang.pick(event.title, event.titleFa) }}</p>
+                  @if (event.city) { <p class="event-city ph-caption">{{ lang.pick(event.city, event.cityFa) }}</p> }
+                  <span class="event-price" [class.free]="event.isFree">
+                    {{ event.isFree ? ('BUSINESS_DETAIL.FREE' | translate) : (event.price ? (event.price + ' ' + (event.currency ?? '')) : ('BUSINESS_DETAIL.PAID' | translate)) }}
+                  </span>
+                </div>
+                <ion-icon [name]="expanded ? 'chevron-up-outline' : 'chevron-down-outline'" class="event-chevron" />
               </div>
-              <div class="event-body">
-                <p class="event-title">{{ event.title }}</p>
-                @if (event.city) { <p class="event-city ph-caption">{{ event.city }}</p> }
-                <span class="event-price" [class.free]="event.isFree">{{ event.isFree ? 'Free' : (event.price ? (event.price + ' ' + (event.currency ?? '')) : 'Paid') }}</span>
-              </div>
+
+              <!-- Expanded detail -->
+              @if (expanded) {
+                <div class="event-detail" (click)="$event.stopPropagation()">
+                  @if (eventDetailLoading.has(event.id)) {
+                    <div class="offer-detail-skeleton"></div>
+                  } @else if (eventDetailMap.has(event.id)) {
+                    @let d = eventDetailMap.get(event.id)!;
+
+                    @if (d.coverImageUrl) {
+                      <img [src]="d.coverImageUrl | uploadUrl" [alt]="lang.pick(d.title, d.titleFa)" class="offer-cover" />
+                    }
+
+                    @if (d.description) {
+                      <p class="offer-description">{{ lang.pick(d.description, d.descriptionFa) }}</p>
+                    }
+
+                    <div class="event-detail-rows">
+                      @if (d.endsAtUtc) {
+                        <div class="event-detail-row">
+                          <ion-icon name="calendar-outline" />
+                          <span>{{ d.startsAtUtc | date:'d MMM yyyy, HH:mm' }} – {{ d.endsAtUtc | date:'d MMM yyyy, HH:mm' }}</span>
+                        </div>
+                      }
+                      @if (d.locationName || d.addressLine) {
+                        <div class="event-detail-row">
+                          <ion-icon name="location-outline" />
+                          <span>{{ lang.pick(d.locationName, d.locationNameFa) }}{{ (d.locationName && d.addressLine) ? ' · ' : '' }}{{ lang.pick(d.addressLine, d.addressLineFa) }}</span>
+                        </div>
+                      }
+                      @if (d.organizerName) {
+                        <div class="event-detail-row">
+                          <ion-icon name="person-outline" />
+                          <span>{{ lang.pick(d.organizerName, d.organizerNameFa) }}</span>
+                        </div>
+                      }
+                      @if (d.organizerPhoneNumber) {
+                        <div class="event-detail-row">
+                          <ion-icon name="call-outline" />
+                          <span>{{ d.organizerPhoneNumber }}</span>
+                        </div>
+                      }
+                      @if (d.organizerEmail) {
+                        <div class="event-detail-row">
+                          <ion-icon name="mail-outline" />
+                          <span>{{ d.organizerEmail }}</span>
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+              }
+
             </div>
           }
         </div>
@@ -211,52 +420,18 @@
     <section class="detail-section">
       <div class="section-header-row">
         <h2 class="ph-section-title">
-          <ion-icon name="chatbubble-outline" class="section-icon" /> Reviews
+          <ion-icon name="chatbubble-outline" class="section-icon" /> {{ 'BUSINESS_DETAIL.REVIEWS' | translate }}
         </h2>
-        @if (auth.currentUser && !hasUserReviewed && !showReviewForm) {
-          <button class="write-review-btn" (click)="showReviewForm = true">Write a Review</button>
+        @if (auth.currentUser && !hasUserReviewed) {
+          <button class="write-review-btn" (click)="goToAddReview()">{{ 'BUSINESS_DETAIL.WRITE_REVIEW' | translate }}</button>
         }
       </div>
-
-      <!-- Write review form -->
-      @if (showReviewForm) {
-        <div class="review-form">
-          <p class="form-label">Your Rating</p>
-          <div class="star-picker">
-            @for (s of stars; track s) {
-              <button class="star-btn" (click)="setRating(s)">
-                <ion-icon [name]="s <= reviewRating ? 'star' : 'star-outline'" class="pick-star" />
-              </button>
-            }
-          </div>
-          <ion-textarea
-            class="review-textarea"
-            placeholder="Share your experience (optional)..."
-            [(ngModel)]="reviewComment"
-            [rows]="3"
-            fill="outline"
-          />
-          <div class="review-form-actions">
-            <button class="cancel-btn" (click)="showReviewForm = false; reviewRating = 0; reviewComment = ''">
-              Cancel
-            </button>
-            <app-button
-              size="small"
-              [loading]="reviewSubmitting"
-              [disabled]="reviewRating === 0"
-              (click)="submitReview()"
-            >
-              Submit
-            </app-button>
-          </div>
-        </div>
-      }
 
       @if (reviewsLoading) {
         <div class="skeleton-line short" style="margin-top:8px"></div>
         <div class="skeleton-line" style="margin-top:8px"></div>
       } @else if (reviews.length === 0) {
-        <p class="ph-caption muted-text">No reviews yet. Be the first to review!</p>
+        <p class="ph-caption muted-text">{{ 'BUSINESS_DETAIL.NO_REVIEWS' | translate }}</p>
       } @else {
         <div class="reviews-list">
           @for (review of reviews; track review.id) {
@@ -272,12 +447,58 @@
               @if (review.title) {
                 <p class="review-title">{{ review.title }}</p>
               }
+              @if (review.comment) {
+                <p class="review-comment">{{ review.comment }}</p>
+              }
+              <div class="review-footer">
+                <button
+                  class="like-btn"
+                  [class.liked]="isLiked(review.id)"
+                  [disabled]="!auth.currentUser || reactionLoading.has(review.id)"
+                  (click)="toggleLike(review)"
+                >
+                  <ion-icon [name]="isLiked(review.id) ? 'thumbs-up' : 'thumbs-up-outline'" />
+                  <span>{{ review.likeCount }}</span>
+                </button>
+              </div>
             </div>
           }
         </div>
       }
     </section>
 
+  }
+
+  <!-- Lightbox -->
+  @if (lightboxIndex !== null) {
+    <div class="lightbox" slot="fixed" (click)="closeLightbox()">
+
+      <!-- Image -->
+      <div class="lightbox-img-wrap" (click)="$event.stopPropagation()">
+        <img [src]="lightboxImages[lightboxIndex] | uploadUrl" class="lightbox-img" />
+
+        <!-- Counter -->
+        @if (lightboxImages.length > 1) {
+          <span class="lightbox-counter">{{ lightboxIndex + 1 }} / {{ lightboxImages.length }}</span>
+        }
+      </div>
+
+      <!-- Prev / Next -->
+      @if (lightboxImages.length > 1) {
+        <button class="lightbox-nav lightbox-nav--prev" (click)="$event.stopPropagation(); lightboxPrev()">
+          <ion-icon name="chevron-back-outline" />
+        </button>
+        <button class="lightbox-nav lightbox-nav--next" (click)="$event.stopPropagation(); lightboxNext()">
+          <ion-icon name="chevron-forward-outline" />
+        </button>
+      }
+
+      <!-- Close -->
+      <button class="lightbox-close" (click)="closeLightbox()">
+        <ion-icon name="close-outline" />
+      </button>
+
+    </div>
   }
 
 </ion-content>

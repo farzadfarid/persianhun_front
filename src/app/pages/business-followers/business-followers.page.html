@@ -1,0 +1,47 @@
+
+<app-header [title]="'BUSINESS_FOLLOWERS.TITLE' | translate" [showBack]="true" defaultBackHref="/my-businesses" />
+
+<ion-content class="ph-page-content">
+
+  @if (isLoading) {
+    <div class="followers-list">
+      @for (s of skeletons; track s) {
+        <div class="follower-skeleton">
+          <ion-skeleton-text animated style="width: 40px; height: 40px; border-radius: 50%;" />
+          <div style="flex:1">
+            <ion-skeleton-text animated style="width: 50%; height: 14px; margin-bottom: 6px;" />
+            <ion-skeleton-text animated style="width: 70%; height: 12px;" />
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  @if (hasError) {
+    <div class="empty-state"><p class="ph-caption">{{ 'BUSINESS_FOLLOWERS.LOAD_ERROR' | translate }}</p></div>
+  }
+
+  @if (!isLoading && !hasError) {
+    @if (followers.length === 0) {
+      <div class="empty-state">
+        <ion-icon name="heart-outline" class="empty-icon" />
+        <p class="ph-caption">{{ 'BUSINESS_FOLLOWERS.EMPTY' | translate }}</p>
+      </div>
+    } @else {
+      <p class="followers-count ph-caption">{{ 'BUSINESS_FOLLOWERS.COUNT' | translate:{ count: followers.length } }}</p>
+      <div class="followers-list">
+        @for (f of followers; track f.appUserId) {
+          <div class="follower-card">
+            <div class="follower-avatar">{{ (f.name || f.email)[0].toUpperCase() }}</div>
+            <div class="follower-info">
+              <p class="follower-name">{{ f.name || '—' }}</p>
+              <p class="follower-email ph-caption">{{ f.email }}</p>
+            </div>
+            <span class="follower-date ph-caption">{{ f.savedAtUtc | date:'d MMM' }}</span>
+          </div>
+        }
+      </div>
+    }
+  }
+
+</ion-content>

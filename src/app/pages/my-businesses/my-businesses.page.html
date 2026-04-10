@@ -1,9 +1,7 @@
-
-<app-header title="My Businesses" [showMenu]="true" />
+<app-header [title]="'MY_BUSINESSES.TITLE' | translate" [showMenu]="true" />
 
 <ion-content class="ph-page-content">
 
-  <!-- Loading skeletons -->
   <div *ngIf="isLoading" class="biz-list">
     <div *ngFor="let s of skeletons" class="biz-card skeleton-card">
       <ion-skeleton-text animated style="width: 45%; height: 18px; margin-bottom: 6px;" />
@@ -12,24 +10,20 @@
     </div>
   </div>
 
-  <!-- Error state -->
   <div *ngIf="!isLoading && hasError" class="empty-state">
     <ion-icon name="close-circle-outline" class="empty-icon" />
-    <p class="ph-caption">Could not load your businesses.</p>
+    <p class="ph-caption">{{ 'MY_BUSINESSES.LOAD_ERROR' | translate }}</p>
   </div>
 
-  <!-- Empty state -->
   <div *ngIf="!isLoading && !hasError && cards.length === 0" class="empty-state">
     <ion-icon name="business-outline" class="empty-icon" />
-    <h3 class="empty-title">No businesses yet</h3>
-    <p class="ph-caption">Add your first business to get started.</p>
+    <h3 class="empty-title">{{ 'MY_BUSINESSES.EMPTY_TITLE' | translate }}</h3>
+    <p class="ph-caption">{{ 'MY_BUSINESSES.EMPTY_CAPTION' | translate }}</p>
   </div>
 
-  <!-- Business list -->
   <div *ngIf="!isLoading && !hasError && cards.length > 0" class="biz-list">
     <div *ngFor="let card of cards" class="biz-card" [class.inactive-card]="!card.isActive">
 
-      <!-- Business info -->
       <a [routerLink]="['/businesses', card.biz.id]" class="biz-info">
         <div class="biz-avatar">
           @if (card.biz.logoUrl) {
@@ -39,75 +33,84 @@
           }
         </div>
         <div class="biz-details">
-          <p class="biz-name">{{ card.biz.name }}</p>
-          <p *ngIf="card.biz.city" class="biz-city">{{ card.biz.city }}</p>
+          <p class="biz-name">{{ lang.pick(card.biz.name, card.biz.nameFa) }}</p>
+          <p *ngIf="card.biz.city" class="biz-city">{{ lang.pick(card.biz.city, card.biz.cityFa) }}</p>
         </div>
       </a>
 
-      <!-- Subscription status badge -->
       <div class="sub-status-row">
-        <span *ngIf="hasActiveSub(card)" class="sub-badge active">
-          {{ subLabel(card) }}
-        </span>
-        <span *ngIf="card.subscription && !hasActiveSub(card)" class="sub-badge inactive">
-          {{ subLabel(card) }}
-        </span>
-        <span *ngIf="!card.isActive" class="visibility-badge">Hidden</span>
+        <span *ngIf="hasActiveSub(card)" class="sub-badge active">{{ subLabel(card) }}</span>
+        <span *ngIf="card.subscription && !hasActiveSub(card)" class="sub-badge inactive">{{ subLabel(card) }}</span>
+        <span *ngIf="!card.isActive" class="visibility-badge">{{ 'MY_BUSINESSES.HIDDEN' | translate }}</span>
       </div>
 
-      <!-- Action buttons -->
       <div class="biz-actions">
-        <!-- Edit -->
-        <button class="icon-btn" [routerLink]="['/edit-business', card.biz.id]" aria-label="Edit">
-          <ion-icon name="create-outline" />
-        </button>
-
-        <!-- Manage Offers -->
-        <button class="icon-btn" [routerLink]="['/business-offers', card.biz.id]" aria-label="Offers">
-          <ion-icon name="pricetag-outline" />
-        </button>
-
-        <!-- Manage Events -->
-        <button class="icon-btn" [routerLink]="['/business-events', card.biz.id]" aria-label="Events">
-          <ion-icon name="calendar-outline" />
-        </button>
-
-        <!-- Leads -->
-        <button class="icon-btn" [routerLink]="['/business-leads', card.biz.id]" aria-label="Leads">
-          <ion-icon name="people-outline" />
-        </button>
-
-        <!-- Toggle active/inactive -->
-        <button class="icon-btn" (click)="toggleActive(card)" [disabled]="card.toggling" aria-label="Toggle visibility">
-          <ion-icon [name]="card.isActive ? 'eye-outline' : 'eye-off-outline'" />
-        </button>
-
-        <!-- Cancel subscription -->
-        <button
-          *ngIf="hasActiveSub(card)"
-          class="icon-btn danger"
-          (click)="cancelSubscription(card)"
-          [disabled]="card.cancelling"
-          aria-label="Cancel subscription"
-        >
-          <ion-icon name="ban-outline" />
-        </button>
-
-        <!-- Subscribe / upgrade -->
-        <button
-          *ngIf="!hasActiveSub(card)"
-          class="subscribe-btn"
-          (click)="subscribeForBusiness(card.biz.id)"
-        >
-          <ion-icon name="card-outline" />
-          <span>Subscribe</span>
-        </button>
+        <div class="action-col">
+          <button class="help-btn" (click)="showHelp('edit', $event)"><span class="help-q">?</span></button>
+          <button class="icon-btn" [routerLink]="['/edit-business', card.biz.id]"><ion-icon name="create-outline" /></button>
+        </div>
+        <div class="action-col">
+          <button class="help-btn" (click)="showHelp('offers', $event)"><span class="help-q">?</span></button>
+          <button class="icon-btn" [routerLink]="['/business-offers', card.biz.id]"><ion-icon name="pricetag-outline" /></button>
+        </div>
+        <div class="action-col">
+          <button class="help-btn" (click)="showHelp('events', $event)"><span class="help-q">?</span></button>
+          <button class="icon-btn" [routerLink]="['/business-events', card.biz.id]"><ion-icon name="calendar-outline" /></button>
+        </div>
+        <div class="action-col">
+          <button class="help-btn" (click)="showHelp('reviews', $event)"><span class="help-q">?</span></button>
+          <button class="icon-btn" routerLink="/my-reviews"><ion-icon name="chatbubble-outline" /></button>
+        </div>
+        <div class="action-col">
+          <button class="help-btn" (click)="showHelp('leads', $event)"><span class="help-q">?</span></button>
+          <button class="icon-btn" [routerLink]="['/business-leads', card.biz.id]"><ion-icon name="people-outline" /></button>
+        </div>
+        <div class="action-col">
+          <button class="help-btn" (click)="showHelp('followers', $event)"><span class="help-q">?</span></button>
+          <button class="icon-btn followers-btn" [routerLink]="['/business-followers', card.biz.id]">
+            <ion-icon name="heart-outline" />
+            @if (card.followerCount > 0) {
+              <span class="followers-badge">{{ card.followerCount }}</span>
+            }
+          </button>
+        </div>
+        <div class="action-col">
+          <button class="help-btn" (click)="showHelp('visibility', $event)"><span class="help-q">?</span></button>
+          <button class="icon-btn" (click)="toggleActive(card)" [disabled]="card.toggling">
+            <ion-icon [name]="card.isActive ? 'eye-outline' : 'eye-off-outline'" />
+          </button>
+        </div>
+        <div class="action-col" *ngIf="hasActiveSub(card)">
+          <button class="help-btn" (click)="showHelp('cancel', $event)"><span class="help-q">?</span></button>
+          <button class="icon-btn danger" (click)="cancelSubscription(card)" [disabled]="card.cancelling">
+            <ion-icon name="ban-outline" />
+          </button>
+        </div>
+        <div class="action-col subscribe-col" *ngIf="!hasActiveSub(card)">
+          <button class="help-btn" (click)="showHelp('subscribe', $event)"><span class="help-q">?</span></button>
+          <button class="subscribe-btn" (click)="subscribeForBusiness(card.biz.id)">
+            <ion-icon name="card-outline" />
+            <span>{{ 'MY_BUSINESSES.SUBSCRIBE' | translate }}</span>
+          </button>
+        </div>
       </div>
 
     </div>
   </div>
 
-  <!-- FAB -->
+  @if (activeHelp) {
+    <div class="help-overlay" slot="fixed" (click)="closeHelp()">
+      <div class="help-popup" (click)="$event.stopPropagation()">
+        <div class="help-popup-header">
+          <ion-icon name="help-circle-outline" class="help-popup-icon" />
+          <h4 class="help-popup-title">{{ activeHelp.titleKey | translate }}</h4>
+        </div>
+        <p class="help-popup-desc">{{ activeHelp.descKey | translate }}</p>
+        <button class="help-popup-btn" (click)="closeHelp()">{{ 'MY_BUSINESSES.GOT_IT' | translate }}</button>
+      </div>
+    </div>
+  }
+
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button routerLink="/create-business" color="danger">
       <ion-icon name="add" />

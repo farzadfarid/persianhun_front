@@ -2,6 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { IonIcon } from '@ionic/angular/standalone';
 import { Subscription } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import {
   homeOutline,
@@ -14,30 +15,30 @@ import {
 import { AuthService } from '../../../core/services/auth.service';
 
 interface NavItem {
-  label: string;
+  labelKey: string;
   icon: string;
   route: string;
 }
 
 const OWNER_TABS: NavItem[] = [
-  { label: 'Home', icon: 'home-outline', route: '/home' },
-  { label: 'Businesses', icon: 'storefront-outline', route: '/businesses' },
-  { label: 'My Biz', icon: 'business-outline', route: '/my-businesses' },
-  { label: 'Plans', icon: 'card-outline', route: '/plans' },
-  { label: 'Profile', icon: 'person-outline', route: '/profile' },
+  { labelKey: 'NAV.HOME', icon: 'home-outline', route: '/home' },
+  { labelKey: 'NAV.BUSINESSES', icon: 'storefront-outline', route: '/businesses' },
+  { labelKey: 'NAV.MY_BIZ', icon: 'business-outline', route: '/my-businesses' },
+  { labelKey: 'NAV.PLANS', icon: 'card-outline', route: '/plans' },
+  { labelKey: 'NAV.PROFILE', icon: 'person-outline', route: '/profile' },
 ];
 
 const USER_TABS: NavItem[] = [
-  { label: 'Home', icon: 'home-outline', route: '/home' },
-  { label: 'Businesses', icon: 'storefront-outline', route: '/businesses' },
-  { label: 'Favorites', icon: 'heart-outline', route: '/favorites' },
-  { label: 'Profile', icon: 'person-outline', route: '/profile' },
+  { labelKey: 'NAV.HOME', icon: 'home-outline', route: '/home' },
+  { labelKey: 'NAV.BUSINESSES', icon: 'storefront-outline', route: '/businesses' },
+  { labelKey: 'NAV.FAVORITES', icon: 'heart-outline', route: '/favorites' },
+  { labelKey: 'NAV.PROFILE', icon: 'person-outline', route: '/profile' },
 ];
 
 @Component({
   selector: 'app-bottom-nav',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, IonIcon],
+  imports: [RouterLink, RouterLinkActive, IonIcon, TranslateModule],
   templateUrl: './bottom-nav.component.html',
   styleUrls: ['./bottom-nav.component.scss'],
 })

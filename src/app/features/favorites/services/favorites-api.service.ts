@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { ApiService } from '../../../core/services/api.service';
-import { AddFavoriteDto, FavoriteListItemDto, ReferenceType } from '../models/favorite.model';
+import { AddFavoriteDto, BusinessFollowerDto, FavoriteListItemDto, ReferenceType } from '../models/favorite.model';
 
 @Injectable({ providedIn: 'root' })
 export class FavoritesApiService {
@@ -18,5 +18,14 @@ export class FavoritesApiService {
 
   removeFavorite(favoriteId: number): Observable<void> {
     return this.api.delete<void>(`/favorites/${favoriteId}`);
+  }
+
+  getCount(referenceType: ReferenceType, referenceId: number): Observable<number> {
+    return this.api.get<{ count: number }>(`/favorites/count/${referenceType}/${referenceId}`)
+      .pipe(map(r => r.count));
+  }
+
+  getBusinessFollowers(businessId: number): Observable<BusinessFollowerDto[]> {
+    return this.api.get<BusinessFollowerDto[]>(`/favorites/business/${businessId}/followers`);
   }
 }

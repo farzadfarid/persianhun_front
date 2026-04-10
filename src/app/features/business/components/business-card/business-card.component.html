@@ -3,23 +3,23 @@
   <!-- Logo -->
   <div class="biz-logo">
     @if (business.logoUrl) {
-      <img [src]="business.logoUrl | uploadUrl" [alt]="business.name" class="logo-img" />
+      <img [src]="business.logoUrl | uploadUrl" [alt]="lang.pick(business.name, business.nameFa)" class="logo-img" />
     } @else {
-      {{ business.name[0].toUpperCase() }}
+      {{ lang.pick(business.name, business.nameFa)[0].toUpperCase() }}
     }
   </div>
 
   <!-- Info -->
   <div class="biz-info">
     <div class="biz-name-row">
-      <span class="biz-name">{{ business.name }}</span>
+      <span class="biz-name">{{ lang.pick(business.name, business.nameFa) }}</span>
       @if (business.isVerified) {
         <ion-icon name="checkmark-circle" class="verified-icon" title="Verified" />
       }
     </div>
 
     @if (business.city) {
-      <span class="biz-city">{{ business.city }}</span>
+      <span class="biz-city">{{ lang.pick(business.city, business.cityFa) }}</span>
     }
 
     @if (business.reviewCount > 0) {

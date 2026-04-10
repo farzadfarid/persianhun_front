@@ -1,32 +1,35 @@
 import { NgIf, NgFor } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonContent, IonIcon, IonSkeletonText } from '@ionic/angular/standalone';
+import { TranslateModule } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import { checkmarkOutline, closeCircleOutline } from 'ionicons/icons';
 import { SubscriptionPlanListItemDto } from '../../features/subscription/models/subscription.model';
 import { SubscriptionPlanApiService } from '../../features/subscription/services/subscription-plan-api.service';
+import { LanguageService } from '../../core/services/language.service';
 import { AppButtonComponent } from '../../shared/components/app-button/app-button.component';
 import { AppHeaderComponent } from '../../shared/components/app-header/app-header.component';
 
 @Component({
   selector: 'app-plans-list',
   standalone: true,
-  imports: [IonContent, IonIcon, IonSkeletonText, NgIf, NgFor, AppHeaderComponent, AppButtonComponent],
+  imports: [IonContent, IonIcon, IonSkeletonText, NgIf, NgFor, TranslateModule, AppHeaderComponent, AppButtonComponent],
   templateUrl: './plans-list.page.html',
   styleUrls: ['./plans-list.page.scss'],
 })
 export class PlansListPage implements OnInit {
+  private readonly planApi = inject(SubscriptionPlanApiService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  readonly lang = inject(LanguageService);
+
   plans: SubscriptionPlanListItemDto[] = [];
   isLoading = true;
   hasError = false;
   businessId: number | null = null;
 
-  constructor(
-    private readonly planApi: SubscriptionPlanApiService,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router
-  ) {
+  constructor() {
     addIcons({ checkmarkOutline, closeCircleOutline });
   }
 

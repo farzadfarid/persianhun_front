@@ -1,5 +1,5 @@
 
-<app-header title="Leads" [showBack]="true" defaultBackHref="/my-businesses" />
+<app-header [title]="'BUSINESS_LEADS.TITLE' | translate" [showBack]="true" defaultBackHref="/my-businesses" />
 
 <ion-content class="ph-page-content">
 
@@ -15,32 +15,59 @@
   }
 
   @if (hasError) {
-    <div class="empty-state"><p class="ph-caption">Could not load leads.</p></div>
+    <div class="empty-state"><p class="ph-caption">{{ 'BUSINESS_LEADS.LOAD_ERROR' | translate }}</p></div>
   }
 
   @if (!isLoading && !hasError) {
     @if (leads.length === 0) {
       <div class="empty-state">
         <ion-icon name="people-outline" class="empty-icon" />
-        <p class="ph-caption">No contact requests yet.</p>
+        <p class="ph-caption">{{ 'BUSINESS_LEADS.EMPTY' | translate }}</p>
       </div>
     } @else {
       <div class="leads-list">
         @for (lead of leads; track lead.id) {
-          <div class="lead-card" [class.converted]="lead.isConverted">
-            <div class="lead-icon">
-              <ion-icon [name]="contactTypeIcon(lead.contactType)" />
+          <div class="lead-card" [class.converted]="lead.isConverted" [class.expanded]="expandedId === lead.id" (click)="toggleLead(lead.id)">
+            <div class="lead-row">
+              <div class="lead-icon">
+                <ion-icon [name]="contactTypeIcon(lead.contactType)" />
+              </div>
+              <div class="lead-info">
+                <p class="lead-name">{{ lead.name }}</p>
+                <p class="lead-type ph-caption">{{ lead.contactType }} · {{ lead.createdAtUtc | date:'d MMM yyyy' }}</p>
+              </div>
+              <div class="lead-meta">
+                @if (lead.isConverted) {
+                  <ion-icon name="checkmark-circle-outline" class="converted-icon" />
+                }
+                <ion-icon [name]="expandedId === lead.id ? 'chevron-up-outline' : 'chevron-down-outline'" class="chevron-icon" />
+              </div>
             </div>
-            <div class="lead-info">
-              <p class="lead-name">{{ lead.name }}</p>
-              <p class="lead-type ph-caption">{{ lead.contactType }}</p>
-            </div>
-            <div class="lead-meta">
-              <span class="lead-date ph-caption">{{ lead.createdAtUtc | date:'d MMM yyyy' }}</span>
-              @if (lead.isConverted) {
-                <span class="converted-badge">Converted</span>
-              }
-            </div>
+
+            @if (expandedId === lead.id) {
+              <div class="lead-detail" (click)="$event.stopPropagation()">
+                @if (loadingDetail.has(lead.id)) {
+                  <ion-skeleton-text animated style="width: 80%; height: 14px;" />
+                } @else if (detailMap.has(lead.id)) {
+                  @let d = detailMap.get(lead.id)!;
+                  <div class="detail-row">
+                    <ion-icon name="mail-outline" />
+                    <span>{{ d.email }}</span>
+                  </div>
+                  @if (d.phoneNumber) {
+                    <div class="detail-row">
+                      <ion-icon name="call-outline" />
+                      <span>{{ d.phoneNumber }}</span>
+                    </div>
+                  }
+                  @if (d.message) {
+                    <p class="detail-message">{{ d.message }}</p>
+                  }
+                } @else {
+                  <p class="ph-caption">{{ 'BUSINESS_LEADS.LOAD_DETAIL_ERROR' | translate }}</p>
+                }
+              </div>
+            }
           </div>
         }
       </div>

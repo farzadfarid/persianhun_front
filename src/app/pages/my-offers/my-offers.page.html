@@ -1,0 +1,65 @@
+
+<app-header [title]="'MY_OFFERS.TITLE' | translate" [showBack]="true" defaultBackHref="/my-businesses" />
+
+<ion-content class="ph-page-content">
+
+  @if (isLoading) {
+    <div class="skeleton-list">
+      @for (s of [1,2,3]; track s) { <div class="skeleton-card"></div> }
+    </div>
+  }
+
+  @if (hasError) {
+    <div class="empty-state">
+      <ion-icon name="pricetag-outline" class="empty-icon" />
+      <p class="ph-caption">{{ 'MY_OFFERS.LOAD_ERROR' | translate }}</p>
+      <button class="retry-btn" (click)="load()">{{ 'COMMON.TRY_AGAIN' | translate }}</button>
+    </div>
+  }
+
+  @if (!isLoading && !hasError) {
+    <div class="page-actions">
+      <button class="create-btn" (click)="goCreate()">
+        <ion-icon name="add-outline" /> {{ 'MY_OFFERS.NEW_OFFER' | translate }}
+      </button>
+    </div>
+
+    @if (offers.length === 0) {
+      <div class="empty-state">
+        <ion-icon name="pricetag-outline" class="empty-icon" />
+        <p class="ph-caption">{{ 'MY_OFFERS.EMPTY' | translate }}</p>
+        <button class="create-btn" (click)="goCreate()">{{ 'MY_OFFERS.CREATE' | translate }}</button>
+      </div>
+    } @else {
+      <div class="item-list">
+        @for (offer of offers; track offer.id) {
+          <div class="item-card">
+            <div class="item-card-header">
+              <span class="biz-tag">{{ offer.businessName }}</span>
+              <span class="status-badge" [class.published]="offer.isPublished" [class.draft]="!offer.isPublished">
+                {{ offer.isPublished ? ('COMMON.PUBLISHED' | translate) : ('COMMON.DRAFT' | translate) }}
+              </span>
+            </div>
+            <p class="item-title">{{ lang.pick(offer.title, offer.titleFa) }}</p>
+            <div class="item-meta">
+              <span class="discount-badge">{{ discountLabel(offer) }}</span>
+              <span class="ph-caption muted">{{ offer.startsAtUtc | date:'d MMM' }} – {{ offer.endsAtUtc | date:'d MMM yyyy' }}</span>
+            </div>
+            <div class="item-actions">
+              <button class="action-btn" (click)="togglePublish(offer)">
+                {{ offer.isPublished ? ('COMMON.UNPUBLISH' | translate) : ('COMMON.PUBLISH' | translate) }}
+              </button>
+              <button class="action-btn edit" (click)="goEdit(offer.id)">
+                <ion-icon name="create-outline" /> {{ 'COMMON.EDIT' | translate }}
+              </button>
+              <button class="action-btn danger" (click)="delete(offer)">
+                <ion-icon name="trash-outline" /> {{ 'COMMON.DELETE' | translate }}
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+
+</ion-content>

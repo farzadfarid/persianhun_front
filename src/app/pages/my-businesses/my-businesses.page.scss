@@ -103,9 +103,49 @@
 }
 
 .biz-actions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--ph-space-2);
+}
+
+.action-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.help-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  gap: var(--ph-space-2);
+  justify-content: center;
+}
+
+.help-q {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--ph-surface-2);
+  border: 1px solid var(--ph-surface-3, #ccc);
+  color: var(--ph-text-muted);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  transition: background 0.15s, color 0.15s;
+}
+
+.help-btn:active .help-q {
+  background: var(--ph-accent);
+  color: #fff;
+  border-color: var(--ph-accent);
 }
 
 .inactive-card {
@@ -155,6 +195,7 @@
   border: none;
   border-radius: var(--ph-radius-sm);
   cursor: pointer;
+  position: relative;
 
   ion-icon {
     font-size: 18px;
@@ -167,23 +208,114 @@
   &.danger ion-icon { color: var(--ph-accent); }
 }
 
+.followers-btn {
+  width: auto;
+  min-width: 36px;
+  padding: 0 6px;
+  gap: 3px;
+}
+
+.followers-badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ph-accent);
+  line-height: 1;
+}
+
 .subscribe-btn {
-  flex: 1;
+  width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--ph-space-2);
+  gap: 2px;
   height: 36px;
   background: transparent;
   border: 1px solid var(--ph-accent);
   border-radius: var(--ph-radius-sm);
   color: var(--ph-accent);
-  font-size: var(--ph-font-sm);
+  font-size: 9px;
   font-weight: var(--ph-weight-medium);
   cursor: pointer;
   font-family: inherit;
+  padding: 0 2px;
+  line-height: 1;
 
   ion-icon { font-size: 16px; }
 
   &:active { background: rgba(224, 48, 48, 0.08); }
+}
+
+// ── Help Overlay & Popup ────────────────────────────────────────────────────
+.help-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 9999;
+  padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px));
+  animation: fade-in 0.15s ease;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.help-popup {
+  background: var(--ph-surface-1);
+  border-radius: 20px 20px 0 0;
+  padding: 1.25rem 1.25rem 1rem;
+  width: 100%;
+  max-width: 480px;
+  animation: slide-up 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slide-up {
+  from { transform: translateY(40px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.help-popup-header {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin-bottom: 0.625rem;
+}
+
+.help-popup-icon {
+  font-size: 22px;
+  color: var(--ph-accent);
+  flex-shrink: 0;
+}
+
+.help-popup-title {
+  font-size: var(--ph-font-base);
+  font-weight: var(--ph-weight-bold);
+  color: var(--ph-text-primary);
+  margin: 0;
+}
+
+.help-popup-desc {
+  font-size: var(--ph-font-sm);
+  color: var(--ph-text-secondary);
+  line-height: 1.6;
+  margin: 0 0 1rem;
+}
+
+.help-popup-btn {
+  width: 100%;
+  height: 42px;
+  background: var(--ph-accent);
+  border: none;
+  border-radius: var(--ph-radius-sm);
+  color: #fff;
+  font-size: var(--ph-font-sm);
+  font-weight: var(--ph-weight-semibold);
+  cursor: pointer;
+  font-family: inherit;
+
+  &:active { opacity: 0.85; }
 }

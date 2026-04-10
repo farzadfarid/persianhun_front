@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IonContent } from '@ionic/angular/standalone';
+import { TranslateModule } from '@ngx-translate/core';
 import { AuthService } from '../../core/services/auth.service';
 import { BusinessSuggestionsApiService } from '../../features/business-suggestions/services/business-suggestions-api.service';
 import { AppButtonComponent } from '../../shared/components/app-button/app-button.component';
@@ -10,11 +11,15 @@ import { AppHeaderComponent } from '../../shared/components/app-header/app-heade
 @Component({
   selector: 'app-suggest-business',
   standalone: true,
-  imports: [IonContent, FormsModule, AppHeaderComponent, AppButtonComponent],
+  imports: [IonContent, FormsModule, TranslateModule, AppHeaderComponent, AppButtonComponent],
   templateUrl: './suggest-business.page.html',
   styleUrls: ['./suggest-business.page.scss'],
 })
 export class SuggestBusinessPage {
+  private readonly auth = inject(AuthService);
+  private readonly suggestionsApi = inject(BusinessSuggestionsApiService);
+  private readonly router = inject(Router);
+
   businessName = '';
   categoryText = '';
   phoneNumber = '';
@@ -24,12 +29,6 @@ export class SuggestBusinessPage {
   submitting = false;
   submitted = false;
   error = '';
-
-  constructor(
-    private readonly auth: AuthService,
-    private readonly suggestionsApi: BusinessSuggestionsApiService,
-    private readonly router: Router,
-  ) {}
 
   submit(): void {
     if (!this.businessName || this.submitting) return;

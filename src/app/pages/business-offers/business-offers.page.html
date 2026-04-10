@@ -1,5 +1,5 @@
 
-<app-header title="Manage Offers" [showBack]="true" defaultBackHref="/my-businesses" />
+<app-header [title]="'BUSINESS_OFFERS.TITLE' | translate" [showBack]="true" defaultBackHref="/my-businesses" />
 
 <ion-content class="ph-page-content">
 
@@ -12,63 +12,72 @@
 
   @if (hasError) {
     <div class="empty-state">
-      <p class="ph-caption">Could not load offers.</p>
+      <p class="ph-caption">{{ 'BUSINESS_OFFERS.LOAD_ERROR' | translate }}</p>
     </div>
   }
 
   @if (!isLoading && !hasError) {
 
-    <!-- Create offer form -->
     @if (showForm) {
       <div class="form-card">
-        <h3 class="form-title">{{ editingOffer ? 'Edit Offer' : 'New Offer' }}</h3>
+        <h3 class="form-title">{{ editingOffer ? ('BUSINESS_OFFERS.EDIT_OFFER' | translate) : ('BUSINESS_OFFERS.NEW_OFFER' | translate) }}</h3>
 
-        <label class="field-label">Title *</label>
-        <input class="ph-input" [(ngModel)]="title" placeholder="e.g. Weekend Special" />
+        <div class="english-section-label">🇬🇧 {{ 'COMMON.ENGLISH_SECTION' | translate }}</div>
 
-        <label class="field-label">Description</label>
-        <textarea class="ph-textarea" [(ngModel)]="description" placeholder="Optional details..." rows="2"></textarea>
+        <label class="field-label">{{ 'BUSINESS_OFFERS.TITLE_LABEL' | translate }} *</label>
+        <input class="ph-input" [(ngModel)]="title" [placeholder]="'BUSINESS_OFFERS.TITLE_PLACEHOLDER' | translate" />
+
+        <label class="field-label">{{ 'BUSINESS_OFFERS.DESC_LABEL' | translate }}</label>
+        <textarea class="ph-textarea" [(ngModel)]="description" [placeholder]="'BUSINESS_OFFERS.DESC_PLACEHOLDER' | translate" rows="2"></textarea>
+
+        <div class="persian-section-label">🇮🇷 {{ 'COMMON.PERSIAN_SECTION' | translate }}</div>
+
+        <label class="field-label">{{ 'BUSINESS_OFFERS.TITLE_FA_LABEL' | translate }}</label>
+        <input class="ph-input" dir="rtl" [(ngModel)]="titleFa" [placeholder]="'BUSINESS_OFFERS.TITLE_FA_PLACEHOLDER' | translate" />
+
+        <label class="field-label">{{ 'BUSINESS_OFFERS.DESC_FA_LABEL' | translate }}</label>
+        <textarea class="ph-textarea" dir="rtl" [(ngModel)]="descriptionFa" [placeholder]="'BUSINESS_OFFERS.DESC_FA_PLACEHOLDER' | translate" rows="2"></textarea>
 
         <div class="form-row">
           <div class="form-col">
-            <label class="field-label">Discount Type *</label>
+            <label class="field-label">{{ 'BUSINESS_OFFERS.DISCOUNT_TYPE_LABEL' | translate }} *</label>
             <select class="ph-select" [(ngModel)]="discountType">
-              <option value="Percentage">Percentage (%)</option>
-              <option value="Fixed">Fixed Amount</option>
+              <option value="Percentage">{{ 'CREATE_DEAL.PERCENTAGE' | translate }}</option>
+              <option value="FixedAmount">{{ 'CREATE_DEAL.FIXED' | translate }}</option>
             </select>
           </div>
           <div class="form-col">
-            <label class="field-label">Value *</label>
+            <label class="field-label">{{ 'BUSINESS_OFFERS.VALUE_LABEL' | translate }} *</label>
             <input class="ph-input" type="number" [(ngModel)]="discountValue" placeholder="0" min="0" />
           </div>
         </div>
 
         <div class="form-row">
           <div class="form-col">
-            <label class="field-label">Starts *</label>
+            <label class="field-label">{{ 'BUSINESS_OFFERS.STARTS_LABEL' | translate }} *</label>
             <input class="ph-input" type="datetime-local" [(ngModel)]="startsAt" />
           </div>
           <div class="form-col">
-            <label class="field-label">Ends *</label>
+            <label class="field-label">{{ 'BUSINESS_OFFERS.ENDS_LABEL' | translate }} *</label>
             <input class="ph-input" type="datetime-local" [(ngModel)]="endsAt" />
           </div>
         </div>
 
         <app-image-upload
-          label="Cover Image (optional)"
+          [label]="'BUSINESS_OFFERS.COVER_LABEL' | translate"
           [value]="coverImageUrl"
           (valueChange)="coverImageUrl = $event"
         />
 
         <div class="form-actions">
-          <button class="cancel-btn" (click)="cancelForm()">Cancel</button>
+          <button class="cancel-btn" (click)="cancelForm()">{{ 'COMMON.CANCEL' | translate }}</button>
           @if (editingOffer) {
             <app-button size="small" [loading]="submitting" [disabled]="!title || !discountValue || !startsAt || !endsAt" (click)="submitEdit()">
-              Save
+              {{ 'COMMON.SAVE' | translate }}
             </app-button>
           } @else {
             <app-button size="small" [loading]="submitting" [disabled]="!title || !discountValue || !startsAt || !endsAt" (click)="submitOffer()">
-              Create
+              {{ 'COMMON.CREATE' | translate }}
             </app-button>
           }
         </div>
@@ -77,14 +86,14 @@
 
     @if (!showForm) {
       <button class="add-btn" (click)="showForm = true">
-        <ion-icon name="add-outline" /> Add New Offer
+        <ion-icon name="add-outline" /> {{ 'BUSINESS_OFFERS.ADD_NEW' | translate }}
       </button>
     }
 
     @if (offers.length === 0) {
       <div class="empty-state">
         <ion-icon name="pricetag-outline" class="empty-icon" />
-        <p class="ph-caption">No offers yet. Add your first one.</p>
+        <p class="ph-caption">{{ 'BUSINESS_OFFERS.EMPTY' | translate }}</p>
       </div>
     } @else {
       <div class="list-container">
@@ -95,26 +104,26 @@
             }
             <div class="offer-main">
               <span class="offer-badge">{{ discountLabel(offer) }}</span>
-              <p class="offer-title">{{ offer.title }}</p>
+              <p class="offer-title">{{ lang.pick(offer.title, offer.titleFa) }}</p>
               <p class="offer-dates ph-caption">
                 {{ offer.startsAtUtc | date:'d MMM' }} – {{ offer.endsAtUtc | date:'d MMM yyyy' }}
               </p>
             </div>
             <div class="offer-toggles">
               <div class="toggle-row">
-                <span class="toggle-label">Active</span>
+                <span class="toggle-label">{{ 'BUSINESS_OFFERS.ACTIVE' | translate }}</span>
                 <ion-toggle [checked]="offer.isActive" (ionChange)="toggleActive(offer)" />
               </div>
               <div class="toggle-row">
-                <span class="toggle-label">Published</span>
+                <span class="toggle-label">{{ 'COMMON.PUBLISHED' | translate }}</span>
                 <ion-toggle [checked]="offer.isPublished" (ionChange)="togglePublish(offer)" />
               </div>
             </div>
             <div class="offer-row-actions">
-              <button class="row-action-btn" (click)="startEdit(offer)" title="Edit">
+              <button class="row-action-btn" (click)="startEdit(offer)" [title]="'COMMON.EDIT' | translate">
                 <ion-icon name="create-outline" />
               </button>
-              <button class="row-action-btn danger" (click)="deleteOffer(offer)" title="Delete">
+              <button class="row-action-btn danger" (click)="deleteOffer(offer)" [title]="'COMMON.DELETE' | translate">
                 <ion-icon name="trash-outline" />
               </button>
             </div>

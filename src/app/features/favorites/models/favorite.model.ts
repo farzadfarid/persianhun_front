@@ -12,8 +12,15 @@ export interface AddFavoriteDto {
 }
 
 export enum ReferenceType {
-  Business = 1,
-  Event = 2,
-  Deal = 3,
-  DailyOffer = 7,
+  Business = 'Business',
+  Event = 'Event',
+  Deal = 'Deal',
+  DailyOffer = 'DailyOffer',
+}
+
+export interface BusinessFollowerDto {
+  appUserId: number;
+  name: string;
+  email: string;
+  savedAtUtc: string;
 }

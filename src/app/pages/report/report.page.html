@@ -1,0 +1,32 @@
+<app-header [title]="'REPORT.TITLE' | translate" [showBack]="true" defaultBackHref="/home" />
+
+<ion-content class="ph-page-content">
+
+  @if (submitted) {
+    <div class="success-state">
+      <p class="success-msg">{{ 'REPORT.SUCCESS' | translate }}</p>
+    </div>
+  } @else {
+    <p class="page-desc ph-caption">{{ 'REPORT.DESCRIPTION' | translate }}</p>
+
+    <div class="form-card">
+      <label class="field-label">{{ 'REPORT.REASON_LABEL' | translate }}</label>
+      <select class="ph-select" [(ngModel)]="reason">
+        <option value="" disabled>{{ 'REPORT.REASON_PLACEHOLDER' | translate }}</option>
+        @for (r of reasons; track r) {
+          <option [value]="r">{{ r }}</option>
+        }
+      </select>
+
+      <label class="field-label">{{ 'REPORT.DETAILS_LABEL' | translate }}</label>
+      <textarea class="ph-textarea" [(ngModel)]="details" [placeholder]="'REPORT.DETAILS_PLACEHOLDER' | translate" rows="4"></textarea>
+
+      <div class="form-actions">
+        <app-button [loading]="submitting" [disabled]="!reason" (click)="submit()">
+          {{ 'REPORT.SUBMIT' | translate }}
+        </app-button>
+      </div>
+    </div>
+  }
+
+</ion-content>

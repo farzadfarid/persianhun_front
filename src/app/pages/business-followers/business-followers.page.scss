@@ -1,0 +1,85 @@
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ph-space-10) var(--ph-space-6);
+  gap: var(--ph-space-2);
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 48px;
+  color: var(--ph-surface-3);
+  margin-bottom: var(--ph-space-2);
+}
+
+.followers-count {
+  padding: 0 var(--ph-space-4);
+  margin-bottom: var(--ph-space-2);
+}
+
+.followers-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ph-space-2);
+}
+
+.follower-skeleton {
+  display: flex;
+  align-items: center;
+  gap: var(--ph-space-3);
+  padding: var(--ph-space-3) var(--ph-space-4);
+  background: var(--ph-surface-1);
+  border: 1px solid var(--ph-surface-2);
+  border-radius: var(--ph-radius-md);
+}
+
+.follower-card {
+  display: flex;
+  align-items: center;
+  gap: var(--ph-space-3);
+  padding: var(--ph-space-3) var(--ph-space-4);
+  background: var(--ph-surface-1);
+  border: 1px solid var(--ph-surface-2);
+  border-radius: var(--ph-radius-md);
+}
+
+.follower-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(224, 48, 48, 0.1);
+  color: var(--ph-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--ph-font-base);
+  font-weight: var(--ph-weight-bold);
+  flex-shrink: 0;
+}
+
+.follower-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.follower-name {
+  font-size: var(--ph-font-sm);
+  font-weight: var(--ph-weight-semibold);
+  color: var(--ph-text-primary);
+  margin: 0 0 2px;
+}
+
+.follower-email {
+  color: var(--ph-text-muted);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.follower-date {
+  flex-shrink: 0;
+  color: var(--ph-text-muted);
+}

@@ -1,10 +1,10 @@
 <div class="login-container">
   <div class="auth-logo">
-    <span class="logo-mark">PH</span>
+    <img src="assets/logo.png" width="200px" alt="PersianHub Logo" class="logo-image" />
   </div>
 
-  <h1 class="ph-title">Sign In</h1>
-  <p class="ph-subtitle">Welcome back to PersianHub</p>
+  <h1 class="ph-title">{{ 'AUTH.SIGN_IN' | translate }}</h1>
+  <p class="ph-subtitle">{{ 'AUTH.WELCOME_BACK' | translate }}</p>
 
   <div class="auth-error" *ngIf="errorMessage">
     <ion-icon name="alert-circle-outline" class="error-icon" />
@@ -13,28 +13,28 @@
 
   <form [formGroup]="form" (ngSubmit)="submit()" class="auth-form">
     <app-input
-      label="Email"
+      [label]="'AUTH.EMAIL_LABEL' | translate"
       type="email"
-      placeholder="your@email.com"
+      [placeholder]="'AUTH.EMAIL_PLACEHOLDER' | translate"
       formControlName="email"
       [errorMessage]="emailError"
     />
 
     <app-input
-      label="Password"
+      [label]="'AUTH.PASSWORD_LABEL' | translate"
       type="password"
-      placeholder="Your password"
+      [placeholder]="'AUTH.PASSWORD_PLACEHOLDER' | translate"
       formControlName="password"
       [errorMessage]="passwordError"
     />
 
     <app-button type="submit" expand="block" [loading]="loading">
-      Sign In
+      {{ 'AUTH.SIGN_IN_BTN' | translate }}
     </app-button>
   </form>
 
   <p class="ph-caption auth-footer">
-    Don't have an account?
-    <a routerLink="/auth/register" class="ph-accent-text">Register</a>
+    {{ 'AUTH.NO_ACCOUNT' | translate }}
+    <a routerLink="/auth/register" class="ph-accent-text">{{ 'AUTH.REGISTER_LINK' | translate }}</a>
   </p>
 </div>

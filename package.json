@@ -34,6 +34,7 @@
     "@capacitor/keyboard": "5.0.6",
     "@capacitor/preferences": "^5.0.6",
     "@capacitor/push-notifications": "5.0.6",
+    "@capacitor/splash-screen": "^5.0.8",
     "@cometchat-pro/chat": "^3.0.13",
     "@ionic/angular": "^8.0.0",
     "@ngx-translate/core": "^16.0.4",

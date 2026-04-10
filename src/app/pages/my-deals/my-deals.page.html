@@ -1,0 +1,73 @@
+
+<app-header [title]="'MY_DEALS.TITLE' | translate" [showBack]="true" defaultBackHref="/my-businesses" />
+
+<ion-content class="ph-page-content">
+
+  @if (isLoading) {
+    <div class="skeleton-list">
+      @for (s of [1,2,3]; track s) {
+        <div class="skeleton-card"></div>
+      }
+    </div>
+  }
+
+  @if (hasError) {
+    <div class="empty-state">
+      <ion-icon name="ticket-outline" class="empty-icon" />
+      <p class="ph-caption">{{ 'MY_DEALS.LOAD_ERROR' | translate }}</p>
+      <button class="retry-btn" (click)="load()">{{ 'COMMON.TRY_AGAIN' | translate }}</button>
+    </div>
+  }
+
+  @if (!isLoading && !hasError) {
+    <div class="page-actions">
+      <button class="create-btn" (click)="goCreate()">
+        <ion-icon name="add-outline" /> {{ 'MY_DEALS.NEW_DEAL' | translate }}
+      </button>
+    </div>
+
+    @if (deals.length === 0) {
+      <div class="empty-state">
+        <ion-icon name="ticket-outline" class="empty-icon" />
+        <p class="ph-caption">{{ 'MY_DEALS.EMPTY' | translate }}</p>
+        <button class="create-btn" (click)="goCreate()">{{ 'MY_DEALS.CREATE' | translate }}</button>
+      </div>
+    } @else {
+      <div class="item-list">
+        @for (deal of deals; track deal.id) {
+          <div class="item-card">
+            <div class="item-card-header">
+              <span class="biz-tag">{{ deal.businessName }}</span>
+              <span class="status-badge" [class.published]="deal.isPublished" [class.draft]="!deal.isPublished">
+                {{ deal.isPublished ? ('COMMON.PUBLISHED' | translate) : ('COMMON.DRAFT' | translate) }}
+              </span>
+            </div>
+            <p class="item-title">{{ lang.pick(deal.title, deal.titleFa) }}</p>
+            <div class="item-meta">
+              <span class="discount-badge">{{ discountLabel(deal) }}</span>
+              @if (deal.validToUtc) {
+                <span class="ph-caption muted">{{ 'MY_DEALS.EXPIRES' | translate }} {{ deal.validToUtc | date:'d MMM yyyy' }}</span>
+              }
+              @if (deal.couponCode) {
+                <span class="coupon-tag">{{ deal.couponCode }}</span>
+              }
+            </div>
+            <div class="item-actions">
+              <button class="action-btn" (click)="togglePublish(deal)">
+                <ion-icon [name]="deal.isPublished ? 'close-circle' : 'checkmark-circle'" />
+                {{ deal.isPublished ? ('COMMON.UNPUBLISH' | translate) : ('COMMON.PUBLISH' | translate) }}
+              </button>
+              <button class="action-btn edit" (click)="goEdit(deal.id)">
+                <ion-icon name="create-outline" /> {{ 'COMMON.EDIT' | translate }}
+              </button>
+              <button class="action-btn danger" (click)="delete(deal)">
+                <ion-icon name="trash-outline" /> {{ 'COMMON.DELETE' | translate }}
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+
+</ion-content>

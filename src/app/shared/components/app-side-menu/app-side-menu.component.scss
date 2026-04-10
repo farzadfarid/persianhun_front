@@ -171,3 +171,13 @@
   border: 1px solid var(--ph-surface-2) !important;
   color: var(--ph-text-muted);
 }
+
+.lang-toggle-wrap {
+  padding: var(--ph-space-2) var(--ph-space-4);
+}
+
+.lang-btn {
+  background: transparent;
+  border: 1px solid var(--ph-surface-3) !important;
+  color: var(--ph-text-secondary);
+}

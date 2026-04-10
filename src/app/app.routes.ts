@@ -143,11 +143,37 @@ export const routes: Routes = [
           import('./pages/events/events.page').then((m) => m.EventsPage),
       },
       {
+        path: 'events/:id',
+        loadComponent: () =>
+          import('./pages/event-details/event-details.page').then((m) => m.EventDetailsPage),
+      },
+      {
         path: 'offers',
         loadComponent: () =>
           import('./pages/offers/offers.page').then((m) => m.OffersPage),
       },
+      {
+        path: 'offers/:id',
+        loadComponent: () =>
+          import('./pages/offer-details/offer-details.page').then((m) => m.OfferDetailsPage),
+      },
+      {
+        path: 'deals',
+        loadComponent: () =>
+          import('./pages/deals/deals.page').then((m) => m.DealsPage),
+      },
+      {
+        path: 'deals/:id',
+        loadComponent: () =>
+          import('./pages/deal-details/deal-details.page').then((m) => m.DealDetailsPage),
+      },
       // Auth-required user pages
+      {
+        path: 'add-review/:businessId',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./pages/add-review/add-review.page').then((m) => m.AddReviewPage),
+      },
       {
         path: 'my-reviews',
         canActivate: [authGuard],
@@ -155,9 +181,81 @@ export const routes: Routes = [
           import('./pages/my-reviews/my-reviews.page').then((m) => m.MyReviewsPage),
       },
       {
+        path: 'my-business-reviews',
+        redirectTo: 'my-reviews',
+        pathMatch: 'full',
+      },
+      {
         path: 'suggest-business',
         loadComponent: () =>
           import('./pages/suggest-business/suggest-business.page').then((m) => m.SuggestBusinessPage),
+      },
+      {
+        path: 'report',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./pages/report/report.page').then((m) => m.ReportPage),
+      },
+      // BusinessOwner aggregate management pages
+      {
+        path: 'my-deals',
+        canActivate: [businessOwnerGuard],
+        loadComponent: () =>
+          import('./pages/my-deals/my-deals.page').then((m) => m.MyDealsPage),
+      },
+      {
+        path: 'create-deal',
+        canActivate: [businessOwnerGuard],
+        loadComponent: () =>
+          import('./pages/create-deal/create-deal.page').then((m) => m.CreateDealPage),
+      },
+      {
+        path: 'edit-deal/:id',
+        canActivate: [businessOwnerGuard],
+        loadComponent: () =>
+          import('./pages/edit-deal/edit-deal.page').then((m) => m.EditDealPage),
+      },
+      {
+        path: 'my-offers',
+        canActivate: [businessOwnerGuard],
+        loadComponent: () =>
+          import('./pages/my-offers/my-offers.page').then((m) => m.MyOffersPage),
+      },
+      {
+        path: 'create-offer',
+        canActivate: [businessOwnerGuard],
+        loadComponent: () =>
+          import('./pages/create-offer/create-offer.page').then((m) => m.CreateOfferPage),
+      },
+      {
+        path: 'edit-offer/:id',
+        canActivate: [businessOwnerGuard],
+        loadComponent: () =>
+          import('./pages/edit-offer/edit-offer.page').then((m) => m.EditOfferPage),
+      },
+      {
+        path: 'my-events',
+        canActivate: [businessOwnerGuard],
+        loadComponent: () =>
+          import('./pages/my-events/my-events.page').then((m) => m.MyEventsPage),
+      },
+      {
+        path: 'create-event',
+        canActivate: [businessOwnerGuard],
+        loadComponent: () =>
+          import('./pages/create-event/create-event.page').then((m) => m.CreateEventPage),
+      },
+      {
+        path: 'edit-event/:id',
+        canActivate: [businessOwnerGuard],
+        loadComponent: () =>
+          import('./pages/edit-event/edit-event.page').then((m) => m.EditEventPage),
+      },
+      {
+        path: 'my-contact-requests',
+        canActivate: [businessOwnerGuard],
+        loadComponent: () =>
+          import('./pages/my-contact-requests/my-contact-requests.page').then((m) => m.MyContactRequestsPage),
       },
       // BusinessOwner management pages
       {
@@ -178,6 +276,16 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/business-leads/business-leads.page').then((m) => m.BusinessLeadsPage),
       },
+      {
+        path: 'business-followers/:businessId',
+        canActivate: [businessOwnerGuard],
+        loadComponent: () =>
+          import('./pages/business-followers/business-followers.page').then((m) => m.BusinessFollowersPage),
+      },
     ],
+  },
+  {
+    path: '**',
+    redirectTo: 'home',
   },
 ];

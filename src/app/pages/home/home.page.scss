@@ -126,3 +126,111 @@
   font-weight: var(--ph-weight-medium);
   color: var(--ph-text-primary);
 }
+
+// Section empty state
+.section-empty {
+  color: var(--ph-text-muted);
+  padding: var(--ph-space-2) 0;
+}
+
+// Preview cards (deals + offers)
+.preview-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ph-space-2);
+}
+
+.preview-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--ph-surface-1);
+  border: 1px solid var(--ph-surface-2);
+  border-radius: var(--ph-radius-md);
+  padding: var(--ph-space-3) var(--ph-space-4);
+  text-decoration: none;
+  cursor: pointer;
+
+  &:active { opacity: 0.75; }
+}
+
+.preview-badge {
+  display: inline-block;
+  background: var(--ph-accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: var(--ph-weight-bold);
+  padding: 2px 8px;
+  border-radius: var(--ph-radius-pill);
+  width: fit-content;
+}
+
+.preview-title {
+  font-size: var(--ph-font-sm);
+  font-weight: var(--ph-weight-semibold);
+  color: var(--ph-text-primary);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.preview-meta {
+  color: var(--ph-text-muted);
+  margin: 0;
+}
+
+// Events preview
+.events-preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ph-space-2);
+}
+
+.event-preview-card {
+  display: flex;
+  align-items: center;
+  gap: var(--ph-space-3);
+  background: var(--ph-surface-1);
+  border: 1px solid var(--ph-surface-2);
+  border-radius: var(--ph-radius-md);
+  padding: var(--ph-space-3);
+  text-decoration: none;
+  cursor: pointer;
+
+  &:active { opacity: 0.75; }
+}
+
+.event-date-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  background: var(--ph-accent);
+  border-radius: var(--ph-radius-sm);
+  padding: 4px 8px;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.date-day {
+  font-size: var(--ph-font-lg);
+  font-weight: var(--ph-weight-bold);
+  line-height: 1;
+}
+
+.date-month {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.event-preview-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.free-label {
+  color: #28a745 !important;
+}

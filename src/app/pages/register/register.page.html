@@ -3,33 +3,33 @@
     <span class="logo-mark">PH</span>
   </div>
 
-  <h1 class="ph-title">Create Account</h1>
-  <p class="ph-subtitle">Join PersianHub today</p>
+  <h1 class="ph-title">{{ 'AUTH.CREATE_ACCOUNT' | translate }}</h1>
+  <p class="ph-subtitle">{{ 'AUTH.JOIN' | translate }}</p>
 
   <form [formGroup]="form" (ngSubmit)="submit()" class="auth-form">
     <app-input
-      label="Email"
+      [label]="'AUTH.EMAIL_LABEL' | translate"
       type="email"
-      placeholder="your@email.com"
+      [placeholder]="'AUTH.EMAIL_PLACEHOLDER' | translate"
       formControlName="email"
       [errorMessage]="emailError"
     />
 
     <app-input
-      label="Password"
+      [label]="'AUTH.PASSWORD_LABEL' | translate"
       type="password"
-      placeholder="At least 6 characters"
+      [placeholder]="'AUTH.MIN_PASSWORD' | translate"
       formControlName="password"
       [errorMessage]="passwordError"
     />
 
     <app-button type="submit" expand="block" [loading]="loading">
-      Create Account
+      {{ 'AUTH.CREATE_ACCOUNT_BTN' | translate }}
     </app-button>
   </form>
 
   <p class="ph-caption auth-footer">
-    Already have an account?
-    <a routerLink="/auth/login" class="ph-accent-text">Sign In</a>
+    {{ 'AUTH.HAS_ACCOUNT' | translate }}
+    <a routerLink="/auth/login" class="ph-accent-text">{{ 'AUTH.SIGN_IN_LINK' | translate }}</a>
   </p>
 </div>

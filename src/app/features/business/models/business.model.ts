@@ -9,8 +9,10 @@ export interface BusinessImageDto {
 export interface BusinessSearchItem {
   id: number;
   name: string;
+  nameFa: string | null;
   slug: string;
   city: string | null;
+  cityFa: string | null;
   phoneNumber: string | null;
   logoUrl: string | null;
   isVerified: boolean;
@@ -22,9 +24,11 @@ export interface BusinessSearchItem {
 export interface BusinessDetails {
   id: number;
   name: string;
+  nameFa: string | null;
   slug: string;
   logoUrl: string | null;
   description: string | null;
+  descriptionFa: string | null;
   phoneNumber: string | null;
   email: string | null;
   website: string | null;
@@ -32,8 +36,11 @@ export interface BusinessDetails {
   telegramUrl: string | null;
   whatsAppNumber: string | null;
   addressLine: string | null;
+  addressLineFa: string | null;
   city: string | null;
+  cityFa: string | null;
   region: string | null;
+  regionFa: string | null;
   postalCode: string | null;
   country: string;
   latitude: number | null;
@@ -64,7 +71,9 @@ export interface BusinessSearchFilter {
 
 export interface UpdateBusinessRequest {
   name: string;
+  nameFa: string | null;
   description: string | null;
+  descriptionFa: string | null;
   phoneNumber: string | null;
   email: string | null;
   website: string | null;
@@ -72,8 +81,11 @@ export interface UpdateBusinessRequest {
   telegramUrl: string | null;
   whatsAppNumber: string | null;
   addressLine: string | null;
+  addressLineFa: string | null;
   city: string | null;
+  cityFa: string | null;
   region: string | null;
+  regionFa: string | null;
   postalCode: string | null;
   country: string;
   latitude: number | null;
@@ -83,8 +95,10 @@ export interface UpdateBusinessRequest {
 
 export interface CreateBusinessRequest {
   name: string;
+  nameFa: string | null;
   slug: string | null;
   description: string | null;
+  descriptionFa: string | null;
   phoneNumber: string | null;
   email: string | null;
   website: string | null;
@@ -92,8 +106,11 @@ export interface CreateBusinessRequest {
   telegramUrl: string | null;
   whatsAppNumber: string | null;
   addressLine: string | null;
+  addressLineFa: string | null;
   city: string | null;
+  cityFa: string | null;
   region: string | null;
+  regionFa: string | null;
   postalCode: string | null;
   country: string;
   latitude: number | null;

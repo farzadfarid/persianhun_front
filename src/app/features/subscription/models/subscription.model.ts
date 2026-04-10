@@ -1,8 +1,10 @@
 export interface SubscriptionPlanListItemDto {
   id: number;
   name: string;
+  nameFa: string | null;
   code: string;
-  description: string;
+  description: string | null;
+  descriptionFa: string | null;
   price: number;
   currency: string;
   billingCycle: string;

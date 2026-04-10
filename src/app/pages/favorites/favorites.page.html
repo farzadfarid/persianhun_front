@@ -1,34 +1,29 @@
-
-<app-header title="Favorites" />
+<app-header [title]="'FAVORITES.TITLE' | translate" />
 
 <ion-content class="ph-page-content">
 
-  <!-- Loading -->
   <div *ngIf="isLoading" class="fav-list">
     <div *ngFor="let s of skeletons" class="fav-skeleton pulse"></div>
   </div>
 
-  <!-- Error -->
   <div *ngIf="!isLoading && hasError" class="empty-state">
     <ion-icon name="heart-outline" class="empty-icon" />
-    <p class="empty-message">Could not load favorites.</p>
+    <p class="empty-message">{{ 'FAVORITES.LOAD_ERROR' | translate }}</p>
   </div>
 
-  <!-- Empty -->
   <div *ngIf="!isLoading && !hasError && items.length === 0" class="empty-state">
     <ion-icon name="heart-outline" class="empty-icon" />
-    <p class="empty-title">No favorites yet</p>
-    <p class="empty-message">Tap the heart icon on any business to save it here.</p>
+    <p class="empty-title">{{ 'FAVORITES.EMPTY_TITLE' | translate }}</p>
+    <p class="empty-message">{{ 'FAVORITES.EMPTY_MSG' | translate }}</p>
   </div>
 
-  <!-- List -->
   <div *ngIf="!isLoading && !hasError && items.length > 0" class="fav-list">
     <div *ngFor="let item of items" class="fav-card">
       <a [routerLink]="['/businesses', item.business.id]" class="fav-info">
         <div class="fav-avatar">{{ item.business.name[0].toUpperCase() }}</div>
         <div class="fav-details">
-          <p class="fav-name">{{ item.business.name }}</p>
-          <p *ngIf="item.business.city" class="fav-city">{{ item.business.city }}</p>
+          <p class="fav-name">{{ lang.pick(item.business.name, item.business.nameFa) }}</p>
+          <p *ngIf="item.business.city" class="fav-city">{{ lang.pick(item.business.city, item.business.cityFa) }}</p>
         </div>
       </a>
       <button class="fav-remove" (click)="removeFavorite(item.favoriteId)" aria-label="Remove favorite">
@@ -38,4 +33,3 @@
   </div>
 
 </ion-content>
-

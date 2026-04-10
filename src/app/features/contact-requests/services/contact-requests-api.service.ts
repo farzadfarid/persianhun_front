@@ -11,6 +11,10 @@ export class ContactRequestsApiService {
     return this.api.post<ContactRequestDetail>('/contact-requests', payload);
   }
 
+  getById(id: number): Observable<ContactRequestDetail> {
+    return this.api.get<ContactRequestDetail>(`/contact-requests/${id}`);
+  }
+
   getByBusiness(businessId: number): Observable<ContactRequestListItem[]> {
     return this.api.get<ContactRequestListItem[]>(`/contact-requests/business/${businessId}`);
   }

@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../core/services/auth.service';
 import { AppButtonComponent } from '../../shared/components/app-button/app-button.component';
 import { AppInputComponent } from '../../shared/components/app-input/app-input.component';
@@ -8,7 +9,7 @@ import { AppInputComponent } from '../../shared/components/app-input/app-input.c
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [RouterLink, ReactiveFormsModule, AppButtonComponent, AppInputComponent],
+  imports: [RouterLink, ReactiveFormsModule, AppButtonComponent, AppInputComponent, TranslateModule],
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
 })
@@ -16,6 +17,7 @@ export class RegisterPage {
   private readonly fb = inject(FormBuilder);
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly translate = inject(TranslateService);
 
   loading = false;
 
@@ -26,15 +28,15 @@ export class RegisterPage {
 
   get emailError(): string {
     const c = this.form.controls.email;
-    if (c.touched && c.hasError('required')) return 'Email is required.';
-    if (c.touched && c.hasError('email')) return 'Enter a valid email address.';
+    if (c.touched && c.hasError('required')) return this.translate.instant('AUTH.EMAIL_REQUIRED');
+    if (c.touched && c.hasError('email')) return this.translate.instant('AUTH.EMAIL_INVALID');
     return '';
   }
 
   get passwordError(): string {
     const c = this.form.controls.password;
-    if (c.touched && c.hasError('required')) return 'Password is required.';
-    if (c.touched && c.hasError('minlength')) return 'Password must be at least 6 characters.';
+    if (c.touched && c.hasError('required')) return this.translate.instant('AUTH.PASSWORD_REQUIRED');
+    if (c.touched && c.hasError('minlength')) return this.translate.instant('AUTH.PASSWORD_MIN');
     return '';
   }
 

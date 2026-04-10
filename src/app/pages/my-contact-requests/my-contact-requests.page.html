@@ -1,0 +1,68 @@
+
+<app-header [title]="'MY_CONTACT_REQUESTS.TITLE' | translate" [showBack]="true" defaultBackHref="/my-businesses" />
+
+<ion-content class="ph-page-content">
+
+  @if (isLoading) {
+    <div class="skeleton-list">
+      @for (s of [1,2,3]; track s) { <div class="skeleton-card"></div> }
+    </div>
+  }
+
+  @if (hasError) {
+    <div class="empty-state">
+      <ion-icon name="mail-outline" class="empty-icon" />
+      <p class="ph-caption">{{ 'MY_CONTACT_REQUESTS.LOAD_ERROR' | translate }}</p>
+      <button class="retry-btn" (click)="load()">{{ 'COMMON.TRY_AGAIN' | translate }}</button>
+    </div>
+  }
+
+  @if (!isLoading && !hasError) {
+
+    @if (businesses.length > 1) {
+      <div class="filter-row">
+        <select class="ph-select" [(ngModel)]="selectedBusinessId">
+          <option [ngValue]="null">{{ 'MY_CONTACT_REQUESTS.ALL_BUSINESSES' | translate }}</option>
+          @for (b of businesses; track b.id) {
+            <option [ngValue]="b.id">{{ b.name }}</option>
+          }
+        </select>
+      </div>
+    }
+
+    @if (filtered.length === 0) {
+      <div class="empty-state">
+        <ion-icon name="mail-outline" class="empty-icon" />
+        <p class="ph-caption">{{ 'MY_CONTACT_REQUESTS.EMPTY' | translate }}</p>
+      </div>
+    } @else {
+      <div class="item-list">
+        @for (req of filtered; track req.id) {
+          <div class="req-card" (click)="toggle(req)">
+            <div class="req-header">
+              <div class="req-info">
+                <p class="req-name">{{ req.name }}</p>
+                <span class="biz-tag">{{ req.businessName }}</span>
+              </div>
+              <div class="req-meta">
+                <span class="type-badge">{{ contactTypeLabel(req.contactType) }}</span>
+                <span class="ph-caption muted">{{ req.createdAtUtc | date:'d MMM yyyy' }}</span>
+                <ion-icon [name]="req.expanded ? 'chevron-up-outline' : 'chevron-down-outline'" class="expand-icon" />
+              </div>
+            </div>
+
+            @if (req.expanded) {
+              <div class="req-detail">
+                <p class="detail-label">{{ 'MY_CONTACT_REQUESTS.STATUS' | translate }}: <span [class]="'status-' + req.status.toLowerCase()">{{ req.status }}</span></p>
+                @if (req.isConverted) {
+                  <p class="detail-label converted">{{ 'MY_CONTACT_REQUESTS.CONVERTED' | translate }} ✓</p>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+  }
+
+</ion-content>

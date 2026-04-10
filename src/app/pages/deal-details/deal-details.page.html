@@ -1,0 +1,95 @@
+<app-header [title]="'DEAL_DETAILS.TITLE' | translate" [showBack]="true" defaultBackHref="/deals" />
+
+<ion-content class="ph-page-content">
+
+  @if (isLoading) {
+    <div class="detail-skeleton">
+      <ion-skeleton-text animated style="width: 100%; height: 200px; border-radius: 12px; margin-bottom: 16px;" />
+      <ion-skeleton-text animated style="width: 40%; height: 28px; margin-bottom: 8px;" />
+      <ion-skeleton-text animated style="width: 70%; height: 20px; margin-bottom: 4px;" />
+      <ion-skeleton-text animated style="width: 55%; height: 16px;" />
+    </div>
+  }
+
+  @if (hasError) {
+    <div class="empty-state">
+      <ion-icon name="ticket-outline" class="empty-icon" />
+      <p class="ph-caption">{{ 'DEAL_DETAILS.NOT_FOUND' | translate }}</p>
+    </div>
+  }
+
+  @if (!isLoading && !hasError && deal) {
+    @if (deal.coverImageUrl) {
+      <img [src]="deal.coverImageUrl | uploadUrl" alt="Cover" class="cover-image" />
+    }
+
+    <div class="detail-body">
+      <div class="discount-badge">{{ discountLabel }}</div>
+      <h1 class="deal-title">{{ lang.pick(deal.title, deal.titleFa) }}</h1>
+
+      @if (deal.description || deal.descriptionFa) {
+        <p class="deal-desc">{{ lang.pick(deal.description, deal.descriptionFa) }}</p>
+      }
+
+      <div class="detail-rows">
+        @if (deal.couponCode) {
+          <div class="detail-row highlight">
+            <ion-icon name="ticket-outline" />
+            <div>
+              <span class="row-label">{{ 'DEAL_DETAILS.COUPON_CODE' | translate }}</span>
+              <span class="coupon-code">{{ deal.couponCode }}</span>
+            </div>
+          </div>
+        }
+
+        @if (deal.discountedPrice) {
+          <div class="detail-row">
+            <ion-icon name="pricetag-outline" />
+            <div>
+              <span class="row-label">{{ 'DEAL_DETAILS.PRICE' | translate }}</span>
+              <span class="price-value">{{ deal.discountedPrice }} {{ deal.currency }}</span>
+              @if (deal.originalPrice) {
+                <span class="original-price">{{ deal.originalPrice }} {{ deal.currency }}</span>
+              }
+            </div>
+          </div>
+        }
+
+        @if (deal.validFromUtc || deal.validToUtc) {
+          <div class="detail-row">
+            <ion-icon name="calendar-outline" />
+            <div>
+              <span class="row-label">{{ 'DEAL_DETAILS.VALID' | translate }}</span>
+              <span class="row-value">
+                @if (deal.validFromUtc) { {{ deal.validFromUtc | date:'d MMM yyyy' }} }
+                @if (deal.validFromUtc && deal.validToUtc) { – }
+                @if (deal.validToUtc) { {{ deal.validToUtc | date:'d MMM yyyy' }} }
+              </span>
+            </div>
+          </div>
+        }
+
+        <div class="detail-row">
+          <ion-icon name="storefront-outline" />
+          <div>
+            <span class="row-label">{{ 'DEAL_DETAILS.BUSINESS' | translate }}</span>
+            <a class="row-link" [routerLink]="['/businesses', deal.businessId]">{{ 'DEAL_DETAILS.VIEW_BUSINESS' | translate }}</a>
+          </div>
+        </div>
+      </div>
+
+      @if (deal.termsAndConditions || deal.termsAndConditionsFa) {
+        <div class="terms-section">
+          <p class="terms-label">{{ 'DEAL_DETAILS.TERMS' | translate }}</p>
+          <p class="terms-text ph-caption">{{ lang.pick(deal.termsAndConditions, deal.termsAndConditionsFa) }}</p>
+        </div>
+      }
+
+      <a class="cta-btn" [routerLink]="['/businesses', deal.businessId]">
+        <ion-icon name="storefront-outline" />
+        {{ 'DEAL_DETAILS.VIEW_BUSINESS' | translate }}
+      </a>
+    </div>
+  }
+
+</ion-content>

@@ -1,0 +1,78 @@
+
+<app-header [title]="'CREATE_EVENT.TITLE' | translate" [showBack]="true" defaultBackHref="/my-events" />
+
+<ion-content class="ph-page-content">
+  <div class="form-container">
+
+    @if (businessesLoading) {
+      <div class="form-loading">{{ 'COMMON.LOADING' | translate }}</div>
+    } @else if (businesses.length === 0) {
+      <div class="form-loading">{{ 'CREATE_EVENT.NO_BUSINESSES' | translate }}</div>
+    } @else {
+
+      @if (businesses.length > 1) {
+        <label class="field-label">{{ 'CREATE_EVENT.BUSINESS_LABEL' | translate }} *</label>
+        <select class="ph-select" [(ngModel)]="selectedBusinessId">
+          <option [ngValue]="null" disabled>{{ 'CREATE_EVENT.BUSINESS_PLACEHOLDER' | translate }}</option>
+          @for (b of businesses; track b.id) {
+            <option [ngValue]="b.id">{{ b.name }}</option>
+          }
+        </select>
+      }
+
+      <div class="english-section-label">🇬🇧 {{ 'COMMON.ENGLISH_SECTION' | translate }}</div>
+
+      <label class="field-label">{{ 'CREATE_EVENT.TITLE_LABEL' | translate }} *</label>
+      <input class="ph-input" [(ngModel)]="title" [placeholder]="'CREATE_EVENT.TITLE_PLACEHOLDER' | translate" />
+
+      <label class="field-label">{{ 'CREATE_EVENT.DESC_LABEL' | translate }}</label>
+      <textarea class="ph-textarea" [(ngModel)]="description" [placeholder]="'CREATE_EVENT.DESC_PLACEHOLDER' | translate" rows="3"></textarea>
+
+      <label class="field-label">{{ 'CREATE_EVENT.LOCATION_LABEL' | translate }}</label>
+      <input class="ph-input" [(ngModel)]="locationName" [placeholder]="'CREATE_EVENT.LOCATION_PLACEHOLDER' | translate" />
+
+      <label class="field-label">{{ 'CREATE_EVENT.CITY_LABEL' | translate }}</label>
+      <input class="ph-input" [(ngModel)]="city" [placeholder]="'CREATE_EVENT.CITY_PLACEHOLDER' | translate" />
+
+      <div class="persian-section-label">🇮🇷 {{ 'COMMON.PERSIAN_SECTION' | translate }}</div>
+
+      <label class="field-label">{{ 'CREATE_EVENT.TITLE_FA_LABEL' | translate }}</label>
+      <input class="ph-input" dir="rtl" [(ngModel)]="titleFa" [placeholder]="'CREATE_EVENT.TITLE_FA_PLACEHOLDER' | translate" />
+
+      <label class="field-label">{{ 'CREATE_EVENT.DESC_FA_LABEL' | translate }}</label>
+      <textarea class="ph-textarea" dir="rtl" [(ngModel)]="descriptionFa" [placeholder]="'CREATE_EVENT.DESC_FA_PLACEHOLDER' | translate" rows="3"></textarea>
+
+      <label class="field-label">{{ 'CREATE_EVENT.LOCATION_FA_LABEL' | translate }}</label>
+      <input class="ph-input" dir="rtl" [(ngModel)]="locationNameFa" [placeholder]="'CREATE_EVENT.LOCATION_FA_PLACEHOLDER' | translate" />
+
+      <label class="field-label">{{ 'CREATE_EVENT.CITY_FA_LABEL' | translate }}</label>
+      <input class="ph-input" dir="rtl" [(ngModel)]="cityFa" [placeholder]="'CREATE_EVENT.CITY_FA_PLACEHOLDER' | translate" />
+
+      <label class="field-label">{{ 'CREATE_EVENT.STARTS_LABEL' | translate }} *</label>
+      <input class="ph-input" type="datetime-local" [(ngModel)]="startsAt" />
+
+      <label class="field-label">{{ 'CREATE_EVENT.ENDS_LABEL' | translate }}</label>
+      <input class="ph-input" type="datetime-local" [(ngModel)]="endsAt" />
+
+      <div class="toggle-row">
+        <span class="field-label" style="margin: 0">{{ 'CREATE_EVENT.FREE_LABEL' | translate }}</span>
+        <ion-toggle [(ngModel)]="isFree" />
+      </div>
+
+      @if (!isFree) {
+        <label class="field-label">{{ 'CREATE_EVENT.PRICE_LABEL' | translate }}</label>
+        <input class="ph-input" type="number" [(ngModel)]="price" placeholder="e.g. 150" min="0" />
+      }
+
+      <app-button
+        class="submit-btn"
+        [loading]="submitting"
+        [disabled]="!selectedBusinessId || !title || !startsAt"
+        (click)="submit()"
+      >
+        {{ 'CREATE_EVENT.SUBMIT' | translate }}
+      </app-button>
+    }
+
+  </div>
+</ion-content>

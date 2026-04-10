@@ -1,0 +1,108 @@
+<app-header [title]="'EVENT_DETAILS.TITLE' | translate" [showBack]="true" defaultBackHref="/events" />
+
+<ion-content class="ph-page-content">
+
+  @if (isLoading) {
+    <div class="detail-skeleton">
+      <ion-skeleton-text animated style="width: 100%; height: 200px; border-radius: 12px; margin-bottom: 16px;" />
+      <ion-skeleton-text animated style="width: 40%; height: 28px; margin-bottom: 8px;" />
+      <ion-skeleton-text animated style="width: 60%; height: 18px; margin-bottom: 4px;" />
+      <ion-skeleton-text animated style="width: 45%; height: 16px;" />
+    </div>
+  }
+
+  @if (hasError) {
+    <div class="empty-state">
+      <ion-icon name="calendar-outline" class="empty-icon" />
+      <p class="ph-caption">{{ 'EVENT_DETAILS.NOT_FOUND' | translate }}</p>
+    </div>
+  }
+
+  @if (!isLoading && !hasError && event) {
+    @if (event.coverImageUrl) {
+      <img [src]="event.coverImageUrl | uploadUrl" alt="Cover" class="cover-image" />
+    }
+
+    <div class="detail-body">
+      <div class="event-date-block">
+        <span class="date-day">{{ event.startsAtUtc | date:'d' }}</span>
+        <span class="date-month">{{ event.startsAtUtc | date:'MMM yyyy' }}</span>
+      </div>
+
+      <h1 class="event-title">{{ lang.pick(event.title, event.titleFa) }}</h1>
+
+      @if (event.description || event.descriptionFa) {
+        <p class="event-desc">{{ lang.pick(event.description, event.descriptionFa) }}</p>
+      }
+
+      <div class="detail-rows">
+        <div class="detail-row">
+          <ion-icon name="calendar-outline" />
+          <div>
+            <span class="row-label">{{ 'EVENT_DETAILS.DATE_TIME' | translate }}</span>
+            <span class="row-value">{{ event.startsAtUtc | date:'EEEE, d MMMM yyyy, HH:mm' }}</span>
+            @if (event.endsAtUtc) {
+              <span class="row-sub">{{ 'EVENT_DETAILS.ENDS' | translate }} {{ event.endsAtUtc | date:'d MMM yyyy, HH:mm' }}</span>
+            }
+          </div>
+        </div>
+
+        @if (fullLocation) {
+          <div class="detail-row">
+            <ion-icon name="location-outline" />
+            <div>
+              <span class="row-label">{{ 'EVENT_DETAILS.LOCATION' | translate }}</span>
+              <span class="row-value">{{ fullLocation }}</span>
+            </div>
+          </div>
+        }
+
+        <div class="detail-row" [class.free]="event.isFree">
+          <ion-icon name="ticket-outline" />
+          <div>
+            <span class="row-label">{{ 'EVENT_DETAILS.TICKET' | translate }}</span>
+            <span class="price-value">{{ priceLabel }}</span>
+          </div>
+        </div>
+
+        @if (event.organizerName || event.organizerNameFa) {
+          <div class="detail-row">
+            <ion-icon name="person-outline" />
+            <div>
+              <span class="row-label">{{ 'EVENT_DETAILS.ORGANIZER' | translate }}</span>
+              <span class="row-value">{{ lang.pick(event.organizerName, event.organizerNameFa) }}</span>
+              @if (event.organizerPhoneNumber) {
+                <a class="row-link" href="tel:{{ event.organizerPhoneNumber }}">
+                  <ion-icon name="call-outline" />{{ event.organizerPhoneNumber }}
+                </a>
+              }
+              @if (event.organizerEmail) {
+                <a class="row-link" href="mailto:{{ event.organizerEmail }}">
+                  <ion-icon name="mail-outline" />{{ event.organizerEmail }}
+                </a>
+              }
+            </div>
+          </div>
+        }
+
+        @if (event.businessId) {
+          <div class="detail-row">
+            <ion-icon name="storefront-outline" />
+            <div>
+              <span class="row-label">{{ 'EVENT_DETAILS.RELATED_BUSINESS' | translate }}</span>
+              <a class="row-link" [routerLink]="['/businesses', event.businessId]">{{ 'EVENT_DETAILS.VIEW_BUSINESS' | translate }}</a>
+            </div>
+          </div>
+        }
+      </div>
+
+      @if (event.businessId) {
+        <a class="cta-btn" [routerLink]="['/businesses', event.businessId]">
+          <ion-icon name="storefront-outline" />
+          {{ 'EVENT_DETAILS.VIEW_BUSINESS' | translate }}
+        </a>
+      }
+    </div>
+  }
+
+</ion-content>

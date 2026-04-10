@@ -1,6 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonInfiniteScroll, IonInfiniteScrollContent, IonSearchbar } from '@ionic/angular/standalone';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { BusinessCardComponent } from '../../features/business/components/business-card/business-card.component';
@@ -14,12 +15,12 @@ import { AppHeaderComponent } from '../../shared/components/app-header/app-heade
   selector: 'app-business-list',
   standalone: true,
   imports: [
-    
     IonContent,
     IonSearchbar,
     IonInfiniteScroll,
     IonInfiniteScrollContent,
     FormsModule,
+    TranslateModule,
     AppHeaderComponent,
     AppButtonComponent,
     BusinessCardComponent,
@@ -29,6 +30,9 @@ import { AppHeaderComponent } from '../../shared/components/app-header/app-heade
   styleUrls: ['./business-list.page.scss'],
 })
 export class BusinessListPage implements OnInit, OnDestroy {
+  private readonly businessApi = inject(BusinessApiService);
+  private readonly translate = inject(TranslateService);
+
   businesses: BusinessSearchItem[] = [];
   totalCount = 0;
   isLoading = false;
@@ -41,8 +45,6 @@ export class BusinessListPage implements OnInit, OnDestroy {
   private readonly pageSize = 20;
   private readonly search$ = new Subject<void>();
   private sub?: Subscription;
-
-  constructor(private readonly businessApi: BusinessApiService) {}
 
   ngOnInit(): void {
     this.sub = this.search$
@@ -109,6 +111,12 @@ export class BusinessListPage implements OnInit, OnDestroy {
 
   get hasMore(): boolean {
     return this.businesses.length < this.totalCount;
+  }
+
+  get emptyMessage(): string {
+    return this.keyword || this.city
+      ? this.translate.instant('BUSINESS_LIST.NO_MATCH')
+      : this.translate.instant('BUSINESS_LIST.NO_BUSINESSES');
   }
 
   clearFilters(): void {

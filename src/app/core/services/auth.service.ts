@@ -54,6 +54,7 @@ export class AuthService {
       userId: res.userId,
       email: res.email,
       role: res.role,
+      name: res.name ?? '',
     });
   }
 
@@ -73,6 +74,10 @@ export class AuthService {
         role:
           payload['role'] ??
           payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ??
+          '',
+        name:
+          payload['name'] ??
+          payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] ??
           '',
       };
     } catch {

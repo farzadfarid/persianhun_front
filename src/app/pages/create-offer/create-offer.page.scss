@@ -1,0 +1,11 @@
+.form-container { padding: 20px 16px; max-width: 600px; margin: 0 auto; }
+.form-loading { text-align: center; padding: 40px 0; color: var(--ph-text-muted); }
+.field-label { display: block; font-size: 13px; font-weight: var(--ph-weight-semibold); color: var(--ph-text-secondary); margin: 16px 0 6px; }
+.ph-input, .ph-select, .ph-textarea {
+  display: block; width: 100%; background: var(--ph-surface-1); border: 1px solid var(--ph-surface-2);
+  border-radius: var(--ph-radius-sm); padding: 10px 12px; font-size: var(--ph-font-sm);
+  color: var(--ph-text-primary); font-family: inherit; box-sizing: border-box;
+  &:focus { outline: none; border-color: var(--ph-accent); }
+}
+.ph-textarea { resize: none; }
+.submit-btn { display: block; margin-top: 28px; width: 100%; }

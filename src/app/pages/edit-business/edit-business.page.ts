@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonContent, IonIcon, IonSpinner } from '@ionic/angular/standalone';
+import { TranslateModule } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import { trashOutline, starOutline, star } from 'ionicons/icons';
 import { AppButtonComponent } from '../../shared/components/app-button/app-button.component';
@@ -27,6 +28,7 @@ import { ToastService } from '../../core/services/toast.service';
     AppInputComponent,
     ImageUploadComponent,
     UploadUrlPipe,
+    TranslateModule,
   ],
   templateUrl: './edit-business.page.html',
   styleUrls: ['./edit-business.page.scss'],
@@ -52,7 +54,9 @@ export class EditBusinessPage implements OnInit {
 
   form = this.fb.nonNullable.group({
     name:           ['', Validators.required],
+    nameFa:         [''],
     description:    [''],
+    descriptionFa:  [''],
     phoneNumber:    [''],
     email:          [''],
     website:        [''],
@@ -60,8 +64,11 @@ export class EditBusinessPage implements OnInit {
     telegramUrl:    [''],
     whatsAppNumber: [''],
     addressLine:    [''],
+    addressLineFa:  [''],
     city:           [''],
+    cityFa:         [''],
     region:         [''],
+    regionFa:       [''],
     postalCode:     [''],
     country:        ['Sweden'],
   });
@@ -75,7 +82,9 @@ export class EditBusinessPage implements OnInit {
         this.galleryImages = biz.images ?? [];
         this.form.patchValue({
           name:           biz.name ?? '',
+          nameFa:         biz.nameFa ?? '',
           description:    biz.description ?? '',
+          descriptionFa:  biz.descriptionFa ?? '',
           phoneNumber:    biz.phoneNumber ?? '',
           email:          biz.email ?? '',
           website:        biz.website ?? '',
@@ -83,8 +92,11 @@ export class EditBusinessPage implements OnInit {
           telegramUrl:    biz.telegramUrl ?? '',
           whatsAppNumber: biz.whatsAppNumber ?? '',
           addressLine:    biz.addressLine ?? '',
+          addressLineFa:  biz.addressLineFa ?? '',
           city:           biz.city ?? '',
+          cityFa:         biz.cityFa ?? '',
           region:         biz.region ?? '',
+          regionFa:       biz.regionFa ?? '',
           postalCode:     biz.postalCode ?? '',
           country:        biz.country ?? 'Sweden',
         });
@@ -101,7 +113,9 @@ export class EditBusinessPage implements OnInit {
 
     this.businessApi.update(this.business.id, {
       name:           v.name,
+      nameFa:         v.nameFa || null,
       description:    v.description || null,
+      descriptionFa:  v.descriptionFa || null,
       phoneNumber:    v.phoneNumber || null,
       email:          v.email || null,
       website:        v.website || null,
@@ -109,8 +123,11 @@ export class EditBusinessPage implements OnInit {
       telegramUrl:    v.telegramUrl || null,
       whatsAppNumber: v.whatsAppNumber || null,
       addressLine:    v.addressLine || null,
+      addressLineFa:  v.addressLineFa || null,
       city:           v.city || null,
+      cityFa:         v.cityFa || null,
       region:         v.region || null,
+      regionFa:       v.regionFa || null,
       postalCode:     v.postalCode || null,
       country:        v.country || 'Sweden',
       latitude:       null,

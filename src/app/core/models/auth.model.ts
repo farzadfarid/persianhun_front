@@ -4,10 +4,12 @@ export interface AuthResponse {
   userId: number;
   email: string;
   role: string;
+  name: string;
 }
 
 export interface AuthUser {
   userId: number;
   email: string;
   role: string;
+  name: string;
 }

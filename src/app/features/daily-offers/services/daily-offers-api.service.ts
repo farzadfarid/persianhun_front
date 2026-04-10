@@ -1,11 +1,23 @@
 import { inject, Injectable } from '@angular/core';
+import { HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiService } from '../../../core/services/api.service';
-import { CreateDailyOfferRequest, DailyOfferDetail, DailyOfferListItem, UpdateDailyOfferRequest } from '../models/daily-offer.model';
+import { CreateDailyOfferRequest, DailyOfferDetail, DailyOfferListItem, OfferSearchFilter, OfferSearchItem, PagedResult, UpdateDailyOfferRequest } from '../models/daily-offer.model';
 
 @Injectable({ providedIn: 'root' })
 export class DailyOffersApiService {
   private readonly api = inject(ApiService);
+
+  searchOffers(filter: OfferSearchFilter = {}): Observable<PagedResult<OfferSearchItem>> {
+    let params = new HttpParams();
+    if (filter.keyword) params = params.set('keyword', filter.keyword);
+    if (filter.city) params = params.set('city', filter.city);
+    if (filter.minPrice != null) params = params.set('minPrice', filter.minPrice);
+    if (filter.maxPrice != null) params = params.set('maxPrice', filter.maxPrice);
+    params = params.set('page', filter.page ?? 1);
+    params = params.set('pageSize', filter.pageSize ?? 20);
+    return this.api.get<PagedResult<OfferSearchItem>>(`/search/offers?${params.toString()}`);
+  }
 
   getActiveBusiness(businessId: number): Observable<DailyOfferListItem[]> {
     return this.api.get<DailyOfferListItem[]>(`/daily-offers/business/${businessId}`);
